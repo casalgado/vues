@@ -1,6 +1,7 @@
 <template>
   <div>
     <button @click="getRefs">get</button>
+    <button @click="setRefs">set</button>
     <ul>
       <li v-for="item in items" v-bind:key="item.key">
         <p>{{ item.client }}</p>
@@ -24,7 +25,7 @@ export default {
   },
   methods: {
     getRefs: function() {
-      db.ref("devAccount/orders")
+      db.child("orders")
         .once("value")
         .then(function(snapshot) {
           let data = snapshot.val();
@@ -35,6 +36,9 @@ export default {
           return objects;
         })
         .then(objects => (this.items = objects));
+    },
+    setRefs: function() {
+      db.child("clients").push({ name: "pedro" });
     }
   }
 };

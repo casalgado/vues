@@ -10,6 +10,6 @@ const app = initializeApp({
 	appId             : '1:753348054477:web:d3da8ff9e84aaf6c7a8884'
 });
 
-const db = app.database();
-
+const database = app.database();
+const db = database.ref('esalimento');
 export default db;
