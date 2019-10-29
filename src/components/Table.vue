@@ -1,8 +1,12 @@
 <template>
   <div>
-    <p>{{ items }}</p>
     <button @click="getRefs">get</button>
-    <button @click="setRefs">set</button>
+    <ul>
+      <li v-for="item in items" v-bind:key="item.key">
+        <p>{{ item.client }}</p>
+        <p>{{ item.product }}</p>
+      </li>
+    </ul>
   </div>
 </template>
 <script>
@@ -10,26 +14,28 @@ import db from "../firebase";
 
 export default {
   name: "Table",
+  data() {
+    return {
+      items: []
+    };
+  },
   props: {
     table: String
   },
   methods: {
     getRefs: function() {
-      db.ref("esalimento")
+      db.ref("devAccount/orders")
         .once("value")
         .then(function(snapshot) {
-          let object = snapshot.val();
-          alert(JSON.stringify(object));
-        });
-    },
-    setRefs: function() {
-      db.ref("esalimento/orders").push({ test: "test" });
+          let data = snapshot.val();
+          let objects = [];
+          for (let key in data) {
+            objects.push(data[key]);
+          }
+          return objects;
+        })
+        .then(objects => (this.items = objects));
     }
-  },
-  data: function() {
-    return {
-      items: "test"
-    };
   }
 };
 </script>
