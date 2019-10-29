@@ -2,6 +2,7 @@
   <div>
     <button @click="getRefs">get</button>
     <button @click="setRefs">set</button>
+    <p>{{date}}</p>
     <ul>
       <li v-for="item in items" v-bind:key="item.key">
         <p>{{ item.client }}</p>
@@ -11,13 +12,15 @@
   </div>
 </template>
 <script>
-import db from "../firebase";
+import db from "../../firebase";
+import moment from "moment";
 
 export default {
   name: "Table",
   data() {
     return {
-      items: []
+      items: [],
+      date: moment().format()
     };
   },
   props: {
