@@ -1,10 +1,10 @@
 <template>
   <div>
     <button @click="getRefs">get</button>
-    <button @click="setRefs">set</button>
+    <Pagination />
     <p>{{date}}</p>
     <ul>
-      <li v-for="item in items" v-bind:key="item.key">
+      <li v-for="item in items" :key="item.key">
         <p>{{ item.client }}</p>
         <p>{{ item.product }}</p>
       </li>
@@ -12,11 +12,15 @@
   </div>
 </template>
 <script>
+import Pagination from "@/components/dashboard/Pagination.vue";
 import db from "../../firebase";
 import moment from "moment";
 
 export default {
   name: "Table",
+  components: {
+    Pagination
+  },
   data() {
     return {
       items: [],

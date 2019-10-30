@@ -17,7 +17,7 @@
 </template>
 <script>
 export default {
-  name: "Nav",
+  name: "DashNav",
   data: function() {
     return {
       list: ["1", "2", "3", "4", "5"]
