@@ -10,7 +10,7 @@
       <li>
         <router-link to="/about">about</router-link>
       </li>
-      <li v-for="item in list" :key="item">{{ item }}</li>
+      <li class="btn btn-primary" v-for="item in list" :key="item">{{ item }}</li>
     </ul>
     <div></div>
   </div>
@@ -26,4 +26,14 @@ export default {
 };
 </script>
 <style scoped>
+ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 5px;
+  grid-gap: 5px;
+}
+
+li {
+  text-align: left;
+}
 </style>

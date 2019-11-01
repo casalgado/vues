@@ -3,23 +3,22 @@
     <div id="header">
       <Header />
     </div>
-    <div id="nav" class="shadow-1">
+    <div id="nav" class>
       <DashNav />
     </div>
-    <div id="main" class="shadow-1">
-      <Main />
+    <div id="main" class>
+      <router-view />
     </div>
   </div>
 </template>
 <script>
 import DashNav from "@/components/layout/DashNav";
-import Main from "@/components/layout/Main";
+// import Main from "@/components/layout/Main";
 import Header from "@/components/layout/Header";
 export default {
   name: "Dashboard",
   components: {
     DashNav,
-    Main,
     Header
   }
 };
@@ -28,28 +27,28 @@ export default {
 #container {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  color: #c4761a;
-  background-color: #c4761a;
-  border-radius: 5px;
+  color: var(--color-primary);
+  background-color: var(--color-primary);
+  border-radius: var(--border-radius-large);
 }
 
 #header {
   grid-column-start: 1;
   grid-column-end: 5;
-  color: whitesmoke;
+  color: var(--color-neutral);
 }
 
 #nav {
   height: 80vh;
-  background-color: oldlace;
-  border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px;
+  background-color: var(--color-neutral);
+  border-bottom-left-radius: var(--border-radius-large);
+  border-top-left-radius: var(--border-radius-large);
 }
 
 #main {
   height: 80vh;
-  background-color: whitesmoke;
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
+  background-color: var(--color-base);
+  border-bottom-right-radius: var(--border-radius-large);
+  border-top-right-radius: var(--border-radius-large);
 }
 </style>
