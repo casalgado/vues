@@ -2,6 +2,15 @@
   <div>
     <ul>
       <li>
+        <router-link :to="{ name: 'table', params: routes[0].params}">{{routes[0].title}}</router-link>
+      </li>
+      <li>
+        <router-link :to="{ name: 'table', params: routes[1].params}">{{routes[1].title}}</router-link>
+      </li>
+      <li>
+        <router-link :to="{ name: 'table', params: routes[2].params}">{{routes[2].title}}</router-link>
+      </li>
+      <li>
         <router-link to="/dashboard">dashboard</router-link>
       </li>
       <li>
@@ -10,7 +19,9 @@
       <li>
         <router-link to="/about">about</router-link>
       </li>
-      <li class="btn btn-primary" v-for="item in list" :key="item">{{ item }}</li>
+      <li>
+        <router-link to="/dashboard/console">console</router-link>
+      </li>
     </ul>
     <div></div>
   </div>
@@ -20,7 +31,26 @@ export default {
   name: "DashNav",
   data: function() {
     return {
-      list: ["1", "2", "3", "4", "5"]
+      routes: [
+        {
+          name: "table",
+          path: "/dashboard/table",
+          params: { sheet: "orders" },
+          title: "Pedidos"
+        },
+        {
+          name: "table",
+          path: "/dashboard/table",
+          params: { sheet: "expenses" },
+          title: "Gastos"
+        },
+        {
+          name: "table",
+          path: "/dashboard/table",
+          params: { sheet: "clients" },
+          title: "Clientes"
+        }
+      ]
     };
   }
 };

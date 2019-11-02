@@ -1,5 +1,4 @@
 /* variables */
-
 :root {
 	--color-primary: #c4761a;
 	--color-secondary: #79bedb;
@@ -15,9 +14,10 @@ body {
 	padding: 5px;
 	background-color: var(--color-background);
 }
-
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+@import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap');
 #app {
-	font-family: "Avenir", Helvetica, Arial, sans-serif;
+	font-family: "Muli", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;

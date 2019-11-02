@@ -1,12 +1,12 @@
 <template>
   <div>
+    <h1>{{$route.params}}</h1>
     <button @click="getRefs">get</button>
     <Pagination />
     <p>{{date}}</p>
     <ul>
       <li v-for="item in items" :key="item.key">
-        <p>{{ item.client }}</p>
-        <p>{{ item.product }}</p>
+        <p>{{ item.name }}</p>
       </li>
     </ul>
   </div>
@@ -32,7 +32,8 @@ export default {
   },
   methods: {
     getRefs: function() {
-      db.child("orders")
+      console.log(this.$route.params.sheet);
+      db.child("clients")
         .once("value")
         .then(function(snapshot) {
           let data = snapshot.val();

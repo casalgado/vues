@@ -43,11 +43,12 @@ export default {
   background-color: var(--color-neutral);
   border-bottom-left-radius: var(--border-radius-large);
   border-top-left-radius: var(--border-radius-large);
+  border-right: 1px solid var(--color-primary);
 }
 
 #main {
   height: 80vh;
-  background-color: var(--color-base);
+  background-color: var(--color-neutral);
   border-bottom-right-radius: var(--border-radius-large);
   border-top-right-radius: var(--border-radius-large);
 }
