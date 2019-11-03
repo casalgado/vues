@@ -39,7 +39,7 @@ export default {
 }
 
 #nav {
-  height: 80vh;
+  min-height: 80vh;
   background-color: var(--color-neutral);
   border-bottom-left-radius: var(--border-radius-large);
   border-top-left-radius: var(--border-radius-large);
@@ -47,7 +47,7 @@ export default {
 }
 
 #main {
-  height: 80vh;
+  min-height: 80vh;
   background-color: var(--color-neutral);
   border-bottom-right-radius: var(--border-radius-large);
   border-top-right-radius: var(--border-radius-large);

@@ -5,14 +5,15 @@
   </div>
 </template>
 <script>
-import db from "../../firebase";
+import { database } from "../../firebase";
 export default {
   name: "Console",
   methods: {
     importDatabase: function() {
       let nodes = ["expenses", "products", "clients"];
       nodes.forEach(node => {
-        db.ref("")
+        database
+          .ref("")
           .child(node)
           .once("value")
           .then(function(snapshot) {
@@ -23,13 +24,14 @@ export default {
             for (let i = 0; i < Object.keys(objs).length; i++) {
               let obj = objs[Object.keys(objs)[i]];
               delete obj.id;
-              db.ref(`backup/${node}`).push(obj);
+              database.ref(`backup/${node}`).push(obj);
             }
           });
       });
     },
     importOrders: function() {
-      db.ref("")
+      database
+        .ref("")
         .child("orders")
         .once("value")
         .then(function(snapshot) {
@@ -41,6 +43,7 @@ export default {
           for (let i = 0; i < Object.keys(objs).length; i++) {
             let co = objs[Object.keys(objs)[i]];
             let new_order = {
+              name: "P-19-" + orders.length + 1,
               client: co.client,
               comment: co.comment,
               lastModified: co.lastModified,
@@ -49,12 +52,12 @@ export default {
               products: [
                 {
                   name: co.product,
-                  quantity: co.quantity,
-                  unitPrice: co.unitPrice,
-                  total: co.total
+                  quantity: parseInt(co.quantity),
+                  unitPrice: parseInt(co.unitPrice),
+                  total: parseInt(co.total)
                 }
               ],
-              total: co.total
+              total: parseInt(co.total)
             };
             let last_order = orders[orders.length - 1];
             if (
@@ -64,17 +67,19 @@ export default {
             ) {
               last_order.products.push({
                 name: co.product,
-                quantity: co.quantity,
-                unitPrice: co.unitPrice,
-                total: co.total
+                quantity: parseInt(co.quantity),
+                unitPrice: parseInt(co.unitPrice),
+                total: parseInt(co.total)
               });
-              last_order.total = last_order.total += co.total;
+              let lo = parseInt(last_order.total);
+              let cot = parseInt(co.total);
+              last_order.total = lo += cot;
             } else {
               orders.push(new_order);
             }
           }
           orders.map(e => {
-            db.ref(`esalimento/orders`).push(e);
+            database.ref(`esalimento/orders`).push(e);
           });
         });
     }

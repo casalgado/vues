@@ -1,19 +1,29 @@
 <template>
   <div>
-    <h1>{{$route.params}}</h1>
-    <button @click="getRefs">get</button>
     <Pagination />
-    <p>{{date}}</p>
-    <ul>
-      <li v-for="item in items" :key="item.key">
-        <p>{{ item.name }}</p>
-      </li>
-    </ul>
+    <h1>{{$route.params}}</h1>
+    <h3>Computed: {{currentDate}}</h3>
+    <button @click="getObjects">get</button>
+    <p>current period = {{this.$store.state.period}}</p>
+    <table>
+      <tr class="table-header">
+        <th>date</th>
+        <th>client</th>
+        <th>products</th>
+        <th>total</th>
+      </tr>
+      <tr v-for="item in items" :key="item.key">
+        <td>{{ item.date }}</td>
+        <td>{{ item.client }}</td>
+        <td>{{ item.products.length }}</td>
+        <td>{{ item.total }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 <script>
 import Pagination from "@/components/dashboard/Pagination.vue";
-import db from "../../firebase";
+import { orders } from "../../firebase";
 import moment from "moment";
 
 export default {
@@ -23,17 +33,35 @@ export default {
   },
   data() {
     return {
-      items: [],
-      date: moment().format()
+      items: []
     };
   },
   props: {
     table: String
   },
+  computed: {
+    currentDate() {
+      return `${this.$store.state.date}`;
+    },
+    currentPeriod() {
+      return `${this.$store.state.period}`;
+    }
+  },
   methods: {
-    getRefs: function() {
+    getObjects: function() {
       console.log(this.$route.params.sheet);
-      db.child("clients")
+      orders
+        .orderByChild("date")
+        .startAt(
+          moment(this.currentDate)
+            .startOf(this.currentPeriod)
+            .format()
+        )
+        .endAt(
+          moment(this.currentDate)
+            .endOf(this.currentPeriod)
+            .format()
+        )
         .once("value")
         .then(function(snapshot) {
           let data = snapshot.val();
@@ -43,10 +71,13 @@ export default {
           }
           return objects;
         })
-        .then(objects => (this.items = objects));
-    },
-    setRefs: function() {
-      db.child("clients").push({ name: "pedro" });
+        .then(
+          objects =>
+            (this.items = objects.map(function(e) {
+              e.date = moment(e.date).format("DD/MM");
+              return e;
+            }))
+        );
     }
   }
 };

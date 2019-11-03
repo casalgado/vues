@@ -12,4 +12,5 @@ const app = initializeApp({
 
 const database = app.database();
 const db = database.ref('esalimento');
-export default db;
+const orders = database.ref('esalimento/orders');
+export { database, db, orders };
