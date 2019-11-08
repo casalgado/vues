@@ -1,29 +1,12 @@
 <template>
   <div>
     <Pagination />
-    <h1>{{$route.params}}</h1>
-    <h3>Computed: {{currentDate}}</h3>
-    <button @click="getObjects">get</button>
-    <p>current period = {{this.$store.state.period}}</p>
-    <table>
-      <tr class="table-header">
-        <th>date</th>
-        <th>client</th>
-        <th>products</th>
-        <th>total</th>
-      </tr>
-      <tr v-for="item in items" :key="item.key">
-        <td>{{ item.date }}</td>
-        <td>{{ item.client }}</td>
-        <td>{{ item.products.length }}</td>
-        <td>{{ item.total }}</td>
-      </tr>
-    </table>
+    <router-view :objects="items"></router-view>
   </div>
 </template>
 <script>
 import Pagination from "@/components/dashboard/Pagination.vue";
-import { orders } from "../../firebase";
+import { database } from "../../firebase";
 import moment from "moment";
 
 export default {
@@ -33,11 +16,9 @@ export default {
   },
   data() {
     return {
-      items: []
+      items: [],
+      state: this.$store.state.date
     };
-  },
-  props: {
-    table: String
   },
   computed: {
     currentDate() {
@@ -45,12 +26,27 @@ export default {
     },
     currentPeriod() {
       return `${this.$store.state.period}`;
+    },
+    currentSheet() {
+      return `${this.$route.params.sheet}`;
+    }
+  },
+  created() {
+    this.getObjects();
+  },
+  watch: {
+    currentDate() {
+      console.log("items");
+      this.getObjects();
+    },
+    currentPeriod() {
+      this.getObjects();
     }
   },
   methods: {
     getObjects: function() {
-      console.log(this.$route.params.sheet);
-      orders
+      database
+        .ref(`esalimento/${this.currentSheet}`)
         .orderByChild("date")
         .startAt(
           moment(this.currentDate)
@@ -71,13 +67,9 @@ export default {
           }
           return objects;
         })
-        .then(
-          objects =>
-            (this.items = objects.map(function(e) {
-              e.date = moment(e.date).format("DD/MM");
-              return e;
-            }))
-        );
+        .then(objects => {
+          this.items = objects;
+        });
     }
   }
 };

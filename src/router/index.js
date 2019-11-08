@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Dashboard from '../views/Dashboard.vue';
 import Table from '../components/dashboard/Table.vue';
+import OrdersTable from '../components/dashboard/tables/OrdersTable.vue';
 import Console from '../components/database/Console.vue';
 
 Vue.use(VueRouter);
@@ -19,9 +20,16 @@ const routes = [
 		component : Dashboard,
 		children  : [
 			{
-				path      : 'table',
+				path      : 'table/',
 				name      : 'table',
-				component : Table
+				component : Table,
+				children  : [
+					{
+						path      : 'orders/',
+						name      : 'ordersTable',
+						component : OrdersTable
+					}
+				]
 			},
 			{
 				path      : 'console',

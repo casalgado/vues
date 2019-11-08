@@ -2,10 +2,10 @@
   <div>
     <ul>
       <li>
-        <router-link :to="{ name: 'table', params: routes[0].params}">{{routes[0].title}}</router-link>
+        <router-link :to="{ name: 'ordersTable', params: routes[0].params}">{{routes[0].title}}</router-link>
       </li>
       <li>
-        <router-link :to="{ name: 'table', params: routes[1].params}">{{routes[1].title}}</router-link>
+        <router-link :to="{ name: 'expensesTable', params: routes[1].params}">{{routes[1].title}}</router-link>
       </li>
       <li>
         <router-link :to="{ name: 'table', params: routes[2].params}">{{routes[2].title}}</router-link>
@@ -33,14 +33,14 @@ export default {
     return {
       routes: [
         {
-          name: "table",
-          path: "/dashboard/table",
+          name: "ordersTable",
+          path: "/dashboard/table/orders",
           params: { sheet: "orders" },
           title: "Pedidos"
         },
         {
-          name: "table",
-          path: "/dashboard/table",
+          name: "expensesTable",
+          path: "/dashboard/table/expenses",
           params: { sheet: "expenses" },
           title: "Gastos"
         },
@@ -49,6 +49,11 @@ export default {
           path: "/dashboard/table",
           params: { sheet: "clients" },
           title: "Clientes"
+        },
+        {
+          name: "neworder",
+          path: "/dashboard/table/orders/neworder",
+          title: "neworder"
         }
       ]
     };
