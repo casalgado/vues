@@ -93,8 +93,4 @@ export default {
 };
 </script>
 <style>
-.b-table-row-selected {
-  background-color: var(--color-background) !important;
-  color: var(--color-neutral);
-}
 </style>

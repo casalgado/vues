@@ -1,13 +1,24 @@
 /* variables */
 
 :root {
-	--color-primary: #c4761a;
-	--color-secondary: #79bedb;
-	--color-secondary-light: #94cbe2;
-	--color-base: whitesmoke;
-	--color-neutral: oldlace;
-	--color-background: #45331e;
+	--color-primary: #1d1c1c;
+	--color-secondary: #2d2f34;
+	--color-secondary-light: #383b40;
+	--color-neutral: whitesmoke;
+	--color-background: #010101;
 	--border-radius-large: 5px;
+	--border-radius-small: 2px;
+}
+
+/* global table styles */
+
+.table {
+	color: var(--color-neutral);
+}
+
+.b-table-row-selected {
+	background-color: var(--color-background);
+	color: var(--color-neutral);
 }
 
 /* global styles */
@@ -49,12 +60,12 @@ body {
 	cursor: pointer;
 }
 .btn-primary {
-	background-color: var(--color-secondary);
-	border-color: var(--color-secondary);
+	background-color: var(--color-secondary-light);
+	border-color: var(--color-primary);
 }
 .btn-primary:hover {
-	background-color: var(--color-secondary-light);
-	border-color: var(--color-secondary-light);
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
 }
 
 /* material design shadows */

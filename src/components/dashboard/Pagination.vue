@@ -2,11 +2,11 @@
   <div class="border">
     <h4 id="date">{{currentDate()}}</h4>
     <div id="grid">
-      <button @click="previous" class="btn btn-warning">prev</button>
-      <button @click="setPeriod('day')" class="btn btn-warning">day</button>
-      <button @click="setPeriod('week')" class="btn btn-warning">week</button>
-      <button @click="setPeriod('month')" class="btn btn-warning">month</button>
-      <button @click="next" class="btn btn-warning">next</button>
+      <button @click="previous" class="btn btn-primary">prev</button>
+      <button @click="setPeriod('day')" class="btn btn-primary">day</button>
+      <button @click="setPeriod('week')" class="btn btn-primary">week</button>
+      <button @click="setPeriod('month')" class="btn btn-primary">month</button>
+      <button @click="next" class="btn btn-primary">next</button>
     </div>
   </div>
 </template>

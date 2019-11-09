@@ -27,9 +27,9 @@ export default {
 #container {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  color: var(--color-primary);
+  color: var(--color-neutral);
   background-color: var(--color-primary);
-  border-radius: var(--border-radius-large);
+  border-radius: var(--border-radius-small);
 }
 
 #header {
@@ -40,16 +40,16 @@ export default {
 
 #nav {
   min-height: 80vh;
-  background-color: var(--color-neutral);
-  border-bottom-left-radius: var(--border-radius-large);
-  border-top-left-radius: var(--border-radius-large);
-  border-right: 1px solid var(--color-primary);
+  background-color: var(--color-secondary);
+  border-bottom-left-radius: var(--border-radius-small);
+  border-top-left-radius: var(--border-radius-small);
+  border-right: 1px solid var(--color-neutral);
 }
 
 #main {
   min-height: 80vh;
-  background-color: var(--color-neutral);
-  border-bottom-right-radius: var(--border-radius-large);
-  border-top-right-radius: var(--border-radius-large);
+  background-color: var(--color-secondary);
+  border-bottom-right-radius: var(--border-radius-small);
+  border-top-right-radius: var(--border-radius-small);
 }
 </style>
