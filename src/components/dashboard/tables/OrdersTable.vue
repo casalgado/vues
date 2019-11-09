@@ -22,7 +22,7 @@
 <script>
 import moment from "moment";
 export default {
-  name: "DisplayTable",
+  name: "OrdersTable",
   data() {
     return {
       modes: ["multi", "single", "range"],
@@ -76,9 +76,10 @@ export default {
           let quantity = [...e.products];
           e.products = e.products.map(e => e.name).join(",  ");
           e.quantity = quantity.map(e => e.quantity).join(", ");
+          e.total = e.total / 1000 + "k";
           e.date = moment(e.date).format("DD/MM");
           if (e.paid == "") {
-            e._rowVariant = "warning";
+            e._rowVariant = "danger";
           } else {
             e.paid = moment(e.paid).format("DD/MM");
           }
