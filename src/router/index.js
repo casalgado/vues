@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Dashboard from '../views/Dashboard.vue';
-import Table from '../components/dashboard/Table.vue';
+import Table from '../components/dashboard/tables/Table.vue';
 import OrdersTable from '../components/dashboard/tables/OrdersTable.vue';
 import ExpensesTable from '../components/dashboard/tables/ExpensesTable.vue';
 import Console from '../components/database/Console.vue';

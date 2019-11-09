@@ -5,8 +5,8 @@
   </div>
 </template>
 <script>
-import Pagination from "@/components/dashboard/Pagination.vue";
-import { database } from "../../firebase";
+import Pagination from "@/components/dashboard/tables/Pagination.vue";
+import { database } from "../../../firebase";
 import moment from "moment";
 
 export default {
