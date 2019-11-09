@@ -1,7 +1,6 @@
 <template>
-  <div class="border">
-    <p>Orders Table</p>
-    <div>
+  <div id="container" class="border">
+    <div id="main">
       <b-table
         id="table"
         selectable
@@ -11,6 +10,8 @@
         selected-variant="active"
         @row-selected="onRowSelected"
       ></b-table>
+    </div>
+    <div id="sidebar">
       <p>
         Selected Rows:
         <br />
@@ -93,5 +94,9 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+#container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
 </style>

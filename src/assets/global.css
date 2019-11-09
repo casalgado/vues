@@ -45,6 +45,11 @@ body {
 
 /* bootstrap classes */
 
+a,
+a:visited {
+	color: var(--color-neutral);
+}
+
 *:active,
 *:focus {
 	outline: 0;

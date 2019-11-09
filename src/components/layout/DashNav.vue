@@ -1,30 +1,27 @@
 <template>
-  <div>
-    <ul>
-      <li>
-        <router-link :to="{ name: 'ordersTable', params: routes[0].params}">{{routes[0].title}}</router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'expensesTable', params: routes[1].params}">{{routes[1].title}}</router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'table', params: routes[2].params}">{{routes[2].title}}</router-link>
-      </li>
-      <li>
-        <router-link to="/dashboard">dashboard</router-link>
-      </li>
-      <li>
-        <router-link to="/">home</router-link>
-      </li>
-      <li>
-        <router-link to="/about">about</router-link>
-      </li>
-      <li>
-        <router-link to="/dashboard/console">console</router-link>
-      </li>
-    </ul>
-    <div></div>
-  </div>
+  <ul>
+    <li>
+      <router-link :to="{ name: 'ordersTable', params: routes[0].params}">{{routes[0].title}}</router-link>
+    </li>
+    <li>
+      <router-link :to="{ name: 'expensesTable', params: routes[1].params}">{{routes[1].title}}</router-link>
+    </li>
+    <li>
+      <router-link :to="{ name: 'table', params: routes[2].params}">{{routes[2].title}}</router-link>
+    </li>
+    <li>
+      <router-link to="/dashboard">dashboard</router-link>
+    </li>
+    <li>
+      <router-link to="/">home</router-link>
+    </li>
+    <li>
+      <router-link to="/about">about</router-link>
+    </li>
+    <li>
+      <router-link to="/dashboard/console">console</router-link>
+    </li>
+  </ul>
 </template>
 <script>
 export default {
@@ -62,13 +59,14 @@ export default {
 </script>
 <style scoped>
 ul {
+  width: 99vw;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(7, 1fr);
   padding: 5px;
   grid-gap: 5px;
 }
 
 li {
-  text-align: left;
+  list-style-type: none;
 }
 </style>

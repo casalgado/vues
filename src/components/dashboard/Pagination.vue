@@ -1,5 +1,5 @@
 <template>
-  <div class="border">
+  <div id="container" class="border">
     <h4 id="date">{{currentDate()}}</h4>
     <div id="grid">
       <button @click="previous" class="btn btn-primary">prev</button>
@@ -41,20 +41,17 @@ export default {
 };
 </script>
 <style scoped>
-.arrow-right {
-  width: 0;
-  height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-
-  border-left: 12px solid var(--color-background);
-  cursor: pointer;
-}
 #grid {
   align-content: center;
   margin: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 10px;
+}
+
+#container {
+  position: sticky;
+  top: 0px;
+  background-color: var(--color-secondary);
 }
 </style>
