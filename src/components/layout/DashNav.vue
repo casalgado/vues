@@ -7,7 +7,7 @@
       <router-link :to="{ name: 'expensesTable', params: routes[1].params}">{{routes[1].title}}</router-link>
     </li>
     <li>
-      <router-link :to="{ name: 'table', params: routes[2].params}">{{routes[2].title}}</router-link>
+      <router-link :to="{ name: 'form' }">{{routes[2].title}}</router-link>
     </li>
     <li>
       <router-link to="/dashboard">dashboard</router-link>
@@ -42,10 +42,9 @@ export default {
           title: "Gastos"
         },
         {
-          name: "table",
-          path: "/dashboard/table",
-          params: { sheet: "clients" },
-          title: "Clientes"
+          name: "form",
+          path: "/form",
+          title: "Form"
         },
         {
           name: "neworder",
