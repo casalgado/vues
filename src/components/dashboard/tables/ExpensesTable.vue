@@ -1,7 +1,7 @@
 <template>
-  <div class="border">
-    <p>Expenses Table</p>
-    <div>
+  <div id="container" class="border">
+    <div id="main">
+      <p>Expenses Table</p>
       <b-table
         id="table"
         selectable
@@ -11,6 +11,8 @@
         selected-variant="active"
         @row-selected="onRowSelected"
       ></b-table>
+    </div>
+    <div id="sidebar">
       <p>
         Selected Rows:
         <br />
@@ -109,8 +111,8 @@ export default {
 };
 </script>
 <style>
-.b-table-row-selected {
-  background-color: var(--color-background) !important;
-  color: var(--color-neutral) !important;
+#container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
 }
 </style>

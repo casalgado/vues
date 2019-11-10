@@ -1,6 +1,5 @@
 <template>
   <div id="container" class="border">
-    <h4 id="date">{{currentDate()}}</h4>
     <div id="grid">
       <button @click="previous" class="btn btn-primary">prev</button>
       <button @click="setPeriod('day')" class="btn btn-primary">day</button>
@@ -8,6 +7,7 @@
       <button @click="setPeriod('month')" class="btn btn-primary">month</button>
       <button @click="next" class="btn btn-primary">next</button>
     </div>
+    <h4 id="date">{{currentDate()}}</h4>
   </div>
 </template>
 <script>

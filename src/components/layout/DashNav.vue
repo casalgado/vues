@@ -7,7 +7,7 @@
       <router-link :to="{ name: 'expensesTable', params: routes[1].params}">{{routes[1].title}}</router-link>
     </li>
     <li>
-      <router-link :to="{ name: 'form' }">{{routes[2].title}}</router-link>
+      <router-link :to="{ name: 'ordersForm' }">{{routes[2].title}}</router-link>
     </li>
     <li>
       <router-link to="/dashboard">dashboard</router-link>

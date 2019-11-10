@@ -1,6 +1,7 @@
 <template>
   <div id="container" class="border">
     <div id="main">
+      <p>Orders Table</p>
       <b-table
         id="table"
         selectable
@@ -21,6 +22,7 @@
   </div>
 </template>
 <script>
+import { fetch } from "../../../firebase";
 import moment from "moment";
 export default {
   name: "OrdersTable",
@@ -55,41 +57,58 @@ export default {
         }
       ],
       selectMode: "multi",
-      selected: []
+      selected: [],
+      tableItems: []
     };
-  },
-  props: {
-    objects: Array
-  },
-  computed: {
-    tableItems() {
-      let items = this.prepare(this.objects);
-      return items;
-    }
   },
   methods: {
     onRowSelected(items) {
       this.selected = items;
     },
     prepare(objects) {
-      if (this.$route.params.sheet == "orders") {
-        let items = objects.map(function(e) {
-          let quantity = [...e.products];
-          e.products = e.products.map(e => e.name).join(",  ");
-          e.quantity = quantity.map(e => e.quantity).join(", ");
-          e.total = e.total / 1000 + "k";
-          e.date = moment(e.date).format("DD/MM");
-          if (e.paid == "") {
-            e._rowVariant = "danger";
-          } else {
-            e.paid = moment(e.paid).format("DD/MM");
-          }
-          return e;
-        });
-        return items;
-      } else {
-        return objects;
-      }
+      let items = objects.map(function(e) {
+        let quantity = [...e.products];
+        e.products = e.products.map(e => e.name).join(",  ");
+        e.quantity = quantity.map(e => e.quantity).join(", ");
+        e.total = e.total / 1000 + "k";
+        e.date = moment(e.date).format("DD/MM");
+        if (e.paid == "") {
+          e._rowVariant = "danger";
+        } else {
+          e.paid = moment(e.paid).format("DD/MM");
+        }
+        return e;
+      });
+      return items;
+    },
+    fetchObjects: function() {
+      let date = `${this.$store.state.date}`;
+      let period = `${this.$store.state.period}`;
+      fetch("orders", date, period).then(e => {
+        this.tableItems = this.prepare(e);
+      });
+    }
+  },
+  mounted() {
+    this.fetchObjects();
+  },
+  computed: {
+    currentDate() {
+      return `${this.$store.state.date}`;
+    },
+    currentPeriod() {
+      return `${this.$store.state.period}`;
+    },
+    currentSheet() {
+      return `${this.$route.params.sheet}`;
+    }
+  },
+  watch: {
+    currentDate() {
+      this.fetchObjects();
+    },
+    currentPeriod() {
+      this.fetchObjects();
     }
   }
 };

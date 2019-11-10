@@ -7,6 +7,7 @@ import OrdersTable from '../components/dashboard/tables/OrdersTable.vue';
 import ExpensesTable from '../components/dashboard/tables/ExpensesTable.vue';
 import Console from '../components/database/Console.vue';
 import Form from '../components/dashboard/forms/Form.vue';
+import OrdersForm from '../components/dashboard/forms/OrdersForm.vue';
 
 Vue.use(VueRouter);
 
@@ -41,7 +42,14 @@ const routes = [
 			{
 				path      : 'form/',
 				name      : 'form',
-				component : Form
+				component : Form,
+				children  : [
+					{
+						path      : 'orders/',
+						name      : 'ordersForm',
+						component : OrdersForm
+					}
+				]
 			},
 			{
 				path      : 'console',
