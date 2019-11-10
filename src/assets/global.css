@@ -50,6 +50,10 @@ a:visited {
 	color: var(--color-neutral);
 }
 
+input {
+	background-color: var(--color-secondary);
+}
+
 *:active,
 *:focus {
 	outline: 0;
