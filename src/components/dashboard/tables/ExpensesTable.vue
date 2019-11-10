@@ -69,7 +69,7 @@ export default {
       let items = objects.map(e => {
         e.date = moment(e.date).format("DD/MM");
         if (parseFloat(e.total / 1000) > 1) {
-          e.total = e.total / 1000 + " k";
+          e.total = "$" + e.total / 1000;
         }
         if (parseFloat(e.quantity / 1000) > 1) {
           e.quantity = e.quantity / 1000 + " k";
@@ -110,7 +110,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 #container {
   display: grid;
   grid-template-columns: 2fr 1fr;
