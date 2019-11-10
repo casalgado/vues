@@ -36,7 +36,6 @@ export default {
   },
   watch: {
     currentDate() {
-      console.log("items");
       this.getObjects();
     },
     currentPeriod() {

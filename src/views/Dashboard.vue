@@ -20,6 +20,11 @@ export default {
   components: {
     DashNav,
     Header
+  },
+  data() {
+    return {
+      items: []
+    };
   }
 };
 </script>
