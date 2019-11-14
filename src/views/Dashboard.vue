@@ -1,8 +1,5 @@
 <template>
   <div id="container" class="shadow-2">
-    <div id="header">
-      <Header />
-    </div>
     <div id="main" class>
       <router-view :key="$route.fullPath" />
     </div>
@@ -14,12 +11,11 @@
 <script>
 import DashNav from "@/components/layout/DashNav";
 // import Main from "@/components/layout/Main";
-import Header from "@/components/layout/Header";
+// import Header from "@/components/layout/Header";
 export default {
   name: "Dashboard",
   components: {
-    DashNav,
-    Header
+    DashNav
   },
   data() {
     return {

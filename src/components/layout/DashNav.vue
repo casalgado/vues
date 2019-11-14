@@ -1,10 +1,10 @@
 <template>
   <ul>
     <li>
-      <router-link :to="{ name: 'ordersTable', params: routes[0].params}">{{routes[0].title}}</router-link>
+      <router-link :to="{ name: 'pedidos'}">Pedidos</router-link>
     </li>
     <li>
-      <router-link :to="{ name: 'expensesTable', params: routes[1].params}">{{routes[1].title}}</router-link>
+      <router-link :to="{ name: 'gastos'}">Gastos</router-link>
     </li>
     <li>
       <router-link :to="{ name: 'ordersForm' }">{{routes[2].title}}</router-link>
@@ -33,7 +33,7 @@ export default {
           name: "ordersTable",
           path: "/dashboard/table/orders",
           params: { sheet: "orders" },
-          title: "Pedidos"
+          title: "Orders"
         },
         {
           name: "expensesTable",
@@ -60,7 +60,7 @@ export default {
 ul {
   width: 99vw;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   padding: 5px;
   grid-gap: 5px;
 }

@@ -17,7 +17,7 @@ const orders = database.ref('esalimento/orders');
 const expenses = database.ref('esalimento/expenses');
 export { database, db, orders, expenses };
 
-export function fetch(ref, date, period) {
+export function fetchByDate(ref, date, period) {
 	return new Promise(function(resolve) {
 		database
 			.ref(`esalimento/${ref}`)
@@ -29,6 +29,7 @@ export function fetch(ref, date, period) {
 				let data = snapshot.val();
 				let objects = [];
 				for (let key in data) {
+					data[key].id = key;
 					objects.push(data[key]);
 				}
 				resolve(objects);
