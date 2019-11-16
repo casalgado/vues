@@ -7,6 +7,7 @@ import ExpensesTable from '../components/dashboard/tables/ExpensesTable.vue';
 import Console from '../components/database/Console.vue';
 import Form from '../components/dashboard/forms/Form.vue';
 import OrdersForm from '../components/dashboard/forms/OrdersForm.vue';
+import RenderForm from '../components/dashboard/forms/RenderForm.vue';
 
 Vue.use(VueRouter);
 
@@ -42,6 +43,11 @@ const routes = [
 						component : OrdersForm
 					}
 				]
+			},
+			{
+				path      : 'newform',
+				name      : 'newform',
+				component : RenderForm
 			},
 			{
 				path      : 'console',

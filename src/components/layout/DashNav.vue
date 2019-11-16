@@ -10,6 +10,9 @@
       <router-link :to="{ name: 'ordersForm' }">{{routes[2].title}}</router-link>
     </li>
     <li>
+      <router-link :to="{ name: 'newform' }">new Form</router-link>
+    </li>
+    <li>
       <router-link to="/dashboard">dashboard</router-link>
     </li>
     <li>

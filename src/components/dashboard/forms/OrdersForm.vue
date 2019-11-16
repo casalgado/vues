@@ -7,14 +7,35 @@
     </div>
     <div id="sidebar">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <div id="select-group" class="f-group">
+        <div class="f-group select-group">
           <b-button @click="toggleCreate" variant="info">+</b-button>
-          <b-form-input v-if="create" id="unit" v-model="form.client" type="text" size="sm"></b-form-input>
+          <b-form-input v-if="create" id="unitPrice" v-model="form.client" type="text" size="sm"></b-form-input>
           <b-form-select v-else v-model="form.client" :options="clients" size="sm"></b-form-select>
         </div>
-        <b-form-select v-model="form.product" :options="products" size="sm"></b-form-select>
-        <b-form-group id="unit-group" class="f-group" label="unit price" label-for="unit">
-          <b-form-input id="unit" v-model="form.unit" type="number" size="sm"></b-form-input>
+        <div class="f-group select-group">
+          <b-button @click="toggleCreate" variant="info">+</b-button>
+          <b-form-input v-if="create" id="product" v-model="form.product" type="text" size="sm"></b-form-input>
+          <b-form-select v-else v-model="form.product" :options="products" size="sm"></b-form-select>
+        </div>
+
+        <b-form-group class="f-group price-group" label="Ctd" label-for="unit">
+          <b-form-input v-model="form.quantity" type="number" size="sm"></b-form-input>
+        </b-form-group>
+
+        <b-form-group class="f-group price-group" label="$Un" label-for="unit">
+          <b-form-input v-model="form.unitPrice" type="number" size="sm"></b-form-input>
+        </b-form-group>
+
+        <b-form-group class="f-group price-group" label="$To" label-for="unit">
+          <b-form-input v-model="form.total" type="number" size="sm"></b-form-input>
+        </b-form-group>
+
+        <b-form-group class="f-group date-group" label="Pro" label-for="unit">
+          <b-form-input v-model="form.produced" type="date" size="sm"></b-form-input>
+        </b-form-group>
+
+        <b-form-group class="f-group date-group" label="Ent" label-for="unit">
+          <b-form-input v-model="form.delivered" type="date" size="sm"></b-form-input>
         </b-form-group>
 
         <b-button type="submit" variant="primary">Submit</b-button>
@@ -31,8 +52,12 @@ export default {
       form: {
         client: "",
         product: "",
-        food: null,
-        checked: []
+        unitPrice: 0,
+        quantity: 0,
+        total: 0,
+        produced: "",
+        delivered: "",
+        paid: ""
       },
       show: true,
       create: false,
@@ -54,10 +79,14 @@ export default {
     onReset(evt) {
       evt.preventDefault();
       // Reset our form values
-      this.form.email = "";
-      this.form.name = "";
-      this.form.food = null;
-      this.form.checked = [];
+      this.client = "";
+      this.product = "";
+      this.unitPrice = 0;
+      this.quantity = 0;
+      this.total = 0;
+      this.produced = "";
+      this.delivered = "";
+      this.paid = "";
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {
