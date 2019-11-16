@@ -37,6 +37,15 @@ export function fetchByDate(ref, date, period) {
 	});
 }
 
+export function save(ref, payload) {
+	return new Promise(function(resolve) {
+		database.ref(`esalimento/${ref}`).push(payload).then(function(value) {
+			resolve(value);
+			console.log(value);
+		});
+	});
+}
+
 // export function CheckIfFriendsPending(id2) {
 // 	return new Promise(function(resolve, reject) {
 // 		var userID = getFirebase().auth().currentUser.uid;

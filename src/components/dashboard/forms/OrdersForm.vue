@@ -12,6 +12,7 @@
           <b-form-input v-if="create" id="unitPrice" v-model="form.client" type="text" size="sm"></b-form-input>
           <b-form-select v-else v-model="form.client" :options="clients" size="sm"></b-form-select>
         </div>
+
         <div class="f-group select-group">
           <b-button @click="toggleCreate" variant="info">+</b-button>
           <b-form-input v-if="create" id="product" v-model="form.product" type="text" size="sm"></b-form-input>
@@ -31,7 +32,7 @@
         </b-form-group>
 
         <b-form-group class="f-group date-group" label="Pro" label-for="unit">
-          <b-form-input v-model="form.produced" type="date" size="sm"></b-form-input>
+          <b-form-input v-model="form.date" type="date" size="sm"></b-form-input>
         </b-form-group>
 
         <b-form-group class="f-group date-group" label="Ent" label-for="unit">
@@ -45,6 +46,7 @@
   </div>
 </template>
 <script>
+import { save } from "../../../firebase";
 export default {
   name: "OrdersForm",
   data() {
@@ -55,7 +57,7 @@ export default {
         unitPrice: 0,
         quantity: 0,
         total: 0,
-        produced: "",
+        date: "",
         delivered: "",
         paid: ""
       },
@@ -74,17 +76,20 @@ export default {
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
-      alert(JSON.stringify(this.form));
+      save("orders", this.form);
+      this.onReset();
     },
     onReset(evt) {
-      evt.preventDefault();
+      if (evt) {
+        evt.preventDefault();
+      }
       // Reset our form values
       this.client = "";
       this.product = "";
       this.unitPrice = 0;
       this.quantity = 0;
       this.total = 0;
-      this.produced = "";
+      this.date = "";
       this.delivered = "";
       this.paid = "";
       // Trick to reset/clear native browser form validation state
