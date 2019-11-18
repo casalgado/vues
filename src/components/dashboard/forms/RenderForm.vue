@@ -7,7 +7,7 @@
     </div>
     <div id="sidebar">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <SelectGroup />
+        <Select />
         <TextGroup />
         <!-- <div v-for="field in fields" :key="field.id">
           <component v-bind:is="field.component"></component>
@@ -19,7 +19,7 @@
         </b-form-group>-->
         <div v-if="false">
           <!-- necessary because of linting rule 'no unused component' -->
-          <SelectGroup />
+          <Select />
           <TextGroup />
         </div>
         <b-button type="submit" variant="primary">Submit</b-button>
@@ -29,15 +29,15 @@
   </div>
 </template>
 <script>
-import SelectGroup from "./SelectGroup";
+import Select from "./inputs/Select";
 import TextGroup from "./TextGroup";
 export default {
-  components: { SelectGroup, TextGroup },
+  components: { Select, TextGroup },
   name: "OrdersForm",
   data() {
     return {
       fields: [
-        { component: "SelectGroup", id: 1 },
+        { component: "Select", id: 1 },
         { component: "TextGroup", id: 2 }
       ],
       form: {

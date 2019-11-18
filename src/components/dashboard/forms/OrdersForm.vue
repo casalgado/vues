@@ -7,29 +7,14 @@
     </div>
     <div id="sidebar">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <div class="f-group select-group">
-          <b-button @click="toggleCreate" variant="info">+</b-button>
-          <b-form-input v-if="create" id="unitPrice" v-model="form.client" type="text" size="sm"></b-form-input>
-          <b-form-select v-else v-model="form.client" :options="clients" size="sm"></b-form-select>
+        <Select @change="addInput" :options="clients" :property="'client'" />
+        <Basic @change="addInput" :label="'Total'" :property="'total'" :type="'date'" />
+
+        <div v-for="product in form.products" :key="product.name">
+          {{form.products.indexOf(product)}}
+          <Select @change="addNestedInput" :options="products" :property="'name'" />
+          <Prices @change="addNestedInput" :property="'products'" />
         </div>
-
-        <div class="f-group select-group">
-          <b-button @click="toggleCreate" variant="info">+</b-button>
-          <b-form-input v-if="create" id="product" v-model="form.product" type="text" size="sm"></b-form-input>
-          <b-form-select v-else v-model="form.product" :options="products" size="sm"></b-form-select>
-        </div>
-
-        <b-form-group class="f-group price-group" label="Ctd" label-for="unit">
-          <b-form-input v-model="form.quantity" type="number" size="sm"></b-form-input>
-        </b-form-group>
-
-        <b-form-group class="f-group price-group" label="$Un" label-for="unit">
-          <b-form-input v-model="form.unitPrice" type="number" size="sm"></b-form-input>
-        </b-form-group>
-
-        <b-form-group class="f-group price-group" label="$To" label-for="unit">
-          <b-form-input v-model="form.total" type="number" size="sm"></b-form-input>
-        </b-form-group>
 
         <b-form-group class="f-group date-group" label="Pro" label-for="unit">
           <b-form-input v-model="form.date" type="date" size="sm"></b-form-input>
@@ -46,23 +31,26 @@
   </div>
 </template>
 <script>
-import { save } from "../../../firebase";
+import Select from "./inputs/Select";
+import Basic from "./inputs/Basic";
+import Prices from "./inputs/Prices";
+// import { save } from "../../../firebase";
 export default {
+  components: { Select, Basic, Prices },
   name: "OrdersForm",
   data() {
     return {
       form: {
         client: "",
-        product: "",
         unitPrice: 0,
         quantity: 0,
         total: 0,
         date: "",
+        products: [{ name: "1" }, { name: "2" }],
         delivered: "",
         paid: ""
       },
       show: true,
-      create: false,
       clients: [
         { value: "", text: "cliente" },
         { value: "c", text: "ciieosu" }
@@ -74,9 +62,16 @@ export default {
     };
   },
   methods: {
+    addInput(evt) {
+      this.form = Object.assign(this.form, evt);
+    },
+    addNestedInput(evt) {
+      console.log(evt);
+    },
     onSubmit(evt) {
       evt.preventDefault();
-      save("orders", this.form);
+      console.log(this.form);
+      // save("orders", this.form);
       this.onReset();
     },
     onReset(evt) {
@@ -110,6 +105,7 @@ export default {
 }
 .f-group {
   display: grid;
+  grid-gap: 10px;
   grid-template-columns: 1fr 8fr;
 }
 
