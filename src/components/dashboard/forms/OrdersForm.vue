@@ -2,7 +2,7 @@
   <div id="container" class="border">
     <div id="main">
       <b-card class="mt-3">
-        <pre class="m-0">{{ this.dynamicFields }}</pre>
+        <pre class="m-0">{{ this.form }}</pre>
       </b-card>
     </div>
     <div id="sidebar">
@@ -35,6 +35,7 @@ import Select from "./inputs/Select";
 import Basic from "./inputs/Basic";
 import Prices from "./inputs/Prices";
 import { save } from "../../../firebase";
+import { orders } from "../../../firebase";
 export default {
   components: { Select, Basic, Prices },
   name: "OrdersForm",
@@ -47,12 +48,10 @@ export default {
         paid: "",
         products: []
       },
+      // @refactor, move dynamicFields up to vuex store.
       dynamicFields: [{ id: 0, active: true }],
       show: true,
-      clients: [
-        { value: "", text: "cliente" },
-        { value: "c", text: "ciieosu" }
-      ],
+      clients: [],
       products: [
         { value: "", text: "producto" },
         { value: "p", text: "pounhon" },
@@ -62,6 +61,9 @@ export default {
         { value: "d", text: "d" }
       ]
     };
+  },
+  created() {
+    this.setClients();
   },
   methods: {
     addInput(evt) {
@@ -117,6 +119,68 @@ export default {
     },
     toggleCreate() {
       this.create = !this.create;
+    },
+    setClients() {
+      /* 
+      this can be a method called getPropertyWithSpotlight(ref, property, target_property, spotlight_size)
+      ref = database.ref
+      property = String (property of objects in database to choose from)
+      local_property = String (data property of local component)
+      spotlight_size = Integer
+
+      in this case, 
+      ref = orders,
+      property = client,
+      spotlight_size = 10
+
+      the method should return an array of objects of the form {value: String, text: String}
+      to be sent to a Select component as the prop :options
+      */
+      let spotlight_size = 15;
+      let property = "client";
+      let local_property = "clients";
+      let ref = orders;
+
+      let objects = [];
+      let sorted_unique_objects = [];
+      let most_used = [];
+
+      ref
+        .once("value")
+        .then(function(snapshot) {
+          let orders = snapshot.val();
+          for (let order in orders) {
+            objects.push(orders[order][property]);
+          }
+          sorted_unique_objects = objects
+            .filter((value, index, self) => {
+              return self.indexOf(value) === index;
+            })
+            .sort();
+          most_used = sorted_unique_objects
+            .map(e => {
+              let times_used = objects.filter(i => {
+                return e == i;
+              }).length;
+              return {
+                client: e,
+                use_count: times_used
+              };
+            })
+            .sort(function(a, b) {
+              var x = a.use_count;
+              var y = b.use_count;
+              return x < y ? 1 : x > y ? -1 : 0;
+            })
+            .splice(0, spotlight_size)
+            .map(e => {
+              return e.client;
+            });
+          most_used.push({ value: "", text: "" });
+          most_used.unshift({ value: "", text: "clientes" });
+          return [...most_used, ...sorted_unique_objects];
+        })
+        .then(options => (this[local_property] = options));
     }
   }
 };
