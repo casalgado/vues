@@ -2,18 +2,18 @@
   <div id="container" class="border">
     <div id="main">
       <b-card class="mt-3">
-        <pre class="m-0">{{ this.form }}</pre>
+        <pre class="m-0">{{ this.dynamicFields }}</pre>
       </b-card>
     </div>
     <div id="sidebar">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <Select @change="addInput" :options="clients" :property="'client'" />
-        <b-button @click="addProductFields">+ producto</b-button>
-        <div v-for="field in dynamicFields" :key="field.id">
+        <Basic @change="addInput" :label="'producir'" :property="'date'" :type="'date'" />
+        <Basic @change="addInput" :label="'entregar'" :property="'delivered'" :type="'date'" />
+
+        <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
           <div v-if="field.active">
-            <b-button @click="removeAtIndex(field.id)">x{{field.id}}</b-button>
             <Prices
-              @change="addNestedInput"
               :property="'products'"
               :options="products"
               :id="field.id"
@@ -21,11 +21,9 @@
             />
           </div>
         </div>
-        <Basic @change="addInput" :label="'producir'" :property="'date'" :type="'date'" />
-        <Basic @change="addInput" :label="'entregar'" :property="'delivered'" :type="'date'" />
 
         <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button>
+        <b-button @click="addProductFields" variant="info">+ producto</b-button>
       </b-form>
     </div>
   </div>
@@ -34,8 +32,9 @@
 import Select from "./inputs/Select";
 import Basic from "./inputs/Basic";
 import Prices from "./inputs/Prices";
-import { save } from "../../../firebase";
+// import { save } from "../../../firebase";
 import { orders } from "../../../firebase";
+import { mapState } from "vuex";
 export default {
   components: { Select, Basic, Prices },
   name: "OrdersForm",
@@ -48,8 +47,6 @@ export default {
         paid: "",
         products: []
       },
-      // @refactor, move dynamicFields up to vuex store.
-      dynamicFields: [{ id: 0, active: true }],
       show: true,
       clients: [],
       products: [
@@ -65,23 +62,19 @@ export default {
   created() {
     this.setClients();
   },
+  computed: mapState(["dynamicFields"]),
   methods: {
     addInput(evt) {
       this.form = Object.assign(this.form, evt);
     },
-    addNestedInput(evt) {
-      Object.assign(this.dynamicFields[evt.id], evt);
-    },
     addProductFields() {
-      let size = this.dynamicFields.length;
-      this.dynamicFields.push({ id: size, active: true });
-    },
-    removeAtIndex(i) {
-      this.dynamicFields[i].active = false;
+      this.$store.commit("addField");
     },
     onSubmit(evt) {
       evt.preventDefault();
-      let products = this.dynamicFields;
+      let products = Object.values(this.dynamicFields).filter(
+        e => e.active == true
+      );
       let total = 0;
       for (let i = 0; i < products.length; i++) {
         if (products[i].active) {
@@ -93,9 +86,9 @@ export default {
       }
       this.form.total = total;
       console.log(this.form);
-      save("orders", this.form).then(() => {
-        this.onReset();
-      });
+      // save("orders", this.form).then(() => {
+      //   this.onReset();
+      // });
     },
     onReset(evt) {
       if (evt) {
@@ -103,7 +96,6 @@ export default {
       }
       // Reset our form values
       this.form.client = "";
-      this.form.product = "";
       this.form.unitPrice = 0;
       this.form.quantity = 0;
       this.form.total = 0;
@@ -177,10 +169,15 @@ export default {
               return e.client;
             });
           most_used.push({ value: "", text: "" });
-          most_used.unshift({ value: "", text: "clientes" });
+          most_used.unshift({ value: "", text: "cliente" });
           return [...most_used, ...sorted_unique_objects];
         })
         .then(options => (this[local_property] = options));
+    }
+  },
+  watch: {
+    dynamicFields() {
+      console.log("watching");
     }
   }
 };

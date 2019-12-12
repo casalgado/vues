@@ -43,6 +43,13 @@ body {
 	color: #e6e6e6;
 }
 
+/* global form styles */
+
+.custom-input {
+	color: var(--color-neutral);
+	background-color: var(--color-secondary-light);
+}
+
 /* bootstrap classes */
 
 a,

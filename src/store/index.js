@@ -6,8 +6,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state     : {
-		period : 'day',
-		date   : moment().format()
+		period        : 'day',
+		date          : moment().format(),
+		dynamicFields : { 0: { id: 0, active: true, name: '', unitPrice: 0, quantity: 0, total: 0 } }
 	},
 	mutations : {
 		next(state) {
@@ -18,6 +19,24 @@ export default new Vuex.Store({
 		},
 		setPeriod(state, payload) {
 			state.period = payload.period;
+		},
+		updateField(state, payload) {
+			state.dynamicFields[payload.id] = Object.assign({}, state.dynamicFields[payload.id], payload);
+		},
+		addField() {
+			let id = Object.keys(this.state.dynamicFields).length;
+			console.log(id);
+			Vue.set(this.state.dynamicFields, id, {
+				id        : id,
+				active    : true,
+				name      : '',
+				unitPrice : 0,
+				quantity  : 0,
+				total     : 0
+			});
+		},
+		removeField(state, payload) {
+			state.dynamicFields[payload.id].active = false;
 		}
 	},
 	actions   : {},

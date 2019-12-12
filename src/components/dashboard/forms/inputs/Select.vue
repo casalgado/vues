@@ -1,8 +1,15 @@
 <template>
   <div class="f-group select-group">
-    <b-button @click="toggleCreate" variant="info">+</b-button>
-    <b-form-input v-if="create" v-model="input" type="text" size="sm" placeholder="..."></b-form-input>
-    <b-form-select v-else v-model="input" :options="options" size="sm"></b-form-select>
+    <b-button id="toggle-button" @click="toggleCreate" variant="info">+</b-button>
+    <b-form-input
+      v-if="create"
+      v-model="input"
+      class="custom-input"
+      type="text"
+      size="sm"
+      placeholder="..."
+    ></b-form-input>
+    <b-form-select v-else v-model="input" :options="options" class="custom-input" size="sm"></b-form-select>
   </div>
 </template>
 <script>
@@ -33,3 +40,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+#toggle-button {
+  justify-self: center;
+  height: 30px;
+  width: 30px;
+  padding: 0px;
+}
+</style>

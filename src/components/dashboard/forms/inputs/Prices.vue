@@ -1,28 +1,43 @@
 <template>
   <div>
-    <b-form>
-      <b-form-group class="f-group price-group" label="$Un">
-        <b-form-select @change="onChange('name')" v-model="input.name" :options="options" size="sm"></b-form-select>
-      </b-form-group>
-      <b-form-group class="f-group price-group" label="$Un">
-        <b-form-input
-          @change="onChange('unitPrice')"
-          v-model="input.unitPrice"
-          type="number"
-          size="sm"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group class="f-group price-group" label="Ctd">
-        <b-form-input
-          @change="onChange('quantity')"
-          v-model="input.quantity"
-          type="number"
-          size="sm"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group class="f-group price-group" label="$To">
-        <b-form-input @change="onChange('total')" v-model="input.total" type="number" size="sm"></b-form-input>
-      </b-form-group>
+    <b-form id="form">
+      <b-button id="remove-button" variant="danger" @click="remove()">x</b-button>
+
+      <b-form-select
+        id="product-select"
+        class="custom-input"
+        @change="onChange('name')"
+        v-model="input.name"
+        :options="options"
+        size="sm"
+      ></b-form-select>
+
+      <b-form-group class="f-group price-group" label="$ Unitario" size="sm"></b-form-group>
+      <b-form-input
+        class="custom-input price-input"
+        @change="onChange('unitPrice')"
+        v-model="input.unitPrice"
+        type="number"
+        size="sm"
+      ></b-form-input>
+
+      <b-form-group class="f-group price-group" label="Cantidad"></b-form-group>
+      <b-form-input
+        class="custom-input price-input"
+        @change="onChange('quantity')"
+        v-model="input.quantity"
+        type="number"
+        size="sm"
+      ></b-form-input>
+
+      <b-form-group class="f-group price-group" label="$ Total"></b-form-group>
+      <b-form-input
+        class="custom-input price-input"
+        @change="onChange('total')"
+        v-model="input.total"
+        type="number"
+        size="sm"
+      ></b-form-input>
     </b-form>
   </div>
 </template>
@@ -61,8 +76,43 @@ export default {
         this.input.total = Math.floor(unitPrice * quantity);
       }
       this.input.id = this.id;
-      this.$emit("change", this.input);
+      this.input.active = true;
+      this.$store.commit("updateField", this.input);
+    },
+    remove() {
+      console.log(this.id);
+      this.$store.commit("removeField", { id: this.id });
     }
   }
 };
 </script>
+<style scoped>
+* {
+  margin: 0px;
+}
+#form {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-gap: 5px;
+}
+
+#product-select {
+  grid-column: 2 / span 8;
+}
+
+.price-input {
+  grid-column: span 3;
+}
+
+.price-group {
+  grid-column: span 6;
+  justify-self: start;
+  align-self: end;
+}
+
+#remove-button {
+  height: 30px;
+  width: 30px;
+  padding: 0px;
+}
+</style>

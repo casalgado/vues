@@ -1,6 +1,6 @@
 <template>
   <b-form-group class="f-group text-group" :label="label" :label-for="label">
-    <b-form-input v-model="input" :type="type" size="sm"></b-form-input>
+    <b-form-input class="custom-input" v-model="input" :type="type" size="sm"></b-form-input>
   </b-form-group>
 </template>
 <script>
