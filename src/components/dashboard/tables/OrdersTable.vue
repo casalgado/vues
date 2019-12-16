@@ -25,12 +25,14 @@ export default {
           {
             key: "client",
             label: "Clientes",
-            sortable: true
+            sortable: true,
+            tdClass: "justifyLeft"
           },
           {
             key: "products",
             label: "Productos",
-            sortable: true
+            sortable: true,
+            tdClass: "justifyLeft"
           },
           {
             key: "quantity",
@@ -56,9 +58,9 @@ export default {
     },
     format: function(objects) {
       let items = objects.map(function(e) {
-        let quantity = [...e.products];
-        e.products = e.products.map(e => e.name).join(",  ");
-        e.quantity = quantity.map(e => e.quantity).join(", ");
+        let clone = [...e.products];
+        e.products = e.products.map(e => e.name).join("<br />");
+        e.quantity = clone.map(e => e.quantity).join("<br />");
         e.total = e.total / 1000 + "k";
         e.date = moment(e.date).format("DD/MM");
         if (e.paid == "") {

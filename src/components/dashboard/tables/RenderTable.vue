@@ -1,35 +1,41 @@
 <template>
   <div>
-    <div id="container" class="border">
-      <p id="title">{{table.title}}</p>
+    <div id="container" class>
+      <h4 id="title">{{table.title}}</h4>
       <div id="main">
         <Pagination />
         <b-table
-          id="table"
           selectable
+          striped
+          borderless
+          id="table"
           :items="table.objects"
           :fields="table.fields"
           :select-mode="selectMode"
           selected-variant="active"
           @row-selected="onRowSelected"
-        ></b-table>
+        >
+          <template v-slot:cell(products)="data">
+            <span v-html="data.value"></span>
+          </template>
+          <template v-slot:cell(quantity)="data">
+            <span v-html="data.value"></span>
+          </template>
+        </b-table>
       </div>
-      <div id="sidebar">
-        <p id="scontent">
-          Selected Rows:
-          <br />
-          {{ selected }}
-        </p>
-      </div>
+
+      <TableSidebar :objects="table.objects" :selected="selected" />
     </div>
   </div>
 </template>
 <script>
 import Pagination from "./Pagination";
+import TableSidebar from "./TableSidebar";
 export default {
   name: "RenderTable",
   components: {
-    Pagination
+    Pagination,
+    TableSidebar
   },
   props: {
     table: Object

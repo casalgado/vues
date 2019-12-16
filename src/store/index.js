@@ -20,6 +20,11 @@ export default new Vuex.Store({
 		setPeriod(state, payload) {
 			state.period = payload.period;
 		},
+		togglePeriod(state) {
+			const p = [ 'day', 'week', 'month' ];
+			let i = p.indexOf(state.period);
+			state.period = p[(i + 1) % 3];
+		},
 		updateField(state, payload) {
 			state.dynamicFields[payload.id] = Object.assign({}, state.dynamicFields[payload.id], payload);
 		},

@@ -2,23 +2,31 @@
 
 :root {
 	--color-primary: #1d1c1c;
-	--color-secondary: #2d2f34;
-	--color-secondary-light: #383b40;
+	--color-secondary: rgb(38, 38, 38);
+	--color-secondary-light: rgb(55, 55, 55);
 	--color-neutral: whitesmoke;
-	--color-background: #010101;
+	--color-background: rgb(38, 38, 38);
 	--border-radius-large: 5px;
 	--border-radius-small: 2px;
 }
 
 /* global table styles */
 
-.table {
+.b-table {
 	color: var(--color-neutral);
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.5;
 }
 
 .b-table-row-selected {
-	background-color: var(--color-background);
-	color: var(--color-neutral);
+	background-color: var(--color-neutral) !important;
+	color: var(--color-primary);
+}
+
+.table-striped > tbody > tr:nth-child(2n + 1) > td,
+.table-striped > tbody > tr:nth-child(2n + 1) > th {
+	background-color: var(--color-secondary-light);
 }
 
 /* global styles */
@@ -32,11 +40,15 @@ body {
 	border: 1px solid var(--color-background);
 }
 
+.justifyLeft {
+	text-align: left;
+}
+
 @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
 @import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap');
 
 #app {
-	font-family: "Muli", Helvetica, Arial, sans-serif;
+	font-family: sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
