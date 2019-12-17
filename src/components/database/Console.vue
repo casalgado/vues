@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button @click="importDatabase()" class="btn btn-danger">import database</button>
     <button @click="importOrders()" class="btn btn-danger">import orders</button>
+    <button @click="importDatabase()" class="btn btn-danger">import rest of database</button>
   </div>
 </template>
 <script>
@@ -13,7 +13,7 @@ export default {
       let nodes = ["expenses", "products", "clients"];
       nodes.forEach(node => {
         database
-          .ref("")
+          .ref("devAccount")
           .child(node)
           .once("value")
           .then(function(snapshot) {
@@ -21,17 +21,18 @@ export default {
             return objs;
           })
           .then(objs => {
+            console.log(objs);
             for (let i = 0; i < Object.keys(objs).length; i++) {
               let obj = objs[Object.keys(objs)[i]];
               delete obj.id;
-              database.ref(`backup/${node}`).push(obj);
+              database.ref(`esalimento/${node}`).push(obj);
             }
           });
       });
     },
     importOrders: function() {
       database
-        .ref("")
+        .ref("devAccount")
         .child("orders")
         .once("value")
         .then(function(snapshot) {
