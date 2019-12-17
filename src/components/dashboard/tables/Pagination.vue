@@ -37,14 +37,15 @@ export default {
     currentDate() {
       let period = this.$store.state.period;
       let date = this.$store.state.date;
+      moment.locale("es");
       if (period == "day") {
         return moment(date).format("dddd DD MMM");
       } else if (period == "month") {
         return moment(date).format("MMMM");
       } else {
-        return `${moment(date)
+        return `semana ${moment(date)
           .startOf(period)
-          .format("DD MMM")}  -  ${moment(date)
+          .format("DD")}  -  ${moment(date)
           .endOf(period)
           .format("DD MMM")}`;
       }

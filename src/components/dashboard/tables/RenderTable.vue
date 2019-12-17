@@ -23,8 +23,30 @@
           </template>
         </b-table>
       </div>
-
       <TableSidebar :objects="table.objects" :selected="selected" />
+    </div>
+    <div id="print">
+      <div id="logo"></div>
+      <div id="info">
+        <h1>Cuenta de Cobro</h1>
+        <br />
+        <h1>{{table.objects[0]}}</h1>
+        <h1>NIT:901909839-9</h1>
+        <br />
+        <h1>Debe A:</h1>
+        <br />
+        <h1>ESTEBAN SALGADO</h1>
+        <h1>CC: 1045676132</h1>
+        <br />
+        <h1>La suma de $ONE MILLION DOLLARS</h1>
+      </div>
+      <div id="content">
+        <ul>
+          <li>con</li>
+          <li>nora</li>
+          <li>jones</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -54,17 +76,36 @@ export default {
 };
 </script>
 <style scoped>
-#container {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+@media screen {
+  #container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+  }
+
+  #title {
+    grid-column: span 2;
+  }
+
+  #scontent {
+    position: sticky;
+    top: 0px;
+  }
+
+  #print {
+    display: none;
+  }
 }
 
-#title {
-  grid-column: span 2;
-}
+@media print {
+  #container,
+  #title,
+  #scontent {
+    display: none;
+  }
 
-#scontent {
-  position: sticky;
-  top: 0px;
+  #print {
+    color: black;
+    display: block;
+  }
 }
 </style>

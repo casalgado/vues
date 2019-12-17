@@ -15,6 +15,7 @@ const database = app.database();
 const db = database.ref('esalimento');
 const orders = database.ref('esalimento/orders');
 const expenses = database.ref('esalimento/expenses');
+
 export { database, db, orders, expenses };
 
 export function fetchByDate(ref, date, period) {

@@ -25,27 +25,35 @@ export default {
 };
 </script>
 <style scoped>
-#container {
-  display: grid;
-  grid-template-columns: 1fr;
-  color: var(--color-neutral);
-  background-color: var(--color-primary);
-  border-radius: var(--border-radius-small);
+@media screen {
+  #container {
+    display: grid;
+    grid-template-columns: 1fr;
+    color: var(--color-neutral);
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius-small);
+  }
+
+  #header {
+    color: var(--color-neutral);
+  }
+
+  #nav {
+    position: fixed;
+    bottom: 0px;
+    background-color: var(--color-primary);
+    border-top: 1px solid var(--color-neutral);
+  }
+
+  #main {
+    background-color: var(--color-secondary);
+    margin-bottom: 40px;
+  }
 }
 
-#header {
-  color: var(--color-neutral);
-}
-
-#nav {
-  position: fixed;
-  bottom: 0px;
-  background-color: var(--color-primary);
-  border-top: 1px solid var(--color-neutral);
-}
-
-#main {
-  background-color: var(--color-secondary);
-  margin-bottom: 40px;
+@media print {
+  #nav {
+    display: none;
+  }
 }
 </style>
