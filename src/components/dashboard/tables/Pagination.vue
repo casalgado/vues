@@ -37,7 +37,7 @@ export default {
     currentDate() {
       let period = this.$store.state.period;
       let date = this.$store.state.date;
-      moment.locale("es");
+
       if (period == "day") {
         return moment(date).format("dddd DD MMM");
       } else if (period == "month") {

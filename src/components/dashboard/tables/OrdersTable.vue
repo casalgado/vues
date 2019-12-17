@@ -64,7 +64,8 @@ export default {
         e.total = e.total / 1000 + "k";
         e.date = moment(e.date).format("DD/MM");
         if (e.paid == "") {
-          e._rowVariant = "dark";
+          // @refactor code below
+          e.paid = "";
         } else {
           e.paid = moment(e.paid).format("DD/MM");
         }

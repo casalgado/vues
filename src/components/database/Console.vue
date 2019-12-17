@@ -44,7 +44,7 @@ export default {
           for (let i = 0; i < Object.keys(objs).length; i++) {
             let co = objs[Object.keys(objs)[i]];
             let new_order = {
-              name: "P-19-" + orders.length + 1,
+              name: "P-19-" + orders.length,
               client: co.client,
               comment: co.comment,
               lastModified: co.lastModified,

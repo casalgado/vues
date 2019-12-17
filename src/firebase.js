@@ -1,5 +1,14 @@
 import { initializeApp } from 'firebase';
 import moment from 'moment';
+// @refactor
+// where should the code below go (momentjs)?
+moment.locale('es');
+moment.locale('en', {
+	week : {
+		dow : 0,
+		doy : moment.localeData('en').firstDayOfYear()
+	}
+});
 
 const app = initializeApp({
 	apiKey            : 'AIzaSyBHfxD6HppqwQm75Pg6u1oLuYB-Phy3HCc',
