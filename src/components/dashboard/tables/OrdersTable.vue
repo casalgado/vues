@@ -45,6 +45,7 @@ export default {
             sortable: true
           }
         ],
+        formattedObjects: [],
         objects: []
       }
     };
@@ -53,7 +54,10 @@ export default {
   methods: {
     getObjects: function() {
       fetchByDate("orders", this.date, this.period).then(e => {
-        this.table.objects = this.format(e);
+        this.table.objects = JSON.parse(JSON.stringify(e));
+        this.table.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
       });
     },
     format: function(objects) {

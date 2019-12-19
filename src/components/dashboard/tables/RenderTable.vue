@@ -9,7 +9,7 @@
           striped
           borderless
           id="table"
-          :items="table.objects"
+          :items="table.formattedObjects"
           :fields="table.fields"
           :select-mode="selectMode"
           selected-variant="active"
@@ -25,7 +25,9 @@
       </div>
       <TableSidebar :objects="table.objects" :selected="selected" />
     </div>
-    <PrintOrders :objects="selected" />
+    <div id="print">
+      <PrintOrders :objects="selected" />
+    </div>
   </div>
 </template>
 <script>

@@ -7,6 +7,9 @@
       <br />Selected Rows:
       <br />
       {{ selected }}
+      <br />Total:
+      <br />
+      {{ (objects.reduce((a, b) => ({total: a.total + b.total})).total/1000) + 'k' }}
     </p>
   </div>
 </template>
