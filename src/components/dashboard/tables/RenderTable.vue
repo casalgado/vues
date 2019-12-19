@@ -9,6 +9,7 @@
           striped
           borderless
           id="table"
+          class="text-nowrap"
           :items="table.formattedObjects"
           :fields="table.fields"
           :select-mode="selectMode"
