@@ -42,6 +42,7 @@ export default {
         .then(objs => {
           let orders = [];
           for (let i = 0; i < Object.keys(objs).length; i++) {
+            // co stands for current object or current order
             let co = objs[Object.keys(objs)[i]];
             let new_order = {
               name: "P-19" + this.zeroPad(orders.length + 1, 3),
@@ -49,6 +50,7 @@ export default {
               comment: co.comment,
               lastModified: co.lastModified,
               paid: co.paid,
+              invoice: "",
               date: co.produced,
               products: [
                 {
