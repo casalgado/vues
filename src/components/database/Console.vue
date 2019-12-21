@@ -44,7 +44,7 @@ export default {
           for (let i = 0; i < Object.keys(objs).length; i++) {
             let co = objs[Object.keys(objs)[i]];
             let new_order = {
-              name: "P-19-" + orders.length,
+              name: "P-19" + this.zeroPad(orders.length + 1, 3),
               client: co.client,
               comment: co.comment,
               lastModified: co.lastModified,
@@ -83,6 +83,10 @@ export default {
             database.ref(`esalimento/orders`).push(e);
           });
         });
+    },
+    zeroPad: function(value, digits) {
+      var zeroes = new Array(digits).join("0");
+      return (zeroes + value).slice(-digits);
     }
   }
 };

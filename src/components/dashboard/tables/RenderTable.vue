@@ -24,10 +24,12 @@
           </template>
         </b-table>
       </div>
+
       <TableSidebar :objects="table.objects" :selected="selected" />
     </div>
+    <!-- v-if sameClient en el div#print -->
     <div id="print">
-      <PrintOrders :objects="selected" />
+      <PrintOrders :objects="table.objects" :selected="selected" />
     </div>
   </div>
 </template>
@@ -69,20 +71,20 @@ export default {
     grid-column: span 2;
   }
 
-  #scontent {
+  #sidebar-content {
     position: sticky;
     top: 0px;
   }
 
   #print {
-    display: none;
+    display: block;
   }
 }
 
 @media print {
   #container,
   #title,
-  #scontent {
+  #sidebar-content {
     display: none;
   }
 

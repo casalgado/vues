@@ -12,13 +12,13 @@
     </div>
     <div id="client_info">
       <ul>
-        <li>cliente:</li>
-        <li>{{objects[0]}}</li>
-        <li>id:</li>
+        <li>Cliente:</li>
+        <li>{{invoice.client}}</li>
+        <li>Id:</li>
         <li>12.231.223</li>
-        <li>direccion:</li>
-        <li>cra 55 # 82 - 14</li>
-        <li>telefono:</li>
+        <li>Direccion:</li>
+        <li>Cra 55 # 82 - 14</li>
+        <li>Telefono:</li>
         <li>231 342 6432</li>
       </ul>
     </div>
@@ -27,7 +27,7 @@
         <li>Factura de Venta</li>
         <li>.</li>
         <li>Fecha:</li>
-        <li>06-12-2019</li>
+        <li>{{date}}</li>
         <li>Numero:</li>
         <li>P-15-124</li>
       </ul>
@@ -35,36 +35,103 @@
     <div id="objects">
       <table>
         <tr>
-          <th class="text-left">No. Pedido</th>
+          <th class="text-left">Codigo</th>
           <th class="text-left">Descripcion</th>
           <th class="text-right">Cantidad</th>
           <th class="text-right">Vr Unitario</th>
           <th class="text-right">Vr Total</th>
         </tr>
-        <!-- <tr>
-          <td class="text-left">{{objects[0].name}}</td>
-          <td class="text-left">{{objects[0].products}}</td>
-          <td class="text-right">{{objects[0].quantity}}</td>
-          <td class="text-right">{{objects[0].total}}</td>
-          <td class="text-right">{{objects[0].total}}</td>
-        </tr>-->
+        <tr v-for="row in invoice.rows" :key="row.id">
+          <td class="text-left">{{ row.name}}</td>
+          <td class="text-left">{{ row.product}}</td>
+          <td class="text-right">{{row.quantity}}</td>
+          <td class="text-right">{{row.unitPrice}}</td>
+          <td class="text-right">{{row.total}}</td>
+        </tr>
       </table>
     </div>
-    <div id="footer">footer</div>
-    <div id="totals">totals</div>
+    <div id="footer">Recibe ___________________________</div>
+    <div id="totals">
+      Total:
+      <span>{{invoice.total}}</span>
+    </div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "PrintOrders",
   props: {
-    objects: Array
+    objects: Array,
+    selected: Array
   },
   data() {
-    return {};
+    return {
+      date: moment().format("DD-MM-YYYY")
+    };
   },
-  methods: {}
+  methods: {
+    sameClient: function(objects) {
+      if (objects.length > 0) {
+        let client = objects[0].client;
+        return (
+          objects.map(e => e.client).filter(e => e == client).length ==
+          objects.length
+        );
+      } else {
+        return false;
+      }
+    }
+  },
+  computed: {
+    rows: function() {
+      if (this.objects.length > 0) {
+        let rows = [];
+        if (this.sameClient(this.selected)) {
+          let selected = this.selected.map(e => e.name);
+          for (let i = 0; i < selected.length; i++) {
+            let object = this.objects.find(e => e.name == selected[i]);
+            let products = object.products;
+            for (let j = 0; j < products.length; j++) {
+              let id = rows.length;
+              rows.push({
+                id: id,
+                name: object.name,
+                product: products[j].name,
+                quantity: products[j].quantity,
+                unitPrice: products[j].unitPrice,
+                total: products[j].total
+              });
+            }
+          }
+          return rows;
+        } else {
+          return [{ name: "must be same client" }];
+        }
+      } else {
+        return [];
+      }
+    },
+    total: function() {
+      if (this.selected.length > 0) {
+        return (
+          this.selected
+            .map(e => parseFloat(e.total.slice(0, -1)))
+            .reduce((a, b) => a + b) * 1000
+        );
+      } else {
+        return 0;
+      }
+    },
+    invoice: function() {
+      return {
+        client: "el caminante",
+        rows: this.rows,
+        total: this.total
+      };
+    }
+  }
 };
 </script>
 <style scoped>
@@ -77,10 +144,13 @@ export default {
 }
 
 #page {
+  font-family: "Courier New", Courier, monospace;
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-items: left;
   margin: 2cm 4cm 2cm 4cm;
+  padding-bottom: 1cm;
+  border-bottom: 1px solid black;
 }
 
 ul {
@@ -113,7 +183,7 @@ ul {
 #client_info,
 #invoice_info {
   width: 100%;
-  border-top: 2px solid black;
+  border-top: 1px solid black;
   padding-top: 0.4cm;
   margin-top: 1cm;
 }
@@ -121,11 +191,26 @@ ul {
 #objects {
   width: 100%;
   grid-column: span 2;
-
-  border-top: 3px double white;
+  border-top: 1px dashed black;
+  border-bottom: 1px dashed black;
+  padding-top: 0.4cm;
+  padding-bottom: 0.4cm;
 }
 
 #objects table {
   width: 100%;
+}
+
+#totals {
+  margin-top: 2cm;
+  justify-self: end;
+}
+
+#footer {
+  margin-top: 2cm;
+}
+
+#totals span {
+  margin-left: 6px;
 }
 </style>
