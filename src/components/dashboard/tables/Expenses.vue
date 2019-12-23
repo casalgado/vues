@@ -1,5 +1,7 @@
 <template>
-  <RenderTable :table="table" />
+  <div>
+    <RenderTable :table="table" />
+  </div>
 </template>
 <script>
 import RenderTable from "./structure/RenderTable";

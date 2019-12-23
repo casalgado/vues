@@ -10,8 +10,6 @@
 </template>
 <script>
 import DashNav from "@/components/layout/DashNav";
-// import Main from "@/components/layout/Main";
-// import Header from "@/components/layout/Header";
 export default {
   name: "Dashboard",
   components: {
