@@ -43,6 +43,7 @@ export default {
     bottom: 0px;
     background-color: var(--color-primary);
     border-top: 1px solid var(--color-neutral);
+    width: 100%;
   }
 
   #main {

@@ -10,6 +10,40 @@
 	--border-radius-small: 2px;
 }
 
+/* bootstrap classes */
+
+a,
+a:visited {
+	color: var(--color-neutral);
+}
+
+input {
+	background-color: var(--color-secondary);
+}
+
+*:active,
+*:focus {
+	outline: 0;
+	outline-color: transparent;
+	outline-width: 0;
+	outline-style: none;
+	box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+}
+
+.btn {
+	cursor: pointer;
+}
+.btn-primary {
+	background-color: var(--color-secondary-light);
+	border-color: var(--color-primary);
+}
+.btn-primary:hover {
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
+}
+
 /* global table styles */
 
 .b-table {
@@ -34,6 +68,12 @@
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-gap: 10px;
 	margin: 10px;
+}
+
+/* global nav styles */
+
+.nav-dropdown {
+	background-color: var(--color-primary) !important;
 }
 
 /* global styles */
@@ -71,40 +111,6 @@ body {
 .custom-input {
 	color: var(--color-neutral);
 	background-color: var(--color-secondary-light);
-}
-
-/* bootstrap classes */
-
-a,
-a:visited {
-	color: var(--color-neutral);
-}
-
-input {
-	background-color: var(--color-secondary);
-}
-
-*:active,
-*:focus {
-	outline: 0;
-	outline-color: transparent;
-	outline-width: 0;
-	outline-style: none;
-	box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
-	-webkit-box-shadow: none !important;
-	-moz-box-shadow: none !important;
-}
-
-.btn {
-	cursor: pointer;
-}
-.btn-primary {
-	background-color: var(--color-secondary-light);
-	border-color: var(--color-primary);
-}
-.btn-primary:hover {
-	background-color: var(--color-primary);
-	border-color: var(--color-primary);
 }
 
 /* material design shadows */

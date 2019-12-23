@@ -1,30 +1,34 @@
 <template>
-  <ul>
-    <li>
-      <router-link :to="{ name: 'pedidos'}">Pedidos</router-link>
-    </li>
-    <li>
-      <router-link :to="{ name: 'gastos'}">Gastos</router-link>
-    </li>
-    <li>
-      <router-link :to="{ name: 'ordersForm' }">{{routes[2].title}}</router-link>
-    </li>
-    <li>
-      <router-link :to="{ name: 'newform' }">new Form</router-link>
-    </li>
-    <li>
-      <router-link to="/dashboard">dashboard</router-link>
-    </li>
-    <li>
-      <router-link to="/">home</router-link>
-    </li>
-    <li>
-      <router-link to="/about">about</router-link>
-    </li>
-    <li>
-      <router-link to="/dashboard/console">console</router-link>
-    </li>
-  </ul>
+  <div id="container">
+    <b-dropdown dropup no-caret text="+" offset="-60" toggle-class="nav-dropdown" class="m-2">
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'ordersForm' }">{{routes[2].title}}</router-link>
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'newform' }">new Form</router-link>
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link to="/dashboard">dashboard</router-link>
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link to="/">home</router-link>
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link to="/about">about</router-link>
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link to="/dashboard/console">console</router-link>
+      </b-dropdown-item-button>
+    </b-dropdown>
+    <b-dropdown dropup no-caret text="=" offset="-60" toggle-class="nav-dropdown" class="m-2">
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'pedidos'}">Pedidos</router-link>
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'gastos'}">Gastos</router-link>
+      </b-dropdown-item-button>
+    </b-dropdown>
+  </div>
 </template>
 <script>
 export default {
@@ -60,6 +64,22 @@ export default {
 };
 </script>
 <style scoped>
+#container {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  justify-items: start;
+  align-items: center;
+  grid-gap: 20px;
+}
+
+#container > :first-child {
+  justify-self: end;
+}
+
+a {
+  color: var(--color-primary) !important;
+}
+
 ul {
   width: 99vw;
   display: grid;

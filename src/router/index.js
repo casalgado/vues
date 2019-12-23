@@ -2,8 +2,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Dashboard from '../views/Dashboard.vue';
-import OrdersTable from '../components/dashboard/tables/OrdersTable.vue';
-import ExpensesTable from '../components/dashboard/tables/ExpensesTable.vue';
 import Console from '../components/database/Console.vue';
 import Form from '../components/dashboard/forms/Form.vue';
 import OrdersForm from '../components/dashboard/forms/OrdersForm.vue';
@@ -25,12 +23,12 @@ const routes = [
 			{
 				path      : 'pedidos/',
 				name      : 'pedidos',
-				component : OrdersTable
+				component : () => import('../components/dashboard/tables/Orders.vue')
 			},
 			{
 				path      : 'gastos/',
 				name      : 'gastos',
-				component : ExpensesTable
+				component : () => import('../components/dashboard/tables/Expenses.vue')
 			},
 			{
 				path      : 'form/',

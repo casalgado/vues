@@ -1,21 +1,26 @@
 <template>
-  <RenderTable :table="table" />
+  <div>
+    <RenderTable :table="table" />
+    <PrintOrders :objects="table.objects" />
+  </div>
 </template>
 <script>
+import PrintOrders from "./structure/PrintOrders";
 import RenderTable from "./structure/RenderTable";
 import { fetchByDate } from "../../../firebase";
-import { mapState } from "vuex";
 import moment from "moment";
+import { mapState } from "vuex";
 
 export default {
-  name: "ExpensesTable",
+  name: "Orders",
   components: {
-    RenderTable
+    RenderTable,
+    PrintOrders
   },
   data() {
     return {
       table: {
-        title: "Gastos",
+        title: "Pedidos",
         fields: [
           {
             key: "date",
@@ -23,14 +28,16 @@ export default {
             sortable: true
           },
           {
-            key: "provider",
-            label: "Proveedor",
-            sortable: true
+            key: "client",
+            label: "Clientes",
+            sortable: true,
+            tdClass: "justifyLeft"
           },
           {
-            key: "name",
-            label: "Nombre",
-            sortable: true
+            key: "products",
+            label: "Productos",
+            sortable: true,
+            tdClass: "justifyLeft"
           },
           {
             key: "quantity",
@@ -43,14 +50,16 @@ export default {
             sortable: true
           }
         ],
-        objects: []
+        formattedObjects: [],
+        objects: [],
+        selectMode: "multi"
       }
     };
   },
   computed: mapState(["date", "period"]),
   methods: {
     getObjects: function() {
-      fetchByDate("expenses", this.date, this.period).then(e => {
+      fetchByDate("orders", this.date, this.period).then(e => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
@@ -59,12 +68,16 @@ export default {
     },
     format: function(objects) {
       let items = objects.map(e => {
+        let clone = [...e.products];
+        e.products = e.products.map(e => e.name).join("<br />");
+        e.quantity = clone.map(e => e.quantity).join("<br />");
+        e.total = Math.round(e.total / 100) / 10 + "k";
         e.date = moment(e.date).format("DD/MM");
-        if (parseFloat(e.total / 1000) > 1) {
-          e.total = Math.round(e.total / 100) / 10 + "k";
-        }
-        if (parseFloat(e.quantity / 1000) > 1) {
-          e.quantity = e.quantity / 1000 + " k";
+        if (e.paid == "") {
+          // @refactor code below
+          e.paid = "";
+        } else {
+          e.paid = moment(e.paid).format("DD/MM");
         }
         return e;
       });
@@ -84,3 +97,23 @@ export default {
   }
 };
 </script>
+<style scoped>
+@media screen {
+  #page {
+    display: none;
+  }
+}
+
+@media print {
+  #container,
+  #title,
+  #sidebar-content {
+    display: none;
+  }
+
+  #page {
+    color: black;
+    display: grid;
+  }
+}
+</style>
