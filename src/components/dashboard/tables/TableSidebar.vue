@@ -31,10 +31,12 @@
 export default {
   name: "TableSidebar",
   props: {
-    objects: Array,
-    selected: Array
+    objects: Array
   },
   computed: {
+    selected() {
+      return this.$store.state.selected;
+    },
     sameClient: function() {
       if (this.selected.length > 0) {
         let client = this.selected[0].client;
@@ -58,7 +60,7 @@ export default {
         } else {
           return (
             this.selected
-              .map(e => parseInt(e.total.slice(0, -1)))
+              .map(e => parseFloat(e.total.slice(0, -1)))
               .reduce((a, b) => a + b) + "k"
           );
         }

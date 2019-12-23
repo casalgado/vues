@@ -1,7 +1,11 @@
 <template>
-  <RenderTable :table="table" />
+  <div>
+    <RenderTable :table="table" />
+    <PrintOrders :objects="table.objects" />
+  </div>
 </template>
 <script>
+import PrintOrders from "./PrintOrders";
 import RenderTable from "./RenderTable";
 import { fetchByDate } from "../../../firebase";
 import moment from "moment";
@@ -10,7 +14,8 @@ import { mapState } from "vuex";
 export default {
   name: "OrdersTable",
   components: {
-    RenderTable
+    RenderTable,
+    PrintOrders
   },
   data() {
     return {
@@ -46,7 +51,8 @@ export default {
           }
         ],
         formattedObjects: [],
-        objects: []
+        objects: [],
+        selectMode: "multi"
       }
     };
   },
@@ -61,11 +67,11 @@ export default {
       });
     },
     format: function(objects) {
-      let items = objects.map(function(e) {
+      let items = objects.map(e => {
         let clone = [...e.products];
         e.products = e.products.map(e => e.name).join("<br />");
         e.quantity = clone.map(e => e.quantity).join("<br />");
-        e.total = e.total / 1000 + "k";
+        e.total = Math.round(e.total / 100) / 10 + "k";
         e.date = moment(e.date).format("DD/MM");
         if (e.paid == "") {
           // @refactor code below
@@ -91,3 +97,23 @@ export default {
   }
 };
 </script>
+<style scoped>
+@media screen {
+  #page {
+    display: none;
+  }
+}
+
+@media print {
+  #container,
+  #title,
+  #sidebar-content {
+    display: none;
+  }
+
+  #page {
+    color: black;
+    display: grid;
+  }
+}
+</style>

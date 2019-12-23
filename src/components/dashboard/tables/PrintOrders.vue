@@ -63,8 +63,7 @@ import moment from "moment";
 export default {
   name: "PrintOrders",
   props: {
-    objects: Array,
-    selected: Array
+    objects: Array
   },
   data() {
     return {
@@ -85,6 +84,9 @@ export default {
     }
   },
   computed: {
+    selected() {
+      return this.$store.state.selected;
+    },
     rows: function() {
       if (this.objects.length > 0) {
         let rows = [];

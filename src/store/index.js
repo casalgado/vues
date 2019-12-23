@@ -8,9 +8,11 @@ export default new Vuex.Store({
 	state     : {
 		period        : 'day',
 		date          : moment().format(),
-		dynamicFields : { 0: { id: 0, active: true, name: '', unitPrice: 0, quantity: 0, total: 0 } }
+		dynamicFields : { 0: { id: 0, active: true, name: '', unitPrice: 0, quantity: 0, total: 0 } },
+		selected      : []
 	},
 	mutations : {
+		// pagination
 		next(state) {
 			state.date = moment(state.date).add(1, state.period).format();
 		},
@@ -25,6 +27,11 @@ export default new Vuex.Store({
 			let i = p.indexOf(state.period);
 			state.period = p[(i + 1) % 3];
 		},
+		// table
+		setSelected(state, payload) {
+			state.selected = payload;
+		},
+		// form
 		updateField(state, payload) {
 			state.dynamicFields[payload.id] = Object.assign({}, state.dynamicFields[payload.id], payload);
 		},

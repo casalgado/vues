@@ -1,55 +1,47 @@
 <template>
-  <div>
-    <div id="container" class>
-      <h4 id="title">{{table.title}}</h4>
-      <div id="main">
-        <Pagination />
-        <b-table
-          selectable
-          striped
-          borderless
-          id="table"
-          class="text-nowrap"
-          :items="table.formattedObjects"
-          :fields="table.fields"
-          :select-mode="selectMode"
-          selected-variant="active"
-          @row-selected="onRowSelected"
-        >
-          <template v-slot:cell(products)="data">
-            <span v-html="data.value"></span>
-          </template>
-          <template v-slot:cell(quantity)="data">
-            <span v-html="data.value"></span>
-          </template>
-        </b-table>
-      </div>
+  <div id="container" class>
+    <h4 id="title">{{table.title}}</h4>
+    <div id="main">
+      <Pagination />
+      <b-table
+        selectable
+        striped
+        borderless
+        id="table"
+        class="text-nowrap"
+        :items="table.formattedObjects || table.objects"
+        :fields="table.fields"
+        :select-mode="selectMode"
+        selected-variant="active"
+        @row-selected="onRowSelected"
+      >
+        <template v-slot:cell(products)="data">
+          <span v-html="data.value"></span>
+        </template>
+        <template v-slot:cell(quantity)="data">
+          <span v-html="data.value"></span>
+        </template>
+      </b-table>
+    </div>
 
-      <TableSidebar :objects="table.objects" :selected="selected" />
-    </div>
-    <!-- v-if sameClient en el div#print -->
-    <div id="print">
-      <PrintOrders :objects="table.objects" :selected="selected" />
-    </div>
+    <TableSidebar :objects="table.objects" />
   </div>
 </template>
 <script>
-import PrintOrders from "./PrintOrders";
 import Pagination from "./Pagination";
 import TableSidebar from "./TableSidebar";
 export default {
   name: "RenderTable",
   components: {
     Pagination,
-    TableSidebar,
-    PrintOrders
+    TableSidebar
   },
   props: {
     table: Object
   },
   data() {
     return {
-      selectMode: "multi",
+      selectMode: this.table.selectMode,
       selected: []
     };
   },
@@ -57,40 +49,26 @@ export default {
     onRowSelected(items) {
       this.selected = items;
     }
+  },
+  watch: {
+    selected() {
+      this.$store.commit("setSelected", this.selected);
+    }
   }
 };
 </script>
 <style scoped>
-@media screen {
-  #container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-  }
-
-  #title {
-    grid-column: span 2;
-  }
-
-  #sidebar-content {
-    position: sticky;
-    top: 0px;
-  }
-
-  #print {
-    display: block;
-  }
+#container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
 }
 
-@media print {
-  #container,
-  #title,
-  #sidebar-content {
-    display: none;
-  }
+#title {
+  grid-column: span 2;
+}
 
-  #print {
-    color: black;
-    display: block;
-  }
+#sidebar-content {
+  position: sticky;
+  top: 0px;
 }
 </style>
