@@ -2,7 +2,7 @@
   <RenderTable :table="table" />
 </template>
 <script>
-import RenderTable from "./RenderTable";
+import RenderTable from "./structure/RenderTable";
 import { fetchByDate } from "../../../firebase";
 import { mapState } from "vuex";
 import moment from "moment";
