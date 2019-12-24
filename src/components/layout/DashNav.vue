@@ -78,6 +78,7 @@ export default {
 
 a {
   color: var(--color-primary) !important;
+  text-decoration: none !important;
 }
 
 ul {

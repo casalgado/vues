@@ -3,7 +3,7 @@
     <div id="main" class>
       <router-view :key="$route.fullPath" />
     </div>
-    <div id="nav" class>
+    <div id="nav">
       <DashNav />
     </div>
   </div>
@@ -28,7 +28,7 @@ export default {
     display: grid;
     grid-template-columns: 1fr;
     color: var(--color-neutral);
-    background-color: var(--color-primary);
+    background-color: var(--color-secondary);
     border-radius: var(--border-radius-small);
   }
 
@@ -45,8 +45,8 @@ export default {
   }
 
   #main {
-    background-color: var(--color-secondary);
-    margin-bottom: 40px;
+    background-color: inherit;
+    padding: 5px;
   }
 }
 
