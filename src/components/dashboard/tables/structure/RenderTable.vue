@@ -2,7 +2,7 @@
   <div id="container" class>
     <h4 id="title">{{table.title}}</h4>
     <div id="main">
-      <Pagination />
+      <Pagination :period="table.pagination" />
       <b-table
         selectable
         striped
@@ -65,10 +65,5 @@ export default {
 
 #title {
   grid-column: span 2;
-}
-
-#sidebar-content {
-  position: sticky;
-  top: 0px;
 }
 </style>

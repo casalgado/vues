@@ -1,5 +1,5 @@
 <template>
-  <div id="controls">
+  <div id="controls" v-if="period">
     <button @click="previous" class="btn fas fa-caret-right fa-lg">
       <svg viewBox="0 0 49.2 89.3">
         <path
@@ -21,6 +21,9 @@
 import moment from "moment";
 export default {
   name: "Pagination",
+  props: {
+    period: String
+  },
   methods: {
     next() {
       this.$store.commit("next");
@@ -49,6 +52,11 @@ export default {
           .endOf(period)
           .format("DD MMM")}`;
       }
+    }
+  },
+  mounted() {
+    if (this.period && this.period != "") {
+      this.setPeriod(this.period);
     }
   }
 };

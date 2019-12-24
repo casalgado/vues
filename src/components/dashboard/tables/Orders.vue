@@ -52,7 +52,8 @@ export default {
         ],
         formattedObjects: [],
         objects: [],
-        selectMode: "multi"
+        selectMode: "multi",
+        pagination: "month"
       }
     };
   },

@@ -1,28 +1,30 @@
 <template>
   <div id="sidebar">
-    <p id="sidebar-content">
-      <br />Selected:
-      <br />
-      {{ selected.length }}
-      <br />Objects:
-      <br />
-      {{objects.length}}
-      <br />Total:
-      <br />
-      {{ totals }}
-    </p>
-    <div v-if="selectedOne" class="crud-buttons">
-      <b-button>paid</b-button>
-      <b-button>edit</b-button>
-      <b-button>delete</b-button>
-    </div>
-    <div v-if="selectedMany" class="crud-buttons">
-      <b-button>paid</b-button>
-      <b-button>edit</b-button>
-      <b-button>delete</b-button>
-    </div>
-    <div v-if="sameClient">
-      <b-button onclick="window.print()">Save and Print</b-button>
+    <div id="sidebar-content">
+      <p>
+        <br />Selected:
+        <br />
+        {{ selected.length }}
+        <br />Objects:
+        <br />
+        {{objects.length}}
+        <br />Total:
+        <br />
+        {{ totals }}
+      </p>
+      <div v-if="selectedOne" class="crud-buttons">
+        <b-button>paid</b-button>
+        <b-button>edit</b-button>
+        <b-button>delete</b-button>
+      </div>
+      <div v-if="selectedMany" class="crud-buttons">
+        <b-button>paid</b-button>
+        <b-button>edit</b-button>
+        <b-button>delete</b-button>
+      </div>
+      <div v-if="sameClient">
+        <b-button onclick="window.print()">Save and Print</b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -78,4 +80,8 @@ export default {
 };
 </script>
 <style scoped>
+#sidebar-content {
+  position: sticky;
+  top: 0px;
+}
 </style>
