@@ -27,6 +27,9 @@
       <b-dropdown-item-button>
         <router-link :to="{ name: 'gastos'}">Gastos</router-link>
       </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'clientes'}">Clientes</router-link>
+      </b-dropdown-item-button>
     </b-dropdown>
   </div>
 </template>

@@ -47,6 +47,20 @@ export function fetchByDate(ref, date, period) {
 	});
 }
 
+export function fetchAll(ref) {
+	return new Promise(function(resolve) {
+		database.ref(`esalimento/${ref}`).once('value').then(function(snapshot) {
+			let data = snapshot.val();
+			let objects = [];
+			for (let key in data) {
+				data[key].id = key;
+				objects.push(data[key]);
+			}
+			resolve(objects);
+		});
+	});
+}
+
 export function save(ref, payload) {
 	return new Promise(function(resolve) {
 		database.ref(`esalimento/${ref}`).push(payload).then(function(value) {

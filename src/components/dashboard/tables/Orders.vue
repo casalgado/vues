@@ -53,7 +53,7 @@ export default {
         formattedObjects: [],
         objects: [],
         selectMode: "multi",
-        pagination: "month"
+        pagination: "week"
       }
     };
   },
@@ -101,7 +101,7 @@ export default {
 <style scoped>
 @media screen {
   #page {
-    display: none;
+    display: grid;
   }
 }
 

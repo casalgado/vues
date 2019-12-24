@@ -41,7 +41,7 @@
           <th class="text-right">Vr Unitario</th>
           <th class="text-right">Vr Total</th>
         </tr>
-        <tr v-for="row in invoice.rows" :key="row.id">
+        <tr v-for="row in invoice.rows" :key="row.index">
           <td class="text-left">{{ row.name}}</td>
           <td class="text-left">{{ row.product}}</td>
           <td class="text-right">{{row.quantity}}</td>
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { save } from "../../../../firebase";
 import moment from "moment";
 export default {
   name: "PrintOrders",
@@ -81,6 +82,10 @@ export default {
       } else {
         return false;
       }
+    },
+    saveInput: function() {
+      console.log(this.invoice);
+      save("invoices", this.invoice);
     }
   },
   computed: {
@@ -96,9 +101,9 @@ export default {
             let object = this.objects.find(e => e.name == selected[i]);
             let products = object.products;
             for (let j = 0; j < products.length; j++) {
-              let id = rows.length;
+              let index = rows.length;
               rows.push({
-                id: id,
+                index: index,
                 name: object.name,
                 product: products[j].name,
                 quantity: products[j].quantity,

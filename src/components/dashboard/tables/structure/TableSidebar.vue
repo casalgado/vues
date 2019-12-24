@@ -7,7 +7,7 @@
         {{ selected.length }}
         <br />Objects:
         <br />
-        {{objects.length}}
+        {{ objects.length }}
         <br />Total:
         <br />
         {{ totals }}
@@ -51,7 +51,7 @@ export default {
       }
     },
     totals: function() {
-      if (this.objects.length > 0) {
+      if (this.objects.length > 0 && this.objects[0].total) {
         if (this.selected.length == 0) {
           return (
             this.objects.reduce((a, b) => ({ total: a.total + b.total }))
@@ -67,7 +67,7 @@ export default {
           );
         }
       } else {
-        return "0";
+        return "-";
       }
     },
     selectedOne: function() {
