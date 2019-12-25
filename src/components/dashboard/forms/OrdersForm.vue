@@ -2,18 +2,19 @@
   <div id="container" class="border">
     <div id="main">
       <b-card class="mt-3">
+        <pre class="m-0">{{ this.activeForm }}</pre>
+      </b-card>
+      <b-card class="mt-3">
         <pre class="m-0">{{ this.dynamicFields }}</pre>
       </b-card>
     </div>
     <div id="sidebar">
-      <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <Select @change="addInput" :options="clients" :property="'client'" />
-        <Basic @change="addInput" :label="'producir'" :property="'date'" :type="'date'" />
-        <Basic @change="addInput" :label="'entregar'" :property="'delivered'" :type="'date'" />
+      <b-form @submit="submit" @reset="reset" v-if="show">
+        <Select :options="clients" :property="'client'" />
 
         <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
           <div v-if="field.active">
-            <Prices
+            <DynamicProducts
               :property="'products'"
               :options="products"
               :id="field.id"
@@ -21,6 +22,9 @@
             />
           </div>
         </div>
+
+        <Basic :label="'producir'" :property="'date'" :type="'date'" />
+        <Basic :label="'entregar'" :property="'delivered'" :type="'date'" />
 
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button @click="addProductFields" variant="info">+ producto</b-button>
@@ -31,16 +35,37 @@
 <script>
 import Select from "./inputs/Select";
 import Basic from "./inputs/Basic";
-import Prices from "./inputs/Prices";
+import DynamicProducts from "./inputs/DynamicProducts";
 // import { save } from "../../../firebase";
 import { orders } from "../../../firebase";
 import { mapState } from "vuex";
 export default {
-  components: { Select, Basic, Prices },
+  components: { Select, Basic, DynamicProducts },
   name: "OrdersForm",
   data() {
     return {
       form: {
+        select: [
+          {
+            property: "client",
+            label: "clientes",
+            options: []
+          }
+        ],
+        dynamic: [
+          {
+            property: "products",
+            label: "productos",
+            options: [],
+            priority: "unitPrice"
+          }
+        ],
+        basic: [
+          { property: "date", label: "produccion", type: "date" },
+          { property: "delivered", label: "entrega", type: "date" }
+        ]
+      },
+      pastform: {
         client: "",
         date: "",
         delivered: "",
@@ -59,10 +84,7 @@ export default {
       ]
     };
   },
-  created() {
-    this.setClients();
-  },
-  computed: mapState(["dynamicFields"]),
+  computed: mapState(["dynamicFields", "activeForm"]),
   methods: {
     addInput(evt) {
       this.form = Object.assign(this.form, evt);
@@ -70,8 +92,9 @@ export default {
     addProductFields() {
       this.$store.commit("addField");
     },
-    onSubmit(evt) {
+    submit(evt) {
       evt.preventDefault();
+      let form = { ...this.activeForm };
       let products = Object.values(this.dynamicFields).filter(
         e => e.active == true
       );
@@ -81,16 +104,16 @@ export default {
           delete products[i].id;
           delete products[i].active;
           total += products[i].total;
-          this.form.products.push(products[i]);
+          form.products.push(products[i]);
         }
       }
       this.form.total = total;
       console.log(this.form);
       // save("orders", this.form).then(() => {
-      //   this.onReset();
+      //   this.reset();
       // });
     },
-    onReset(evt) {
+    reset(evt) {
       if (evt) {
         evt.preventDefault();
       }
@@ -134,7 +157,7 @@ export default {
       let ref = orders;
 
       let objects = [];
-      let sorted_unique_objects = [];
+      let sorted_unique_strings = [];
       let most_used = [];
 
       ref
@@ -144,12 +167,12 @@ export default {
           for (let order in orders) {
             objects.push(orders[order][property]);
           }
-          sorted_unique_objects = objects
+          sorted_unique_strings = objects
             .filter((value, index, self) => {
               return self.indexOf(value) === index;
             })
             .sort();
-          most_used = sorted_unique_objects
+          most_used = sorted_unique_strings
             .map(e => {
               let times_used = objects.filter(i => {
                 return e == i;
@@ -170,10 +193,18 @@ export default {
             });
           most_used.push({ value: "", text: "" });
           most_used.unshift({ value: "", text: "cliente" });
-          return [...most_used, ...sorted_unique_objects];
+          return [...most_used, ...sorted_unique_strings];
         })
         .then(options => (this[local_property] = options));
+    },
+    setActiveForm: function() {
+      this.$store.commit("setActiveForm", this.form);
     }
+  },
+  created() {
+    this.setClients();
+    this.setActiveForm();
+    console.log(this.form);
   },
   watch: {
     dynamicFields() {

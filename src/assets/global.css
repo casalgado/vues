@@ -110,6 +110,7 @@ body {
 .custom-input {
 	color: var(--color-neutral);
 	background-color: var(--color-secondary-light);
+	border: var(--color-primary);
 }
 
 /* material design shadows */

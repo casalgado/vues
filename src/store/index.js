@@ -8,6 +8,7 @@ export default new Vuex.Store({
 	state     : {
 		period        : 'day',
 		date          : moment().format(),
+		activeForm    : {},
 		dynamicFields : { 0: { id: 0, active: true, name: '', unitPrice: 0, quantity: 0, total: 0 } },
 		selected      : []
 	},
@@ -32,6 +33,12 @@ export default new Vuex.Store({
 			state.selected = payload;
 		},
 		// form
+		setActiveForm(state, payload) {
+			state.activeForm = { ...payload };
+		},
+		updateActiveForm(state, payload) {
+			state.activeForm = Object.assign(state.activeForm, payload);
+		},
 		updateField(state, payload) {
 			state.dynamicFields[payload.id] = Object.assign({}, state.dynamicFields[payload.id], payload);
 		},

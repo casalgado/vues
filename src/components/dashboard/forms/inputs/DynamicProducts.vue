@@ -43,7 +43,7 @@
 </template>
 <script>
 export default {
-  name: "Prices",
+  name: "DynamicProducts",
   props: {
     options: Array,
     property: String,

@@ -30,7 +30,7 @@ export default {
   watch: {
     input() {
       this.payload[this.property] = this.input;
-      this.$emit("change", this.payload);
+      this.$store.commit("updateActiveForm", this.payload);
     }
   },
   methods: {
