@@ -9,7 +9,7 @@
       size="sm"
       placeholder="..."
     ></b-form-input>
-    <b-form-select v-else v-model="input" :options="options" class="custom-input" size="sm"></b-form-select>
+    <b-form-select v-else v-model="input" :options="options2" class="custom-input" size="sm"></b-form-select>
   </div>
 </template>
 <script>
@@ -36,6 +36,13 @@ export default {
   methods: {
     toggleCreate() {
       this.create = !this.create;
+    }
+  },
+  computed: {
+    options2() {
+      let options2 = this.options;
+      options2.unshift({ value: "", text: this.label });
+      return options2;
     }
   }
 };

@@ -26,6 +26,11 @@ const routes = [
 				component : () => import('../components/dashboard/tables/Orders.vue')
 			},
 			{
+				path      : 'pedidos/nuevo/',
+				name      : 'nuevoPedido',
+				component : OrdersForm
+			},
+			{
 				path      : 'gastos/',
 				name      : 'gastos',
 				component : () => import('../components/dashboard/tables/Expenses.vue')

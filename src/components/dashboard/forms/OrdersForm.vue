@@ -1,50 +1,47 @@
 <template>
-  <div id="container" class="border">
-    <div id="main">
-      <b-card class="mt-3">
-        <pre class="m-0">{{ this.activeForm }}</pre>
-      </b-card>
-      <b-card class="mt-3">
-        <pre class="m-0">{{ this.dynamicFields }}</pre>
-      </b-card>
-    </div>
-    <div id="sidebar">
-      <b-form @submit="submit" @reset="reset" v-if="show">
-        <Select :options="clients" :property="'client'" />
-
-        <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
-          <div v-if="field.active">
-            <DynamicProducts
-              :property="'products'"
-              :options="products"
-              :id="field.id"
-              :priority="'unitPrice'"
-            />
-          </div>
-        </div>
-
-        <Basic :label="'producir'" :property="'date'" :type="'date'" />
-        <Basic :label="'entregar'" :property="'delivered'" :type="'date'" />
-
-        <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button @click="addProductFields" variant="info">+ producto</b-button>
-      </b-form>
-    </div>
+  <div>
+    <RenderForm :formConstructor="this.formConstructor" />
   </div>
 </template>
 <script>
-import Select from "./inputs/Select";
-import Basic from "./inputs/Basic";
-import DynamicProducts from "./inputs/DynamicProducts";
+import RenderForm from "./RenderForm";
 // import { save } from "../../../firebase";
 import { orders } from "../../../firebase";
 import { mapState } from "vuex";
 export default {
-  components: { Select, Basic, DynamicProducts },
   name: "OrdersForm",
+  components: { RenderForm },
   data() {
     return {
-      form: {
+      /* 
+      The formConstructor object is sent to the RenderForm component.
+      RenderForm uses it to create the inputs described in formConstructor.
+      In order for the inputs to send back data, they update the state.
+      activeForm and dynamicFields are the state properties updated by inputs. 
+      On Submit, RenderForm combines both state properties to create an object that is saved to database.
+
+      The schema of the saved object is determined by formConstructor. 
+      formConstructor must have the following structure:
+
+      there are 3 types of fields: select, dynamic, and basic
+
+      formConstructor: {
+        select: [ { }, ... ],
+        dynamic: { },
+        basic: [ { }, ... ]
+      }
+
+      select and basic are arrays of objects. 
+      dynamic is an object
+      these objects contain the field properties
+
+      field properties depend on type
+        select : property, label, options
+        dynamyc: property, label, options 
+        basic  : property, label, type
+        optional for all types: a hidden property set to true to hide field
+      */
+      formConstructor: {
         select: [
           {
             property: "client",
@@ -52,90 +49,43 @@ export default {
             options: []
           }
         ],
-        dynamic: [
-          {
-            property: "products",
-            label: "productos",
-            options: [],
-            priority: "unitPrice"
-          }
-        ],
+        dynamic: {
+          property: "products",
+          label: "productos",
+          options: [
+            { value: "p", text: "pounhon" },
+            { value: "a", text: "a" },
+            { value: "b", text: "b" },
+            { value: "c", text: "c" },
+            { value: "d", text: "d" }
+          ],
+          priority: "unitPrice"
+        },
         basic: [
           { property: "date", label: "produccion", type: "date" },
-          { property: "delivered", label: "entrega", type: "date" }
+          { property: "delivered", label: "entrega", type: "date" },
+          { property: "paid", label: "", type: "date", hidden: true }
         ]
-      },
-      pastform: {
-        client: "",
-        date: "",
-        delivered: "",
-        paid: "",
-        products: []
-      },
-      show: true,
-      clients: [],
-      products: [
-        { value: "", text: "producto" },
-        { value: "p", text: "pounhon" },
-        { value: "a", text: "a" },
-        { value: "b", text: "b" },
-        { value: "c", text: "c" },
-        { value: "d", text: "d" }
-      ]
+      }
     };
   },
-  computed: mapState(["dynamicFields", "activeForm"]),
+  computed: mapState(["activeForm", "dynamicFields"]),
   methods: {
-    addInput(evt) {
-      this.form = Object.assign(this.form, evt);
-    },
-    addProductFields() {
-      this.$store.commit("addField");
-    },
-    submit(evt) {
-      evt.preventDefault();
-      let form = { ...this.activeForm };
-      let products = Object.values(this.dynamicFields).filter(
-        e => e.active == true
-      );
-      let total = 0;
-      for (let i = 0; i < products.length; i++) {
-        if (products[i].active) {
-          delete products[i].id;
-          delete products[i].active;
-          total += products[i].total;
-          form.products.push(products[i]);
-        }
-      }
-      this.form.total = total;
-      console.log(this.form);
-      // save("orders", this.form).then(() => {
-      //   this.reset();
-      // });
-    },
-    reset(evt) {
-      if (evt) {
-        evt.preventDefault();
-      }
-      // Reset our form values
-      this.form.client = "";
-      this.form.unitPrice = 0;
-      this.form.quantity = 0;
-      this.form.total = 0;
-      this.form.date = "";
-      this.form.delivered = "";
-      this.form.products = [];
-      this.dynamicFields = [{ id: 0, active: true }];
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
+    distill() {
+      let form = [];
+      // select
+      this.formConstructor.select.forEach(e => {
+        form[e.property] = "";
       });
+      // dynamic
+      form[this.formConstructor.dynamic.property] = [];
+      // basic
+      this.formConstructor.basic.forEach(e => {
+        form[e.property] = "";
+      });
+      return form;
     },
-    toggleCreate() {
-      this.create = !this.create;
-    },
-    setClients() {
+    setClientSpotlight() {
       /* 
       this can be a method called getPropertyWithSpotlight(ref, property, target_property, spotlight_size)
       ref = database.ref
@@ -153,7 +103,7 @@ export default {
       */
       let spotlight_size = 15;
       let property = "client";
-      let local_property = "clients";
+      // let local_property = "clients";
       let ref = orders;
 
       let objects = [];
@@ -192,19 +142,17 @@ export default {
               return e.client;
             });
           most_used.push({ value: "", text: "" });
-          most_used.unshift({ value: "", text: "cliente" });
           return [...most_used, ...sorted_unique_strings];
         })
-        .then(options => (this[local_property] = options));
-    },
-    setActiveForm: function() {
-      this.$store.commit("setActiveForm", this.form);
+        .then(options => {
+          this.formConstructor.select[0].options = options;
+          return options;
+        });
     }
   },
   created() {
-    this.setClients();
-    this.setActiveForm();
-    console.log(this.form);
+    this.setClientSpotlight();
+    this.$store.commit("setActiveForm", this.distill(this.formConstructor));
   },
   watch: {
     dynamicFields() {

@@ -10,8 +10,12 @@ moment.locale('en', {
 	}
 });
 
+console.log(process.env.VUE_APP_FIREBASE_API_KEY);
+console.log(process.env.VUE_APP_FIREBASE_SENDER_ID);
+console.log(process.env.VUE_APP_FIREBASE_APP_ID);
+
 const app = initializeApp({
-	apiKey            : 'AIzaSyBHfxD6HppqwQm75Pg6u1oLuYB-Phy3HCc',
+	apiKey            : process.env.VUE_APP_FIREBASE_API_KEY,
 	authDomain        : 'es-alimento.firebaseapp.com',
 	databaseURL       : 'https://es-alimento.firebaseio.com',
 	projectId         : 'es-alimento',

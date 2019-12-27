@@ -10,21 +10,29 @@
     </div>
     <div id="sidebar">
       <b-form @submit="submit" @reset="reset" v-if="show">
-        <Select :options="clients" :property="'client'" />
+        <div v-for="field in formConstructor.select" :key="field.property">
+          <Select :options="field.options" :property="field.property" :label="field.label" />
+        </div>
         <!-- @ add :label to <Select/> and <DProducts/> -->
         <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
           <div v-if="field.active">
-            <DynamicProducts
+            <Dynamic
               :property="'products'"
-              :options="products"
+              :options="formConstructor.dynamic.options"
               :id="field.id"
               :priority="'unitPrice'"
             />
           </div>
         </div>
 
-        <Basic :label="'producir'" :property="'date'" :type="'date'" />
-        <Basic :label="'entregar'" :property="'delivered'" :type="'date'" />
+        <div v-for="field in formConstructor.basic" :key="field.property">
+          <Basic
+            :label="field.label"
+            :property="field.property"
+            :type="field.type"
+            v-if="!field.hidden"
+          />
+        </div>
 
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button @click="addProductFields" variant="info">+ producto</b-button>
@@ -35,39 +43,23 @@
 <script>
 import Select from "./inputs/Select";
 import Basic from "./inputs/Basic";
-import DynamicProducts from "./inputs/DynamicProducts";
+import Dynamic from "./inputs/Dynamic";
 // import { save } from "../../../firebase";
-import { orders } from "../../../firebase";
 import { mapState } from "vuex";
 export default {
-  components: { Select, Basic, DynamicProducts },
+  components: { Select, Basic, Dynamic },
   name: "RenderForm",
+  props: {
+    formConstructor: Object,
+    products: Array
+  },
   data() {
     return {
-      form: {
-        client: "",
-        date: "",
-        delivered: "",
-        paid: "",
-        products: []
-      },
-      show: true,
-      clients: [],
-      products: [
-        { value: "", text: "producto" },
-        { value: "p", text: "pounhon" },
-        { value: "a", text: "a" },
-        { value: "b", text: "b" },
-        { value: "c", text: "c" },
-        { value: "d", text: "d" }
-      ]
+      show: true
     };
   },
   computed: mapState(["dynamicFields", "activeForm"]),
   methods: {
-    addInput(evt) {
-      this.form = Object.assign(this.form, evt);
-    },
     addProductFields() {
       this.$store.commit("addField");
     },
@@ -86,8 +78,8 @@ export default {
           form.products.push(products[i]);
         }
       }
-      this.form.total = total;
-      console.log(this.form);
+      form.total = total;
+      console.log(form);
       // save("orders", this.form).then(() => {
       //   this.reset();
       // });
@@ -113,81 +105,6 @@ export default {
     },
     toggleCreate() {
       this.create = !this.create;
-    },
-    setClients() {
-      /* 
-      this can be a method called getPropertyWithSpotlight(ref, property, target_property, spotlight_size)
-      ref = database.ref
-      property = String (property of objects in database to choose from)
-      local_property = String (data property of local component)
-      spotlight_size = Integer
-
-      in this case, 
-      ref = orders,
-      property = client,
-      spotlight_size = 10
-
-      the method should return an array of objects of the form {value: String, text: String}
-      to be sent to a Select component as the prop :options
-      */
-      let spotlight_size = 15;
-      let property = "client";
-      let local_property = "clients";
-      let ref = orders;
-
-      let objects = [];
-      let sorted_unique_strings = [];
-      let most_used = [];
-
-      ref
-        .once("value")
-        .then(function(snapshot) {
-          let orders = snapshot.val();
-          for (let order in orders) {
-            objects.push(orders[order][property]);
-          }
-          sorted_unique_strings = objects
-            .filter((value, index, self) => {
-              return self.indexOf(value) === index;
-            })
-            .sort();
-          most_used = sorted_unique_strings
-            .map(e => {
-              let times_used = objects.filter(i => {
-                return e == i;
-              }).length;
-              return {
-                client: e,
-                use_count: times_used
-              };
-            })
-            .sort(function(a, b) {
-              var x = a.use_count;
-              var y = b.use_count;
-              return x < y ? 1 : x > y ? -1 : 0;
-            })
-            .splice(0, spotlight_size)
-            .map(e => {
-              return e.client;
-            });
-          most_used.push({ value: "", text: "" });
-          most_used.unshift({ value: "", text: "cliente" });
-          return [...most_used, ...sorted_unique_strings];
-        })
-        .then(options => (this[local_property] = options));
-    },
-    setActiveForm: function() {
-      this.$store.commit("setActiveForm", this.form);
-    }
-  },
-  created() {
-    this.setClients();
-    this.setActiveForm();
-    console.log(this.form);
-  },
-  watch: {
-    dynamicFields() {
-      console.log("watching");
     }
   }
 };

@@ -2,19 +2,10 @@
   <div id="container">
     <b-dropdown dropup no-caret text="+" offset="-60" toggle-class="nav-dropdown" class="m-2">
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'ordersForm' }">{{routes[2].title}}</router-link>
-      </b-dropdown-item-button>
-      <b-dropdown-item-button>
-        <router-link :to="{ name: 'newform' }">new Form</router-link>
+        <router-link :to="{ name: 'nuevoPedido' }">crear pedido</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link to="/dashboard">dashboard</router-link>
-      </b-dropdown-item-button>
-      <b-dropdown-item-button>
-        <router-link to="/">home</router-link>
-      </b-dropdown-item-button>
-      <b-dropdown-item-button>
-        <router-link to="/about">about</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link to="/dashboard/console">console</router-link>

@@ -43,7 +43,7 @@
 </template>
 <script>
 export default {
-  name: "DynamicProducts",
+  name: "Dynamic",
   props: {
     options: Array,
     property: String,
