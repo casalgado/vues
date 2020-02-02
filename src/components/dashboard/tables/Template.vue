@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       table: {
-        title: "Templates",
+        title: "Template",
         fields: [
           {
             key: "name",

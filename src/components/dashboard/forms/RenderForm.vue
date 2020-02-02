@@ -2,6 +2,7 @@
   <div id="container" class="border">
     <div id="main">
       <b-card class="mt-3">
+        <pre class="m-0">{{ this.object }}</pre>
         <pre class="m-0">{{ this.activeForm }}</pre>
       </b-card>
       <b-card class="mt-3">
@@ -20,7 +21,7 @@
               :property="'products'"
               :options="formConstructor.dynamic.options"
               :id="field.id"
-              :priority="'unitPrice'"
+              :priority="formConstructor.dynamic.priority || 'unitPrice'"
             />
           </div>
         </div>
@@ -46,12 +47,14 @@ import Basic from "./inputs/Basic";
 import Dynamic from "./inputs/Dynamic";
 // import { save } from "../../../firebase";
 import { mapState } from "vuex";
+import { fetchById } from "../../../firebase";
 export default {
   components: { Select, Basic, Dynamic },
   name: "RenderForm",
   props: {
     formConstructor: Object,
-    products: Array
+    products: Array,
+    object: Object
   },
   data() {
     return {
@@ -106,6 +109,11 @@ export default {
     toggleCreate() {
       this.create = !this.create;
     }
+  },
+  created() {
+    fetchById(this.object.ref, this.object.params.id).then(e => {
+      this.$store.commit("updateActiveForm", e);
+    });
   }
 };
 </script>

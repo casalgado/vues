@@ -3,9 +3,6 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Dashboard from '../views/Dashboard.vue';
 import Console from '../components/database/Console.vue';
-import Form from '../components/dashboard/forms/Form.vue';
-import OrdersForm from '../components/dashboard/forms/OrdersForm.vue';
-import RenderForm from '../components/dashboard/forms/RenderForm.vue';
 
 Vue.use(VueRouter);
 
@@ -28,7 +25,22 @@ const routes = [
 			{
 				path      : 'pedidos/nuevo/',
 				name      : 'nuevoPedido',
-				component : OrdersForm
+				component : () => import('../components/dashboard/forms/OrdersForm.vue')
+			},
+			{
+				path      : 'pedidos/editar/:id',
+				name      : 'editarPedido',
+				component : () => import('../components/dashboard/forms/OrdersForm.vue')
+			},
+			{
+				path      : 'gastos/nuevo/',
+				name      : 'nuevoGasto',
+				component : () => import('../components/dashboard/forms/ExpensesForm.vue')
+			},
+			{
+				path      : 'gastos/editar/:id',
+				name      : 'editarGasto',
+				component : () => import('../components/dashboard/forms/ExpensesForm.vue')
 			},
 			{
 				path      : 'gastos/',
@@ -39,23 +51,6 @@ const routes = [
 				path      : 'clientes/',
 				name      : 'clientes',
 				component : () => import('../components/dashboard/tables/Clients.vue')
-			},
-			{
-				path      : 'form/',
-				name      : 'form',
-				component : Form,
-				children  : [
-					{
-						path      : 'orders/',
-						name      : 'ordersForm',
-						component : OrdersForm
-					}
-				]
-			},
-			{
-				path      : 'newform',
-				name      : 'newform',
-				component : RenderForm
 			},
 			{
 				path      : 'console',

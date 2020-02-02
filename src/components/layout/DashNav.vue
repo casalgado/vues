@@ -5,6 +5,9 @@
         <router-link :to="{ name: 'nuevoPedido' }">crear pedido</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
+        <router-link :to="{ name: 'nuevoGasto' }">crear gasto</router-link>
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
         <router-link to="/dashboard">dashboard</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>

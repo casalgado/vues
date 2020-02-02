@@ -10,18 +10,14 @@ moment.locale('en', {
 	}
 });
 
-console.log(process.env.VUE_APP_FIREBASE_API_KEY);
-console.log(process.env.VUE_APP_FIREBASE_SENDER_ID);
-console.log(process.env.VUE_APP_FIREBASE_APP_ID);
-
 const app = initializeApp({
 	apiKey            : process.env.VUE_APP_FIREBASE_API_KEY,
 	authDomain        : 'es-alimento.firebaseapp.com',
 	databaseURL       : 'https://es-alimento.firebaseio.com',
 	projectId         : 'es-alimento',
 	storageBucket     : 'es-alimento.appspot.com',
-	messagingSenderId : '753348054477',
-	appId             : '1:753348054477:web:d3da8ff9e84aaf6c7a8884'
+	messagingSenderId : process.env.VUE_APP_FIREBASE_SENDER_ID,
+	appId             : process.env.VUE_APP_FIREBASE_APP_ID
 });
 
 const database = app.database();
@@ -70,6 +66,14 @@ export function save(ref, payload) {
 		database.ref(`esalimento/${ref}`).push(payload).then(function(value) {
 			resolve(value);
 			console.log(value);
+		});
+	});
+}
+
+export function fetchById(ref, id) {
+	return new Promise(function(resolve) {
+		database.ref(`esalimento/${ref}/${id}`).once('value').then(function(snapshot) {
+			resolve(snapshot.val());
 		});
 	});
 }

@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Select",
   props: {
@@ -39,11 +40,19 @@ export default {
     }
   },
   computed: {
+    ...mapState(["dynamicFields", "activeForm"]),
     options2() {
       let options2 = this.options;
       options2.unshift({ value: "", text: this.label });
       return options2;
     }
+  },
+  mounted() {
+    console.log(this.activeForm);
+    console.log(this.property);
+    console.log(this.activeForm[this.property]);
+
+    this.input = this.activeForm[this.property];
   }
 };
 </script>

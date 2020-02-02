@@ -44,7 +44,6 @@ export default new Vuex.Store({
 		},
 		addField() {
 			let id = Object.keys(this.state.dynamicFields).length;
-			console.log(id);
 			Vue.set(this.state.dynamicFields, id, {
 				id        : id,
 				active    : true,

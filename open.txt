@@ -1,0 +1,11 @@
+Forms for:
+expenses,
+clients, 
+products
+
+
+CRUD for all
+- in DynamicFields, change field order based on 'priority'
+
+dashboard:
+- two tables: produccion del dia + para entregar hoy
