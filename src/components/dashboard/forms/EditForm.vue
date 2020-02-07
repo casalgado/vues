@@ -6,7 +6,7 @@ import RenderForm from "./RenderForm";
 // import { save } from "../../../firebase";
 import { mapState } from "vuex";
 export default {
-  name: "ExpensesForm",
+  name: "EditForm",
   components: { RenderForm },
   data() {
     return {
@@ -98,6 +98,7 @@ export default {
 * {
   margin: 5px;
 }
+
 .f-group {
   display: grid;
   grid-gap: 10px;
