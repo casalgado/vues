@@ -28,10 +28,10 @@
   </div>
 </template>
 <script>
-import Pagination from "./Pagination";
-import TableSidebar from "./TableSidebar";
+import Pagination from "./structure/Pagination";
+import TableSidebar from "./structure/TableSidebar";
 export default {
-  name: "RenderTable",
+  name: "Table",
   components: {
     Pagination,
     TableSidebar

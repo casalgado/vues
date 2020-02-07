@@ -1,17 +1,17 @@
 <template>
   <div>
-    <RenderTable :table="table" />
+    <Table :table="table" />
   </div>
 </template>
 <script>
-import RenderTable from "./structure/RenderTable";
+import Table from "./Table";
 import { fetchAll } from "../../../firebase";
 import { mapState } from "vuex";
 
 export default {
   name: "Clients",
   components: {
-    RenderTable
+    Table
   },
   data() {
     return {

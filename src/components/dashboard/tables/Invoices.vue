@@ -1,10 +1,10 @@
 <template>
   <div>
-    <RenderTable :table="table" />
+    <Table :table="table" />
   </div>
 </template>
 <script>
-import RenderTable from "./structure/RenderTable";
+import Table from "./Table";
 import { fetchAll, fetchByDate } from "../../../firebase";
 import { mapState } from "vuex";
 import { moment } from "moment";
@@ -12,7 +12,7 @@ import { moment } from "moment";
 export default {
   name: "Invoices",
   components: {
-    RenderTable
+    Table
   },
   data() {
     return {

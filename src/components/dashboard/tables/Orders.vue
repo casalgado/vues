@@ -1,12 +1,12 @@
 <template>
   <div>
-    <RenderTable :table="table" />
+    <Table :table="table" />
     <PrintOrders :objects="table.objects" />
   </div>
 </template>
 <script>
 import PrintOrders from "./structure/PrintOrders";
-import RenderTable from "./structure/RenderTable";
+import Table from "./Table";
 import { fetchByDate } from "../../../firebase";
 import moment from "moment";
 import { mapState } from "vuex";
@@ -14,7 +14,7 @@ import { mapState } from "vuex";
 export default {
   name: "Orders",
   components: {
-    RenderTable,
+    Table,
     PrintOrders
   },
   data() {
