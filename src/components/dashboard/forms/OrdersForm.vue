@@ -99,6 +99,8 @@ export default {
       local_property = String (data property of local component)
       spotlight_size = Integer
 
+      this method should be imported from firebase
+
       in this case, 
       ref = orders,
       property = client,

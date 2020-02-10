@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import DashNav from "@/components/layout/DashNav";
+import DashNav from "@/components/dashboard/DashNav";
 export default {
   name: "Dashboard",
   components: {

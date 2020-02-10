@@ -2,13 +2,18 @@
   <div>
     <button @click="importOrders()" class="btn btn-danger">import orders</button>
     <button @click="importDatabase()" class="btn btn-danger">import rest of database</button>
+    <button @click="testUser()" class="btn btn-info">test user</button>
   </div>
 </template>
 <script>
-import { database } from "../../firebase";
+import { database, getUser } from "@/firebase";
+
 export default {
   name: "Console",
   methods: {
+    testUser: function() {
+      console.log(getUser());
+    },
     importDatabase: function() {
       let nodes = ["expenses", "products", "clients"];
       nodes.forEach(node => {

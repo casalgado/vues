@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase';
+import firebase from 'firebase';
 import moment from 'moment';
 // @refactor
 // where should the code below go (momentjs)?
@@ -24,8 +25,13 @@ const database = app.database();
 const db = database.ref('esalimento');
 const orders = database.ref('esalimento/orders');
 const expenses = database.ref('esalimento/expenses');
+console.log(firebase.auth().currentUser);
 
 export { database, db, orders, expenses };
+
+export function getUser() {
+	return firebase.auth().currentUser;
+}
 
 export function fetchByDate(ref, date, period) {
 	return new Promise(function(resolve) {
