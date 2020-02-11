@@ -72,7 +72,6 @@ export default {
         let clone = [...e.products];
         e.products = e.products.map(e => e.name).join("<br />");
         e.quantity = clone.map(e => e.quantity).join("<br />");
-        e.total = Math.round(e.total / 100) / 10 + "k";
         e.date = moment(e.date).format("DD/MM");
         if (e.paid == "") {
           // @refactor code below

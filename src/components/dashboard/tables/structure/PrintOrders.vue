@@ -122,11 +122,9 @@ export default {
     },
     total: function() {
       if (this.selected.length > 0) {
-        return (
-          this.selected
-            .map(e => parseFloat(e.total.slice(0, -1)))
-            .reduce((a, b) => a + b) * 1000
-        );
+        return this.selected.reduce((a, b) => ({
+          total: parseInt(a.total) + parseInt(b.total)
+        })).total;
       } else {
         return 0;
       }

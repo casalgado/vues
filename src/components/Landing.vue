@@ -1,10 +1,13 @@
 <template>
   <div>
-    <input type="email" v-model="email" placeholder="email" />
-    <input type="password" v-model="password" placeholder="password" />
-    <button @click="submit">submit</button>
-    <button @click="show">show</button>
-    <button @click="logout">logout</button>
+    <img alt="Es Alimento logo" src="https://i.imgur.com/tETJGS8.jpg" />
+    <div>
+      <input type="email" v-model="email" placeholder="email" />
+      <input type="password" v-model="password" placeholder="password" />
+      <button @click="submit">submit</button>
+      <button @click="show">show</button>
+      <button @click="logout">logout</button>
+    </div>
   </div>
 </template>
 
@@ -13,6 +16,7 @@
 import firebase from "firebase";
 
 export default {
+  name: "Landing",
   data() {
     return {
       email: "",
@@ -39,3 +43,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+img {
+  width: 100%;
+  max-width: 520px;
+}
+</style>

@@ -31,32 +31,7 @@
 export default {
   name: "DashNav",
   data: function() {
-    return {
-      routes: [
-        {
-          name: "ordersTable",
-          path: "/dashboard/table/orders",
-          params: { sheet: "orders" },
-          title: "Orders"
-        },
-        {
-          name: "expensesTable",
-          path: "/dashboard/table/expenses",
-          params: { sheet: "expenses" },
-          title: "Gastos"
-        },
-        {
-          name: "form",
-          path: "/form",
-          title: "Form"
-        },
-        {
-          name: "neworder",
-          path: "/dashboard/table/orders/neworder",
-          title: "neworder"
-        }
-      ]
-    };
+    return {};
   }
 };
 </script>

@@ -65,12 +65,7 @@ export default {
     format: function(objects) {
       let items = objects.map(e => {
         e.date = moment(e.date).format("DD/MM");
-        if (parseFloat(e.total / 1000) > 1) {
-          e.total = Math.round(e.total / 100) / 10 + "k";
-        }
-        if (parseFloat(e.quantity / 1000) > 1) {
-          e.quantity = e.quantity / 1000 + " k";
-        }
+
         return e;
       });
       return items;

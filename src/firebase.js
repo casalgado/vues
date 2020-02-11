@@ -25,7 +25,6 @@ const database = app.database();
 const db = database.ref('esalimento');
 const orders = database.ref('esalimento/orders');
 const expenses = database.ref('esalimento/expenses');
-console.log(firebase.auth().currentUser);
 
 export { database, db, orders, expenses };
 

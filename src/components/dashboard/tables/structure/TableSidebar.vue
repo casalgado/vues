@@ -53,18 +53,13 @@ export default {
     totals: function() {
       if (this.objects.length > 0 && this.objects[0].total) {
         if (this.selected.length == 0) {
-          return (
-            this.objects.reduce((a, b) => ({ total: a.total + b.total }))
-              .total /
-              1000 +
-            "k"
-          );
+          return this.objects.reduce((a, b) => ({
+            total: parseInt(a.total) + parseInt(b.total)
+          })).total;
         } else {
-          return (
-            this.selected
-              .map(e => parseFloat(e.total.slice(0, -1)))
-              .reduce((a, b) => a + b) + "k"
-          );
+          return this.objects.reduce((a, b) => ({
+            total: parseInt(a.total) + parseInt(b.total)
+          })).total;
         }
       } else {
         return "-";

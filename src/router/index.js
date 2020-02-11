@@ -6,11 +6,6 @@ Vue.use(VueRouter);
 const routes = [
 	{
 		path      : '/',
-		name      : 'home',
-		component : () => import('@/views/Home.vue')
-	},
-	{
-		path      : '/dashboard',
 		name      : 'dashboard',
 		component : () => import('@/components/dashboard/Dashboard.vue'),
 		children  : [
@@ -54,6 +49,11 @@ const routes = [
 				component : () => import('@/components/dashboard/pages/Console.vue')
 			}
 		]
+	},
+	{
+		path      : '/landing',
+		name      : 'landing',
+		component : () => import('@/components/Landing.vue')
 	}
 ];
 
