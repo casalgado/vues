@@ -1,17 +1,21 @@
 <template>
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
+    <b-button type="submit" variant="primary">Submit</b-button>
+    <b-button @click="addProductFields" variant="info">+ producto</b-button>
     <div v-for="field in formConstructor.select" :key="field.property">
       <inputSelect :options="field.options" :property="field.property" :label="field.label" />
     </div>
     <!-- @ add :label to <Select/> and <DProducts/> -->
     <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
-      <inputDynamic
-        v-if="field.active"
-        :property="'products'"
-        :options="formConstructor.dynamic.options"
-        :id="field.id"
-        :priority="formConstructor.dynamic.priority || 'unitPrice'"
-      />
+      <transition name="fade">
+        <inputDynamic
+          v-if="field.active"
+          :property="'products'"
+          :options="formConstructor.dynamic.options"
+          :id="field.id"
+          :priority="formConstructor.dynamic.priority || 'unitPrice'"
+        />
+      </transition>
     </div>
 
     <div v-for="field in formConstructor.basic" :key="field.property">
@@ -22,9 +26,6 @@
         v-if="!field.hidden"
       />
     </div>
-
-    <b-button type="submit" variant="primary">Submit</b-button>
-    <b-button @click="addProductFields" variant="info">+ producto</b-button>
 
     <b-card class="mt-3">
       <pre class="m-0">{{ this.object }}</pre>
@@ -123,5 +124,13 @@ export default {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 1fr 8fr;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

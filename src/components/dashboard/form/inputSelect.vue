@@ -58,7 +58,6 @@ export default {
 </script>
 <style scoped>
 #toggle-button {
-  justify-self: center;
   height: 30px;
   width: 30px;
   padding: 0px;

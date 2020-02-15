@@ -1,44 +1,42 @@
 <template>
-  <div>
-    <b-form id="dynamic">
-      <b-button id="remove-button" variant="danger" @click="remove()">x</b-button>
+  <div id="dynamic">
+    <b-button id="remove-button" variant="danger" @click="remove()">x</b-button>
 
-      <b-form-select
-        id="product-select"
-        class="custom-input"
-        @change="onChange('name')"
-        v-model="input.name"
-        :options="options"
-        size="sm"
-      ></b-form-select>
+    <b-form-select
+      id="product-select"
+      class="custom-input"
+      @change="onChange('name')"
+      v-model="input.name"
+      :options="options"
+      size="sm"
+    ></b-form-select>
 
-      <b-form-group class="f-group price-group" label="$ Unitario" size="sm"></b-form-group>
-      <b-form-input
-        class="custom-input price-input"
-        @change="onChange('unitPrice')"
-        v-model="input.unitPrice"
-        type="number"
-        size="sm"
-      ></b-form-input>
+    <b-form-group class="f-group price-group" label="$ Unitario" size="sm"></b-form-group>
+    <b-form-input
+      class="custom-input price-input"
+      @change="onChange('unitPrice')"
+      v-model="input.unitPrice"
+      type="number"
+      size="sm"
+    ></b-form-input>
 
-      <b-form-group class="f-group price-group" label="Cantidad"></b-form-group>
-      <b-form-input
-        class="custom-input price-input"
-        @change="onChange('quantity')"
-        v-model="input.quantity"
-        type="number"
-        size="sm"
-      ></b-form-input>
+    <b-form-group class="f-group price-group" label="Cantidad"></b-form-group>
+    <b-form-input
+      class="custom-input price-input"
+      @change="onChange('quantity')"
+      v-model="input.quantity"
+      type="number"
+      size="sm"
+    ></b-form-input>
 
-      <b-form-group class="f-group price-group" label="$ Total"></b-form-group>
-      <b-form-input
-        class="custom-input price-input"
-        @change="onChange('total')"
-        v-model="input.total"
-        type="number"
-        size="sm"
-      ></b-form-input>
-    </b-form>
+    <b-form-group class="f-group price-group" label="$ Total"></b-form-group>
+    <b-form-input
+      class="custom-input price-input"
+      @change="onChange('total')"
+      v-model="input.total"
+      type="number"
+      size="sm"
+    ></b-form-input>
   </div>
 </template>
 <script>
@@ -92,7 +90,7 @@ export default {
 }
 #dynamic {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   grid-gap: 5px;
 }
 
