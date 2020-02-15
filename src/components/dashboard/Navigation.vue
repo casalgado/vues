@@ -2,7 +2,7 @@
   <div id="container">
     <b-dropdown dropup no-caret text="+" offset="-60" toggle-class="nav-dropdown" class="m-2">
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'crearPedido' }">crear pedido</router-link>
+        <router-link :to="{ name: 'CreateOrder' }">crear pedido</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link :to="{ name: 'nuevoGasto' }">crear gasto</router-link>
@@ -16,10 +16,10 @@
     </b-dropdown>
     <b-dropdown dropup no-caret text="=" offset="-60" toggle-class="nav-dropdown" class="m-2">
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'pedidos'}">Pedidos</router-link>
+        <router-link :to="{ name: 'ShowOrders'}">Pedidos</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'gastos'}">Gastos</router-link>
+        <router-link :to="{ name: 'ShowExpenses'}">Gastos</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link :to="{ name: 'clientes'}">Clientes</router-link>
@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-  name: "DashNav",
+  name: "Navigation",
   data: function() {
     return {};
   }

@@ -1,45 +1,39 @@
 <template>
-  <div id="container" class="border">
-    <div id="main">
-      <b-card class="mt-3">
-        <pre class="m-0">{{ this.object }}</pre>
-        <pre class="m-0">{{ this.activeForm }}</pre>
-      </b-card>
-      <b-card class="mt-3">
-        <pre class="m-0">{{ this.dynamicFields }}</pre>
-      </b-card>
+  <b-form id="form" @submit="submit" @reset="reset" v-if="show">
+    <div v-for="field in formConstructor.select" :key="field.property">
+      <inputSelect :options="field.options" :property="field.property" :label="field.label" />
     </div>
-    <div id="sidebar">
-      <b-form @submit="submit" @reset="reset" v-if="show">
-        <div v-for="field in formConstructor.select" :key="field.property">
-          <inputSelect :options="field.options" :property="field.property" :label="field.label" />
-        </div>
-        <!-- @ add :label to <Select/> and <DProducts/> -->
-        <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
-          <div v-if="field.active">
-            <inputDynamic
-              :property="'products'"
-              :options="formConstructor.dynamic.options"
-              :id="field.id"
-              :priority="formConstructor.dynamic.priority || 'unitPrice'"
-            />
-          </div>
-        </div>
-
-        <div v-for="field in formConstructor.basic" :key="field.property">
-          <inputBasic
-            :label="field.label"
-            :property="field.property"
-            :type="field.type"
-            v-if="!field.hidden"
-          />
-        </div>
-
-        <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button @click="addProductFields" variant="info">+ producto</b-button>
-      </b-form>
+    <!-- @ add :label to <Select/> and <DProducts/> -->
+    <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
+      <inputDynamic
+        v-if="field.active"
+        :property="'products'"
+        :options="formConstructor.dynamic.options"
+        :id="field.id"
+        :priority="formConstructor.dynamic.priority || 'unitPrice'"
+      />
     </div>
-  </div>
+
+    <div v-for="field in formConstructor.basic" :key="field.property">
+      <inputBasic
+        :label="field.label"
+        :property="field.property"
+        :type="field.type"
+        v-if="!field.hidden"
+      />
+    </div>
+
+    <b-button type="submit" variant="primary">Submit</b-button>
+    <b-button @click="addProductFields" variant="info">+ producto</b-button>
+
+    <b-card class="mt-3">
+      <pre class="m-0">{{ this.object }}</pre>
+      <pre class="m-0">{{ this.activeForm }}</pre>
+    </b-card>
+    <b-card class="mt-3">
+      <pre class="m-0">{{ this.dynamicFields }}</pre>
+    </b-card>
+  </b-form>
 </template>
 <script>
 import inputSelect from "./inputSelect";
@@ -121,14 +115,13 @@ export default {
 * {
   margin: 5px;
 }
+
+#form {
+  max-width: 400px;
+}
 .f-group {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 1fr 8fr;
-}
-
-#container {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
 }
 </style>

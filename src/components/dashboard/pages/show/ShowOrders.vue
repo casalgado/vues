@@ -6,8 +6,8 @@
   </div>
 </template>
 <script>
-import PrintOrders from "../print/PrintOrders";
-import Table from "../table/Table";
+import PrintOrders from "../../print/PrintOrders";
+import Table from "../../table/Table";
 import { getByDate } from "@/firebase";
 import moment from "moment";
 import { mapState } from "vuex";

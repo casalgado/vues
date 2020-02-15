@@ -11,18 +11,18 @@ const routes = [
 		children  : [
 			{
 				path      : 'pedidos/',
-				name      : 'pedidos',
-				component : () => import('../components/dashboard/pages/ShowOrders.vue')
+				name      : 'ShowOrders',
+				component : () => import('../components/dashboard/pages/show/ShowOrders.vue')
 			},
 			{
 				path      : 'gastos/',
-				name      : 'gastos',
-				component : () => import('../components/dashboard/pages/ShowExpenses.vue')
+				name      : 'ShowExpenses',
+				component : () => import('../components/dashboard/pages/show/ShowExpenses.vue')
 			},
 			{
 				path      : 'pedidos/crear/',
-				name      : 'crearPedido',
-				component : () => import('@/components/dashboard/pages/create/createOrder.vue')
+				name      : 'CreateOrder',
+				component : () => import('@/components/dashboard/pages/create/CreateOrder.vue')
 			},
 			/*
 			{

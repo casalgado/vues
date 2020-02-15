@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import Table from "../table/Table";
+import Table from "../../table/Table";
 import { getByDate } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";

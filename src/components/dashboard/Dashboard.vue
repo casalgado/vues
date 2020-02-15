@@ -4,16 +4,16 @@
       <router-view :key="$route.fullPath" />
     </div>
     <div id="nav">
-      <DashNav />
+      <Navigation />
     </div>
   </div>
 </template>
 <script>
-import DashNav from "@/components/dashboard/DashNav";
+import Navigation from "@/components/dashboard/Navigation";
 export default {
   name: "Dashboard",
   components: {
-    DashNav
+    Navigation
   },
   data() {
     return {

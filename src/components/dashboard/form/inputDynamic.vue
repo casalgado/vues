@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form id="form">
+    <b-form id="dynamic">
       <b-button id="remove-button" variant="danger" @click="remove()">x</b-button>
 
       <b-form-select
@@ -90,7 +90,7 @@ export default {
 * {
   margin: 0px;
 }
-#form {
+#dynamic {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-gap: 5px;
