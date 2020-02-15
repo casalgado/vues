@@ -6,8 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state     : {
-		uid           : '',
-		ref           : '',
+		uid           : null,
+		ref           : null,
 		period        : 'day',
 		date          : moment().format(),
 		activeForm    : {},
@@ -16,14 +16,12 @@ export default new Vuex.Store({
 	},
 	mutations : {
 		// user
-		/*
-		setUser(){
-			state.uid = firebase.auth().currentUser
+		setUser(state, uid) {
+			state.uid = uid;
 		},
-		setRef(){
-			state.ref = getUser(uid).ref
-		} 
-		*/
+		setRef(state, ref) {
+			state.ref = ref;
+		},
 		// pagination
 		next(state) {
 			state.date = moment(state.date).add(1, state.period).format();
@@ -69,7 +67,15 @@ export default new Vuex.Store({
 		}
 	},
 	actions   : {
-		// Connect to Database and execute setUser and setRef mutations.
+		fetchUser({ commit }, user) {
+			if (user) {
+				commit('setUser', user.uid);
+				commit('setRef', user.ref);
+			} else {
+				commit('setUser', null);
+				commit('setRef', null);
+			}
+		}
 	},
 	modules   : {}
 });

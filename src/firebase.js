@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase';
 import firebase from 'firebase';
 import moment from 'moment';
+import store from './store';
 // @refactor
 // where should the code below go (momentjs)?
 moment.locale('es');
@@ -19,6 +20,18 @@ const app = initializeApp({
 	storageBucket     : 'es-alimento.appspot.com',
 	messagingSenderId : process.env.VUE_APP_FIREBASE_SENDER_ID,
 	appId             : process.env.VUE_APP_FIREBASE_APP_ID
+});
+
+firebase.auth().onAuthStateChanged((user) => {
+	if (user) {
+		database.ref(`users/${user.uid}`).once('value').then(function(snapshot) {
+			user.ref = snapshot.val().ref;
+			store.dispatch('fetchUser', user);
+			console.log(user);
+		});
+	} else {
+		store.dispatch('fetchUser', user);
+	}
 });
 
 const database = app.database();

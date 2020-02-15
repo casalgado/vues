@@ -6,13 +6,19 @@
   </div>
 </template>
 <script>
-import { database, getUser } from "@/firebase";
+import { database } from "@/firebase";
+import { mapState } from "vuex";
 
 export default {
   name: "Console",
   methods: {
     testUser: function() {
-      console.log(getUser());
+      database
+        .ref(`users/${this.uid}`)
+        .once("value")
+        .then(function(snapshot) {
+          console.log(snapshot.key);
+        });
     },
     importDatabase: function() {
       let nodes = ["expenses", "products", "clients"];
@@ -95,7 +101,8 @@ export default {
       var zeroes = new Array(digits).join("0");
       return (zeroes + value).slice(-digits);
     }
-  }
+  },
+  computed: mapState(["uid"])
 };
 </script>
 <style scoped>
