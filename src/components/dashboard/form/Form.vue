@@ -3,7 +3,12 @@
     <b-button type="submit" variant="primary">Submit</b-button>
     <b-button @click="addProductFields" variant="info">+ producto</b-button>
     <div v-for="field in formConstructor.select" :key="field.property">
-      <inputSelect :options="field.options" :property="field.property" :label="field.label" />
+      <inputSelect
+        :options="field.options"
+        :property="field.property"
+        :label="field.label"
+        :value="''"
+      />
     </div>
     <!-- @ add :label to <Select/> and <DProducts/> -->
     <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
@@ -23,6 +28,7 @@
         :label="field.label"
         :property="field.property"
         :type="field.type"
+        :value="''"
         v-if="!field.hidden"
       />
     </div>

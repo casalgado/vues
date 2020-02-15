@@ -49,11 +49,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.activeForm);
-    console.log(this.property);
-    console.log(this.activeForm[this.property]);
-
-    this.input = this.activeForm[this.property];
+    this.input = this.value;
   }
 };
 </script>

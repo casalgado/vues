@@ -70,6 +70,7 @@ export default {
   computed: {
     ...mapState(["ref", "activeForm", "dynamicFields"]),
     object() {
+      console.log(this.$route.params);
       return {
         params: this.$route.params,
         ref: "orders"
