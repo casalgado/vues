@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import moment from 'moment';
 import store from './store';
 // @refactor
-// where should the code below go (momentjs)?
+// where should the momentjs code go?
 moment.locale('es');
 moment.locale('en', {
 	week : {
@@ -27,7 +27,6 @@ firebase.auth().onAuthStateChanged((user) => {
 		database.ref(`users/${user.uid}`).once('value').then(function(snapshot) {
 			user.ref = snapshot.val().ref;
 			store.dispatch('fetchUser', user);
-			console.log(user);
 		});
 	} else {
 		store.dispatch('fetchUser', user);
@@ -35,11 +34,8 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 const database = app.database();
-const db = database.ref('esalimento');
-const orders = database.ref('esalimento/orders');
-const expenses = database.ref('esalimento/expenses');
 
-export { database, db, orders, expenses };
+export { database };
 
 export function getUser() {
 	return firebase.auth().currentUser;
@@ -48,7 +44,7 @@ export function getUser() {
 export function getByDate(ref, date, period) {
 	return new Promise(function(resolve) {
 		database
-			.ref(`esalimento/${ref}`)
+			.ref(ref)
 			.orderByChild('date')
 			.startAt(moment(date).startOf(period).format())
 			.endAt(moment(date).endOf(period).format())

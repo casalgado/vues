@@ -4,7 +4,7 @@
 <script>
 import Form from "../../form/Form";
 // import { save } from "../../../firebase";
-import { orders } from "@/firebase";
+import { database } from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "createOrder",
@@ -68,7 +68,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["activeForm", "dynamicFields"]),
+    ...mapState(["ref", "activeForm", "dynamicFields"]),
     object() {
       return {
         params: this.$route.params,
@@ -112,7 +112,7 @@ export default {
       let spotlight_size = 15;
       let property = "client";
       // let local_property = "clients";
-      let ref = orders;
+      let ref = database.ref(`${this.ref}/orders`);
 
       let objects = [];
       let sorted_unique_strings = [];

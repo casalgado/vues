@@ -61,9 +61,7 @@ export default {
   computed: mapState(["ref", "date", "period"]),
   methods: {
     getObjects: function() {
-      // let ref = this.ref + "/orders"
-      // change "orders" to ref
-      getByDate("orders", this.date, this.period).then(e => {
+      getByDate(`${this.ref}/orders`, this.date, this.period).then(e => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))

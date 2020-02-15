@@ -53,10 +53,10 @@ export default {
       }
     };
   },
-  computed: mapState(["date", "period"]),
+  computed: mapState(["ref", "date", "period"]),
   methods: {
     getObjects: function() {
-      getByDate("invoices", this.date, this.period).then(e => {
+      getByDate(`${this.ref}/invoices`, this.date, this.period).then(e => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
