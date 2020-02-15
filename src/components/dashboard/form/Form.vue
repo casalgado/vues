@@ -40,7 +40,7 @@
 import inputSelect from "./inputSelect";
 import inputBasic from "./inputBasic";
 import inputDynamic from "./inputDynamic";
-// import { save } from "../../../firebase";
+// import { save } from "@/firebase";
 import { mapState } from "vuex";
 import { getById } from "@/firebase";
 export default {
@@ -56,7 +56,7 @@ export default {
       show: true
     };
   },
-  computed: mapState(["dynamicFields", "activeForm"]),
+  computed: mapState(["ref", "dynamicFields", "activeForm"]),
   methods: {
     addProductFields() {
       this.$store.commit("addField");
@@ -78,7 +78,7 @@ export default {
       }
       form.total = total;
       console.log(form);
-      // save("orders", this.form).then(() => {
+      // save(`${this.ref}/orders`, this.form).then(() => {
       //   this.reset();
       // });
     },

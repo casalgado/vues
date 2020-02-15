@@ -9,7 +9,8 @@ export default {
   props: {
     type: String,
     label: String,
-    property: String
+    property: String,
+    value: String
   },
   data() {
     return {
@@ -21,6 +22,11 @@ export default {
     input() {
       this.payload[this.property] = this.input;
       this.$store.commit("updateActiveForm", this.payload);
+    }
+  },
+  mounted() {
+    if (this.value != "") {
+      this.input = this.value;
     }
   }
 };

@@ -19,7 +19,8 @@ export default {
   props: {
     options: Array,
     label: String,
-    property: String
+    property: String,
+    value: String
   },
   data() {
     return {

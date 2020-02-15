@@ -13,7 +13,7 @@
         {{ totals }}
       </p>
       <div v-if="selectedOne" class="crud-buttons">
-        <b-button>paid</b-button>
+        <ButtonPaid :oid="selected[0].id" :path="'orders'" />
         <b-button>edit</b-button>
         <b-button>delete</b-button>
       </div>
@@ -32,9 +32,11 @@
   </div>
 </template>
 <script>
+import ButtonPaid from "./../buttons/ButtonPaid";
 import moment from "moment";
 export default {
   name: "Sidebar",
+  components: { ButtonPaid },
   props: {
     objects: Array
   },

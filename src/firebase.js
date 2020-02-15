@@ -77,7 +77,7 @@ export function getAll(ref) {
 
 export function save(ref, payload) {
 	return new Promise(function(resolve) {
-		database.ref(`esalimento/${ref}`).push(payload).then(function(value) {
+		database.ref(ref).push(payload).then(function(value) {
 			resolve(value);
 			console.log('@ save():');
 			console.log(value);
@@ -86,9 +86,9 @@ export function save(ref, payload) {
 	});
 }
 
-export function getById(ref, id) {
+export function getById(fullPath) {
 	return new Promise(function(resolve) {
-		database.ref(`esalimento/${ref}/${id}`).once('value').then(function(snapshot) {
+		database.ref(fullPath).once('value').then(function(snapshot) {
 			resolve(snapshot.val());
 		});
 	});
