@@ -24,6 +24,11 @@ const routes = [
 				name      : 'CreateOrder',
 				component : () => import('@/components/dashboard/pages/create/CreateOrder.vue')
 			},
+			{
+				path      : 'console/',
+				name      : 'console',
+				component : () => import('@/components/dashboard/pages/Console.vue')
+			}
 			/*
 			{
 				path      : 'pedidos/editar/:id',
@@ -52,10 +57,6 @@ const routes = [
 			}
 			,
 			*/
-			{
-				path      : 'console',
-				component : () => import('@/components/dashboard/pages/Console.vue')
-			}
 		]
 	},
 	{

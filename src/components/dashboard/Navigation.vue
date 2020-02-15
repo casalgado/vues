@@ -8,12 +8,10 @@
         <router-link :to="{ name: 'nuevoGasto' }">crear gasto</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link to="/dashboard">dashboard</router-link>
-      </b-dropdown-item-button>
-      <b-dropdown-item-button>
-        <router-link to="/dashboard/console">console</router-link>
+        <router-link :to="{ name: 'console' }">console</router-link>
       </b-dropdown-item-button>
     </b-dropdown>
+
     <b-dropdown dropup no-caret text="=" offset="-60" toggle-class="nav-dropdown" class="m-2">
       <b-dropdown-item-button>
         <router-link :to="{ name: 'ShowOrders'}">Pedidos</router-link>

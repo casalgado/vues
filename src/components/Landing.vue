@@ -31,7 +31,11 @@ export default {
         .then(() => {
           this.email = "";
           this.password = "";
+          this.$router.replace({ name: "dashboard" });
           alert("user signed in successfully");
+        })
+        .catch(err => {
+          this.error = err.message;
         });
     },
     show() {
