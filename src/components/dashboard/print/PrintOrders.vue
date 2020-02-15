@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { save } from "../../../../firebase";
+import { save } from "@/firebase";
 import moment from "moment";
 export default {
   name: "PrintOrders",

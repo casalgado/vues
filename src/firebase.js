@@ -32,7 +32,7 @@ export function getUser() {
 	return firebase.auth().currentUser;
 }
 
-export function fetchByDate(ref, date, period) {
+export function getByDate(ref, date, period) {
 	return new Promise(function(resolve) {
 		database
 			.ref(`esalimento/${ref}`)
@@ -52,7 +52,7 @@ export function fetchByDate(ref, date, period) {
 	});
 }
 
-export function fetchAll(ref) {
+export function getAll(ref) {
 	return new Promise(function(resolve) {
 		database.ref(`esalimento/${ref}`).once('value').then(function(snapshot) {
 			let data = snapshot.val();
@@ -70,34 +70,17 @@ export function save(ref, payload) {
 	return new Promise(function(resolve) {
 		database.ref(`esalimento/${ref}`).push(payload).then(function(value) {
 			resolve(value);
+			console.log('@ save():');
 			console.log(value);
+			console.log('-------------');
 		});
 	});
 }
 
-export function fetchById(ref, id) {
+export function getById(ref, id) {
 	return new Promise(function(resolve) {
 		database.ref(`esalimento/${ref}/${id}`).once('value').then(function(snapshot) {
 			resolve(snapshot.val());
 		});
 	});
 }
-
-// export function CheckIfFriendsPending(id2) {
-// 	return new Promise(function(resolve, reject) {
-// 		var userID = getFirebase().auth().currentUser.uid;
-// 		var indicator = false;
-// 		getFirebase().database().ref('members/' + userID + '/PendingFR').once('value').then(function(snap) {
-// 			function userMatch(user) {
-// 				if (!!user.From && user.From === userID && (user.To === id2 || user.To === userID)) {
-// 					return resolve();
-// 				}
-// 			}
-// 			snap.forEach(function(childSnapshot) {
-// 				var childObject = childSnapshot.val();
-// 				userMatch(childObject);
-// 			});
-// 			return reject();
-// 		});
-// 	});
-// }

@@ -47,7 +47,7 @@ import Basic from "./inputs/Basic";
 import Dynamic from "./inputs/Dynamic";
 // import { save } from "../../../firebase";
 import { mapState } from "vuex";
-import { fetchById } from "../../../firebase";
+import { getById } from "@/firebase";
 export default {
   components: { Select, Basic, Dynamic },
   name: "RenderForm",
@@ -111,7 +111,7 @@ export default {
     }
   },
   created() {
-    fetchById(this.object.ref, this.object.params.id).then(e => {
+    getById(this.object.ref, this.object.params.id).then(e => {
       this.$store.commit("updateActiveForm", e);
     });
   }

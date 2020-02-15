@@ -6,6 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state     : {
+		uid           : '',
+		ref           : '',
 		period        : 'day',
 		date          : moment().format(),
 		activeForm    : {},
@@ -13,6 +15,15 @@ export default new Vuex.Store({
 		selected      : []
 	},
 	mutations : {
+		// user
+		/*
+		setUser(){
+			state.uid = firebase.auth().currentUser
+		},
+		setRef(){
+			state.ref = getUser(uid).ref
+		} 
+		*/
 		// pagination
 		next(state) {
 			state.date = moment(state.date).add(1, state.period).format();
@@ -57,6 +68,8 @@ export default new Vuex.Store({
 			state.dynamicFields[payload.id].active = false;
 		}
 	},
-	actions   : {},
+	actions   : {
+		// Connect to Database and execute setUser and setRef mutations.
+	},
 	modules   : {}
 });

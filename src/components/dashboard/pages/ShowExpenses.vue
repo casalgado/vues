@@ -4,59 +4,58 @@
   </div>
 </template>
 <script>
-import Table from "./Table";
-import { fetchAll, fetchByDate } from "../../../firebase";
+import Table from "../table/Table";
+import { getByDate } from "@/firebase";
 import { mapState } from "vuex";
-import { moment } from "moment";
+import moment from "moment";
 
 export default {
-  name: "Invoices",
+  name: "ShowExpenses",
   components: {
     Table
   },
   data() {
     return {
       table: {
-        title: "Facturas",
+        title: "Gastos",
         fields: [
+          {
+            key: "date",
+            label: "Fecha",
+            sortable: true
+          },
+          {
+            key: "provider",
+            label: "Proveedor",
+            sortable: true
+          },
           {
             key: "name",
             label: "Nombre",
-            sortable: true,
-            tdClass: "justifyLeft"
-          },
-          {
-            key: "email",
-            label: "Mail",
             sortable: true
           },
           {
-            key: "phone",
-            label: "Telefono",
+            key: "quantity",
+            label: "CTD",
             sortable: true
           },
           {
-            key: "address",
-            label: "Direccion",
-            sortable: true
-          },
-          {
-            key: "comment",
-            label: "Comentario",
+            key: "total",
+            label: "Total",
             sortable: true
           }
         ],
         formattedObjects: [],
         objects: [],
-        selectMode: "single",
-        pagination: "false"
+        selectMode: "multi",
+        pagination: "week"
       }
     };
   },
   computed: mapState(["date", "period"]),
   methods: {
     getObjects: function() {
-      fetchByDate("invoices", this.date, this.period).then(e => {
+      getByDate("expenses", this.date, this.period).then(e => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
@@ -64,8 +63,12 @@ export default {
       });
     },
     format: function(objects) {
-      console.log(objects);
-      return false;
+      let items = objects.map(e => {
+        e.date = moment(e.date).format("DD/MM");
+
+        return e;
+      });
+      return items;
     }
   },
   mounted() {

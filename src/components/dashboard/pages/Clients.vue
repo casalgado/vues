@@ -5,19 +5,18 @@
 </template>
 <script>
 import Table from "./Table";
-import { fetchAll, fetchByDate } from "../../../firebase";
+import { getAll } from "@/firebase";
 import { mapState } from "vuex";
-import { moment } from "moment";
 
 export default {
-  name: "Template",
+  name: "Clients",
   components: {
     Table
   },
   data() {
     return {
       table: {
-        title: "Template",
+        title: "Clientes",
         fields: [
           {
             key: "name",
@@ -49,14 +48,14 @@ export default {
         formattedObjects: [],
         objects: [],
         selectMode: "single",
-        pagination: "false"
+        pagination: ""
       }
     };
   },
   computed: mapState(["date", "period"]),
   methods: {
     getObjects: function() {
-      fetchByDate("ref", this.date, this.period).then(e => {
+      getAll("clients").then(e => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))

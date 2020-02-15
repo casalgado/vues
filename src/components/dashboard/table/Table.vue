@@ -28,8 +28,8 @@
   </div>
 </template>
 <script>
-import Pagination from "./structure/Pagination";
-import TableSidebar from "./structure/TableSidebar";
+import Pagination from "./Pagination";
+import TableSidebar from "./Sidebar";
 export default {
   name: "Table",
   components: {

@@ -12,8 +12,14 @@ const routes = [
 			{
 				path      : 'pedidos/',
 				name      : 'pedidos',
-				component : () => import('@/components/dashboard/tables/Orders.vue')
+				component : () => import('../components/dashboard/pages/ShowOrders.vue')
 			},
+			{
+				path      : 'gastos/',
+				name      : 'gastos',
+				component : () => import('../components/dashboard/pages/ShowExpenses.vue')
+			},
+			/*
 			{
 				path      : 'pedidos/nuevo/',
 				name      : 'nuevoPedido',
@@ -43,7 +49,9 @@ const routes = [
 				path      : 'clientes/',
 				name      : 'clientes',
 				component : () => import('@/components/dashboard/tables/Clients.vue')
-			},
+			}
+			,
+			*/
 			{
 				path      : 'console',
 				component : () => import('@/components/dashboard/pages/Console.vue')

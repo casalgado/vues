@@ -25,15 +25,49 @@
       <div v-if="sameClient">
         <b-button onclick="window.print()">Save and Print</b-button>
       </div>
+      <div>
+        <b-button @click="exportTable">export</b-button>
+      </div>
     </div>
   </div>
 </template>
 <script>
-// import moment from "moment";
+import moment from "moment";
 export default {
-  name: "TableSidebar",
+  name: "Sidebar",
   props: {
     objects: Array
+  },
+  methods: {
+    exportTable: function() {
+      let flattened = [];
+      this.objects.forEach(e => {
+        console.log(e);
+        e.date = moment(e.date).format("DD-MM-YYYY");
+        e.paid = moment(e.paid).format("DD/MM");
+        delete e.bug_probe;
+        if (e.products) {
+          e.products.forEach(p => {
+            let c = Object.assign({}, e);
+            c.product = p.name;
+            c.quantity = p.quantity;
+            c.unitPrice = p.unitPrice;
+            c.total = p.total;
+            flattened.push(c);
+          });
+        } else {
+          flattened.push(e);
+        }
+      });
+      console.log(flattened);
+      let header = Object.keys(flattened[0]);
+      let rows = flattened.map(e => {
+        delete e.products;
+        return Object.values(e);
+      });
+      let csvContent = header + rows.map(e => e.join(",")).join("\n");
+      console.log(csvContent);
+    }
   },
   computed: {
     selected() {
