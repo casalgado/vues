@@ -2,7 +2,7 @@
   <div id="container">
     <b-dropdown dropup no-caret text="+" offset="-60" toggle-class="nav-dropdown" class="m-2">
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'nuevoPedido' }">crear pedido</router-link>
+        <router-link :to="{ name: 'crearPedido' }">crear pedido</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link :to="{ name: 'nuevoGasto' }">crear gasto</router-link>

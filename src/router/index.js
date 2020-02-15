@@ -19,12 +19,12 @@ const routes = [
 				name      : 'gastos',
 				component : () => import('../components/dashboard/pages/ShowExpenses.vue')
 			},
-			/*
 			{
-				path      : 'pedidos/nuevo/',
-				name      : 'nuevoPedido',
-				component : () => import('@/components/dashboard/forms/OrdersForm.vue')
+				path      : 'pedidos/crear/',
+				name      : 'crearPedido',
+				component : () => import('@/components/dashboard/pages/create/createOrder.vue')
 			},
+			/*
 			{
 				path      : 'pedidos/editar/:id',
 				name      : 'editarPedido',

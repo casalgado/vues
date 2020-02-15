@@ -12,12 +12,12 @@
     <div id="sidebar">
       <b-form @submit="submit" @reset="reset" v-if="show">
         <div v-for="field in formConstructor.select" :key="field.property">
-          <Select :options="field.options" :property="field.property" :label="field.label" />
+          <inputSelect :options="field.options" :property="field.property" :label="field.label" />
         </div>
         <!-- @ add :label to <Select/> and <DProducts/> -->
         <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
           <div v-if="field.active">
-            <Dynamic
+            <inputDynamic
               :property="'products'"
               :options="formConstructor.dynamic.options"
               :id="field.id"
@@ -27,7 +27,7 @@
         </div>
 
         <div v-for="field in formConstructor.basic" :key="field.property">
-          <Basic
+          <inputBasic
             :label="field.label"
             :property="field.property"
             :type="field.type"
@@ -42,14 +42,14 @@
   </div>
 </template>
 <script>
-import Select from "./inputs/Select";
-import Basic from "./inputs/Basic";
-import Dynamic from "./inputs/Dynamic";
+import inputSelect from "./inputSelect";
+import inputBasic from "./inputBasic";
+import inputDynamic from "./inputDynamic";
 // import { save } from "../../../firebase";
 import { mapState } from "vuex";
 import { getById } from "@/firebase";
 export default {
-  components: { Select, Basic, Dynamic },
+  components: { inputSelect, inputBasic, inputDynamic },
   name: "RenderForm",
   props: {
     formConstructor: Object,
