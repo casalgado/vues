@@ -1,7 +1,7 @@
 <template>
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
     <b-button type="submit" variant="primary">Submit</b-button>
-    <b-button @click="addProductFields" variant="info">+ producto</b-button>
+    <b-button @click="addProductFields" variant="info" v-if="true">+ producto</b-button>
     <div v-for="field in formConstructor.select" :key="field.property">
       <inputSelect
         :options="field.options"
@@ -46,7 +46,7 @@
 import inputSelect from "./inputSelect";
 import inputBasic from "./inputBasic";
 import inputDynamic from "./inputDynamic";
-// import { save } from "@/firebase";
+import { save } from "@/firebase";
 import { mapState } from "vuex";
 import { getById } from "@/firebase";
 export default {
@@ -84,28 +84,20 @@ export default {
       }
       form.total = total;
       console.log(form);
-      // save(`${this.ref}/orders`, this.form).then(() => {
-      //   this.reset();
-      // });
+      save(`${this.ref}/orders`, form).then(() => {
+        this.reset();
+      });
     },
     reset(evt) {
       if (evt) {
         evt.preventDefault();
       }
-      // Reset our form values
-      this.form.client = "";
-      this.form.unitPrice = 0;
-      this.form.quantity = 0;
-      this.form.total = 0;
-      this.form.date = "";
-      this.form.delivered = "";
-      this.form.products = [];
-      this.dynamicFields = [{ id: 0, active: true }];
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {
         this.show = true;
       });
+      this.$store.commit("resetForm");
     },
     toggleCreate() {
       this.create = !this.create;

@@ -90,6 +90,7 @@ export default {
       this.formConstructor.basic.forEach(e => {
         schema[e.property] = "";
       });
+
       return schema;
     },
     setClientSpotlight() {
@@ -162,11 +163,6 @@ export default {
   created() {
     this.setClientSpotlight();
     this.$store.commit("setActiveForm", this.scaffold(this.formConstructor));
-  },
-  watch: {
-    dynamicFields() {
-      console.log("watching");
-    }
   }
 };
 </script>

@@ -89,14 +89,24 @@ export function getAllWithProp(ref, prop, value) {
 	});
 }
 
-export function save(ref, payload) {
+export function save(fullPath, payload) {
 	return new Promise(function(resolve) {
-		database.ref(ref).push(payload).then(function(value) {
-			resolve(value);
-			console.log('@ save():');
-			console.log(value);
-			console.log('-------------');
-		});
+		database
+			.ref(fullPath)
+			.push()
+			.set(payload, function(error) {
+				if (error) {
+					alert('Data could not be saved.' + error);
+				} else {
+					alert('Data saved successfully.');
+				}
+			})
+			.then(function(value) {
+				resolve(value);
+				console.log('@ save():');
+				console.log(value);
+				console.log('-------------');
+			});
 	});
 }
 

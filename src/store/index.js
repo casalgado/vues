@@ -64,6 +64,10 @@ export default new Vuex.Store({
 		},
 		removeField(state, payload) {
 			state.dynamicFields[payload.id].active = false;
+		},
+		resetForm(state) {
+			state.activeForm = {};
+			state.dynamicFields = { 0: { id: 0, active: true, name: '', unitPrice: 0, quantity: 0, total: 0 } };
 		}
 	},
 	actions   : {
