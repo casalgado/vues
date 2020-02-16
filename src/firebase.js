@@ -63,7 +63,21 @@ export function getByDate(ref, date, period) {
 
 export function getAll(ref) {
 	return new Promise(function(resolve) {
-		database.ref(`esalimento/${ref}`).once('value').then(function(snapshot) {
+		database.ref(ref).once('value').then(function(snapshot) {
+			let data = snapshot.val();
+			let objects = [];
+			for (let key in data) {
+				data[key].id = key;
+				objects.push(data[key]);
+			}
+			resolve(objects);
+		});
+	});
+}
+
+export function getAllWithProp(ref, prop, value) {
+	return new Promise(function(resolve) {
+		database.ref(ref).orderByChild(prop).equalTo(value).once('value').then(function(snapshot) {
 			let data = snapshot.val();
 			let objects = [];
 			for (let key in data) {

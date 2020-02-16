@@ -20,6 +20,11 @@ const routes = [
 				component : () => import('../components/dashboard/pages/show/ShowExpenses.vue')
 			},
 			{
+				path      : 'porcobrar/',
+				name      : 'ShowUnpaid',
+				component : () => import('../components/dashboard/pages/show/ShowUnpaid.vue')
+			},
+			{
 				path      : 'pedidos/crear/',
 				name      : 'CreateOrder',
 				component : () => import('@/components/dashboard/pages/create/CreateOrder.vue')

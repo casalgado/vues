@@ -56,7 +56,7 @@ export default {
             // co stands for current object or current order
             let co = objs[Object.keys(objs)[i]];
             let new_order = {
-              name: "P-19" + this.zeroPad(orders.length + 1, 3),
+              name: "P-" + this.zeroPad(orders.length + 1, 3),
               client: co.client,
               comment: co.comment,
               lastModified: co.lastModified,

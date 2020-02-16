@@ -22,6 +22,9 @@
       <b-dropdown-item-button>
         <router-link :to="{ name: 'clientes'}">Clientes</router-link>
       </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'ShowUnpaid'}">Por Cobrar</router-link>
+      </b-dropdown-item-button>
     </b-dropdown>
   </div>
 </template>
