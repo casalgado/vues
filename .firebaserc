@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "es-alimento": {
+      "hosting": {
+        "masa": [
+          "masamadre"
+        ]
+      }
+    }
+  }
+}
