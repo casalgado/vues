@@ -10,12 +10,13 @@
       placeholder="..."
     ></b-form-input>
     <b-form-select v-else v-model="input" :options="options2" class="custom-input" size="sm"></b-form-select>
+    <b-button @click="load">load</b-button>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "Select",
+  name: "InputSelect",
   props: {
     options: Array,
     label: String,
@@ -33,11 +34,20 @@ export default {
     input() {
       this.payload[this.property] = this.input;
       this.$store.commit("updateActiveForm", this.payload);
+    },
+    activeForm() {
+      console.log("w");
+      console.log(this.activeForm[this.property]);
+      this.input = this.activeForm[this.property];
     }
   },
   methods: {
     toggleCreate() {
       this.create = !this.create;
+    },
+    load() {
+      console.log(this.value);
+      this.input = "el caminante";
     }
   },
   computed: {
@@ -49,6 +59,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.value);
     this.input = this.value;
   }
 };

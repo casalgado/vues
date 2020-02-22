@@ -41,7 +41,7 @@
 </template>
 <script>
 export default {
-  name: "Dynamic",
+  name: "InputDynamic",
   props: {
     options: Array,
     property: String,

@@ -2,14 +2,16 @@
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
     <b-button type="submit" variant="primary">Submit</b-button>
     <b-button @click="addProductFields" variant="info" v-if="true">+ producto</b-button>
-    <div v-for="field in formConstructor.select" :key="field.property">
-      <inputSelect
-        :options="field.options"
-        :property="field.property"
-        :label="field.label"
-        :value="''"
-      />
-    </div>
+
+    <inputSelect
+      v-for="field in formConstructor.select"
+      :key="field.property"
+      :options="field.options"
+      :property="field.property"
+      :label="field.label"
+      :value="caf(field.property)"
+    />
+
     <!-- @ add :label to <Select/> and <DProducts/> -->
     <div v-for="field in Object.values(this.dynamicFields)" :key="field.id">
       <transition name="fade">
@@ -28,7 +30,7 @@
         :label="field.label"
         :property="field.property"
         :type="field.type"
-        :value="''"
+        :value="caf(field.property)"
         v-if="!field.hidden"
       />
     </div>
@@ -55,15 +57,27 @@ export default {
   props: {
     formConstructor: Object,
     products: Array,
-    object: Object
+    odata: Object
   },
   data() {
     return {
       show: true
     };
   },
-  computed: mapState(["ref", "dynamicFields", "activeForm"]),
+  computed: {
+    ...mapState(["ref", "activeForm", "dynamicFields"]),
+    object() {
+      return this.activeForm;
+    }
+  },
   methods: {
+    caf(string) {
+      // console.log("/*");
+      // console.log(string);
+      // console.log(this.$store.state.activeForm[string]);
+      // console.log("*/");
+      return this.$store.state.activeForm[string];
+    },
     addProductFields() {
       this.$store.commit("addField");
     },
@@ -103,10 +117,15 @@ export default {
       this.create = !this.create;
     }
   },
-  created() {
-    getById(this.object.ref, this.object.params.id).then(e => {
-      this.$store.commit("updateActiveForm", e);
-    });
+  mounted() {
+    if (this.odata.params.id) {
+      console.log(`${this.ref}/${this.odata.path}/${this.odata.params.id}`);
+      getById(`${this.ref}/${this.odata.path}/${this.odata.params.id}`).then(
+        e => {
+          this.$store.commit("updateActiveForm", e);
+        }
+      );
+    }
   }
 };
 </script>

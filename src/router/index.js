@@ -24,16 +24,26 @@ const routes = [
 				name      : 'ShowUnpaid',
 				component : () => import('../components/dashboard/pages/show/ShowUnpaid.vue')
 			},
-			{
-				path      : 'pedidos/crear/',
-				name      : 'CreateOrder',
-				component : () => import('@/components/dashboard/pages/create/CreateOrder.vue')
-			},
+			// {
+			// 	path      : 'pedidos/crear/',
+			// 	name      : 'CreateOrder',
+			// 	component : () => import('@/components/dashboard/pages/write/FormOrder.vue')
+			// },
+			// {
+			// 	path      : 'pedidos/editar/:id',
+			// 	name      : 'EditOrder',
+			// 	component : () => import('@/components/dashboard/pages/write/FormOrder.vue')
+			// },
 			{
 				path      : 'console/',
 				name      : 'console',
 				component : () => import('@/components/dashboard/pages/Console.vue')
 			}
+			// {
+			// 	path      : 'clientes/crear/',
+			// 	name      : 'FormClient',
+			// 	component : () => import('@/components/dashboard/pages/write/FormClient.vue')
+			// }
 			/*
 			{
 				path      : 'pedidos/editar/:id',

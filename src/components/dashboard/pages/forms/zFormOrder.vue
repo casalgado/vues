@@ -1,5 +1,5 @@
 <template>
-  <Form :formConstructor="this.formConstructor" :object="this.object" />
+  <Form :formConstructor="this.formConstructor" :odata="this.odata" />
 </template>
 <script>
 import Form from "../../form/Form";
@@ -7,7 +7,7 @@ import Form from "../../form/Form";
 import { database } from "@/firebase";
 import { mapState } from "vuex";
 export default {
-  name: "createOrder",
+  name: "FormOrder",
   components: { Form },
   data() {
     return {
@@ -69,11 +69,10 @@ export default {
   },
   computed: {
     ...mapState(["ref", "activeForm", "dynamicFields"]),
-    object() {
-      console.log(this.$route.params);
+    odata() {
       return {
         params: this.$route.params,
-        ref: "orders"
+        path: "orders"
       };
     }
   },
