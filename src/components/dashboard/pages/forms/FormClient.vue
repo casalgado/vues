@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <b-form id="form">
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.phone" :type="'text'" :label="'telefono'" />
     <b-card class="mt-3">
       <pre class="m-0">{{ this.form }}</pre>
     </b-card>
-  </div>
+  </b-form>
 </template>
 <script>
 import InputBasic from "../../inputs/InputBasic";

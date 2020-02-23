@@ -1,36 +1,94 @@
 <template>
-  <div>
+  <b-form id="form" @submit="submit" @reset="reset" v-if="show">
+    <b-button @click="add" variant="info">+ producto</b-button>
+    <b-button type="submit" variant="primary">Submit</b-button>
     <InputSelect v-model="form.client" :options="this.options.client" :label="'cliente'" />
-    <InputBasic v-model="form.date" :type="'date'" :label="'fecha'" />
+    <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
+    <InputBasic v-model="form.delivered" :type="'date'" :label="'entregar'" />
+
+    <div v-for="field in this.form.products" :key="field.id">
+      <transition name="fade">
+        <InputDynamic
+          v-if="field.active"
+          :property="'products'"
+          :options="['a', 'b', 'c', 'd']"
+          :id="field.id"
+          :priority="'unitPrice'"
+          :populate="field"
+          @remove-field="remove"
+          @update-field="update"
+        />
+      </transition>
+    </div>
     <b-card class="mt-3">
-      <pre class="m-0">{{ this.form }}</pre>
+      <pre class="m-0">{{ this.form.products }}</pre>
     </b-card>
-  </div>
+  </b-form>
 </template>
 <script>
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
-// import { save } from "../../../firebase";
+import InputDynamic from "../../inputs/InputDynamic";
+import { save } from "@/firebase";
 import { database } from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "FormOrder",
-  components: { InputSelect, InputBasic },
+  components: { InputSelect, InputBasic, InputDynamic },
   data() {
     return {
       form: {
-        client: "el caminante",
-        date: "2020-02-15"
+        client: "",
+        date: "",
+        delivered: "",
+        paid: "",
+        products: [
+          {
+            id: 0,
+            active: true,
+            name: "",
+            unitPrice: 1,
+            quantity: 1,
+            total: 1
+          }
+        ]
       },
       options: {
-        client: []
-      }
+        client: [],
+        product: []
+      },
+      show: true
     };
   },
   computed: {
-    ...mapState(["ref"])
+    ...mapState(["ref"]),
+    productOptions() {
+      return ["a"];
+    }
   },
   methods: {
+    add() {
+      let id = this.form.products.length;
+      console.log(id);
+      this.form.products.push({
+        id: id,
+        active: true,
+        name: "",
+        unitPrice: 0,
+        quantity: 0,
+        total: 0
+      });
+    },
+    update(payload) {
+      console.log(payload.name);
+      this.form.products[payload.id].name = payload.name;
+      this.form.products[payload.id].unitPrice = payload.unitPrice;
+      this.form.products[payload.id].quantity = payload.quantity;
+      this.form.products[payload.id].total = payload.total;
+    },
+    remove(payload) {
+      this.form.products[payload.id].active = false;
+    },
     setClientSpotlight() {
       /* 
       this can be a method called getPropertyWithSpotlight(ref, property, target_property, spotlight_size)
@@ -96,10 +154,77 @@ export default {
           this.options.client = options;
           return options;
         });
+    },
+    getProductOptions() {
+      database
+        .ref(`${this.ref}/products`)
+        .once("value")
+        .then(function(snapshot) {
+          let options = [];
+          let products = snapshot.val();
+          console.log(products);
+          let keys = Object.keys(products);
+          for (let i = 0; i < keys.length; i++) {
+            options.push(products[keys[i]]);
+          }
+          return options.map(e => {
+            return { value: e.name, text: e.name, price: e.price };
+          });
+        })
+        .then(options => {
+          this.options.product = options;
+        });
+    },
+
+    submit(evt) {
+      evt.preventDefault();
+      let form = Object.assign({}, this.form);
+      let products = this.form.products.filter(e => e.active == true);
+      console.log(products);
+      let total = 0;
+      for (let i = 0; i < products.length; i++) {
+        delete products[i].id;
+        delete products[i].active;
+        total += products[i].total;
+        form.products.push(products[i]);
+      }
+      form.total = total;
+      form.products = products;
+      console.log(form);
+      save(`${this.ref}/orders`, form).then(() => {
+        //this.reset();
+      });
+    },
+    reset(evt) {
+      if (evt) {
+        evt.preventDefault();
+      }
+      this.form = {
+        client: "",
+        date: "",
+        delivered: "",
+        paid: "",
+        products: [
+          {
+            id: 0,
+            active: true,
+            name: "",
+            unitPrice: 1,
+            quantity: 1,
+            total: 1
+          }
+        ]
+      };
+      // Trick to reset/clear native browser form validation state
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+      });
     }
   },
   mounted() {
     this.setClientSpotlight();
+    this.getProductOptions();
   }
 };
 </script>
@@ -116,5 +241,14 @@ export default {
 #container {
   display: grid;
   grid-template-columns: 2fr 1fr;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

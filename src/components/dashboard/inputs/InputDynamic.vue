@@ -1,5 +1,5 @@
 <template>
-  <div id="dynamic">
+  <div class="dynamic">
     <b-button id="remove-button" variant="danger" @click="remove()">x</b-button>
 
     <b-form-select
@@ -46,7 +46,8 @@ export default {
     options: Array,
     property: String,
     id: Number,
-    priority: String
+    priority: String,
+    populate: Object
   },
   data() {
     return {
@@ -75,12 +76,18 @@ export default {
       }
       this.input.id = this.id;
       this.input.active = true;
-      this.$store.commit("updateField", this.input);
+      this.$emit("update-field", this.input);
     },
     remove() {
       console.log(this.id);
-      this.$store.commit("removeField", { id: this.id });
+      this.$emit("remove-field", { id: this.id });
     }
+  },
+  created() {
+    this.input.name = this.populate.name;
+    this.input.unitPrice = this.populate.unitPrice;
+    this.input.quantity = this.populate.quantity;
+    this.input.total = this.populate.total;
   }
 };
 </script>
@@ -88,7 +95,7 @@ export default {
 * {
   margin: 0px;
 }
-#dynamic {
+.dynamic {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-gap: 5px;
