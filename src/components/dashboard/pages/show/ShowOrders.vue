@@ -2,11 +2,11 @@
   <div>
     <Table :table="table" />
     <!-- change printorders to 'invoice' -->
-    <PrintOrders :objects="table.objects" />
+    <!-- <PrintOrders :objects="table.objects" /> -->
   </div>
 </template>
 <script>
-import PrintOrders from "../../print/PrintOrders";
+// import PrintOrders from "../../print/PrintOrders";
 import Table from "../../table/Table";
 import { getByDate } from "@/firebase";
 import moment from "moment";
@@ -15,8 +15,7 @@ import { mapState } from "vuex";
 export default {
   name: "showOrders",
   components: {
-    Table,
-    PrintOrders
+    Table
   },
   data() {
     return {

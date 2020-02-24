@@ -24,11 +24,16 @@ export default {
   },
   methods: {
     edit: function() {
-      this.$router.push({ name: "EditOrder", params: { id: this.oid } });
+      console.log(this.object);
+      this.$router.push({
+        name: "EditOrder",
+        params: { object: this.object }
+      });
     }
   },
   mounted() {
     getById(`${this.ref}/${this.path}/${this.oid}`).then(e => {
+      e.id = this.oid;
       this.object = e;
     });
   }

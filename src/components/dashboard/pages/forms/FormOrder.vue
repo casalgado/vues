@@ -11,7 +11,7 @@
         <InputDynamic
           v-if="field.active"
           :property="'products'"
-          :options="['a', 'b', 'c', 'd']"
+          :options="options.product"
           :id="field.id"
           :priority="'unitPrice'"
           :populate="field"
@@ -21,7 +21,7 @@
       </transition>
     </div>
     <b-card class="mt-3">
-      <pre class="m-0">{{ this.form.products }}</pre>
+      <pre class="m-0">{{ this.object }}</pre>
     </b-card>
   </b-form>
 </template>
@@ -35,6 +35,12 @@ import { mapState } from "vuex";
 export default {
   name: "FormOrder",
   components: { InputSelect, InputBasic, InputDynamic },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({ empty: true })
+    }
+  },
   data() {
     return {
       form: {
@@ -62,8 +68,8 @@ export default {
   },
   computed: {
     ...mapState(["ref"]),
-    productOptions() {
-      return ["a"];
+    client() {
+      return this.form.client;
     }
   },
   methods: {
@@ -91,7 +97,8 @@ export default {
     },
     setClientSpotlight() {
       /* 
-      this can be a method called getPropertyWithSpotlight(ref, property, target_property, spotlight_size)
+      this method presents the most used items at the top of the list. 
+      it can be a method called getPropertyWithSpotlight(ref, property, target_property, spotlight_size)
       ref = database.ref
       property = String (property of objects in database to choose from)
       local_property = String (data property of local component)
@@ -172,10 +179,10 @@ export default {
           });
         })
         .then(options => {
+          options.unshift({ value: "", text: "producto" });
           this.options.product = options;
         });
     },
-
     submit(evt) {
       evt.preventDefault();
       let form = Object.assign({}, this.form);
@@ -191,9 +198,16 @@ export default {
       form.total = total;
       form.products = products;
       console.log(form);
-      save(`${this.ref}/orders`, form).then(() => {
-        //this.reset();
-      });
+      if (this.object.empty) {
+        save(`${this.ref}/orders`, form).then(() => {
+          this.reset();
+        });
+      } else {
+        console.log(`${this.ref}/orders/${this.object.id}`);
+        save(`${this.ref}/orders/${this.object.id}`, form).then(() => {
+          this.reset();
+        });
+      }
     },
     reset(evt) {
       if (evt) {
@@ -220,6 +234,30 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
+    }
+  },
+  watch: {
+    client: function(val) {
+      console.log(val);
+    }
+  },
+  created() {
+    if (!this.object.empty) {
+      this.form.client = this.object.client;
+      this.form.date = this.object.date.split("T")[0];
+      this.form.delivered = this.object.date.split("T")[0];
+      let products = this.object.products;
+      this.form.products.pop();
+      for (let i = 0; i < products.length; i++) {
+        this.form.products.push({
+          id: i,
+          active: true,
+          name: products[i].name,
+          unitPrice: products[i].unitPrice,
+          quantity: products[i].quantity,
+          total: products[i].total
+        });
+      }
     }
   },
   mounted() {

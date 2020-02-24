@@ -34,11 +34,12 @@ const routes = [
 				name      : 'CreateProduct',
 				component : () => import('@/components/dashboard/pages/forms/FormProduct.vue')
 			},
-			// {
-			// 	path      : 'pedidos/editar/:id',
-			// 	name      : 'EditOrder',
-			// 	component : () => import('@/components/dashboard/pages/write/FormOrder.vue')
-			// },
+			{
+				path      : 'pedidos/editar/:id',
+				name      : 'EditOrder',
+				component : () => import('@/components/dashboard/pages/forms/FormOrder.vue'),
+				props     : true
+			},
 			{
 				path      : 'console/',
 				name      : 'console',
