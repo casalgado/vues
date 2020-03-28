@@ -8,7 +8,7 @@
         <router-link :to="{ name: 'nuevoGasto' }">crear gasto</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'console' }">console</router-link>
+        <router-link :to="{ name: 'console' }">import</router-link>
       </b-dropdown-item-button>
     </b-dropdown>
 
