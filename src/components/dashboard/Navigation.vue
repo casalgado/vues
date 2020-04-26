@@ -1,29 +1,43 @@
 <template>
   <div id="container">
-    <b-dropdown dropup no-caret text="+" offset="-60" toggle-class="nav-dropdown" class="m-2">
+    <b-dropdown
+      dropup
+      no-caret
+      text="+"
+      offset="-60"
+      toggle-class="nav-dropdown"
+      class="m-2"
+    >
       <b-dropdown-item-button>
         <router-link :to="{ name: 'CreateOrder' }">crear pedido</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'nuevoGasto' }">crear gasto</router-link>
+        <router-link :to="{ name: 'CreateExpense' }">crear gasto</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'console' }">import</router-link>
+        <router-link :to="{ name: 'console' }">console</router-link>
       </b-dropdown-item-button>
     </b-dropdown>
 
-    <b-dropdown dropup no-caret text="=" offset="-60" toggle-class="nav-dropdown" class="m-2">
+    <b-dropdown
+      dropup
+      no-caret
+      text="="
+      offset="-60"
+      toggle-class="nav-dropdown"
+      class="m-2"
+    >
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'ShowOrders'}">Pedidos</router-link>
+        <router-link :to="{ name: 'ShowOrders' }">Pedidos</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'ShowExpenses'}">Gastos</router-link>
+        <router-link :to="{ name: 'ShowExpenses' }">Gastos</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'clientes'}">Clientes</router-link>
+        <router-link :to="{ name: 'clientes' }">Clientes</router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'ShowUnpaid'}">Por Cobrar</router-link>
+        <router-link :to="{ name: 'ShowUnpaid' }">Por Cobrar</router-link>
       </b-dropdown-item-button>
     </b-dropdown>
   </div>
@@ -33,7 +47,7 @@ export default {
   name: "Navigation",
   data: function() {
     return {};
-  }
+  },
 };
 </script>
 <style scoped>

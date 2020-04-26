@@ -28,23 +28,30 @@ const routes = [
           import("../components/dashboard/pages/show/ShowUnpaid.vue"),
       },
       {
-        path: "pedidos/crear/",
+        path: "crear/pedido/",
         name: "CreateOrder",
         component: () =>
           import("@/components/dashboard/pages/forms/FormOrder.vue"),
       },
+
       {
-        path: "productos/crear/",
-        name: "CreateProduct",
-        component: () =>
-          import("@/components/dashboard/pages/forms/FormProduct.vue"),
-      },
-      {
-        path: "pedidos/editar/:id",
+        path: "/editar/pedido/:id",
         name: "EditOrder",
         component: () =>
           import("@/components/dashboard/pages/forms/FormOrder.vue"),
         props: true,
+      },
+      {
+        path: "crear/gasto/",
+        name: "CreateExpense",
+        component: () =>
+          import("@/components/dashboard/pages/forms/FormExpense.vue"),
+      },
+      {
+        path: "crear/producto/",
+        name: "CreateProduct",
+        component: () =>
+          import("@/components/dashboard/pages/forms/FormProduct.vue"),
       },
       {
         path: "console/",
@@ -52,7 +59,7 @@ const routes = [
         component: () => import("@/components/dashboard/pages/Console.vue"),
       },
       {
-        path: "clientes/crear/",
+        path: "crear/cliente/",
         name: "FormClient",
         component: () =>
           import("@/components/dashboard/pages/forms/FormClient.vue"),

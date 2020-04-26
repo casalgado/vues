@@ -2,9 +2,10 @@ For Forms:
 - https://medium.com/@mntlmaxi/dry-vue-how-to-reuse-and-prepopulate-forms-83068e142c70
 
 
-CRUD for all
-- in DynamicFields, change field order based on 'priority'
+- CRUD for all
 
+- in DynamicFields, change field order based on 'priority'
+- in DynamicFields, autofill in based on past 'expense items'? and allow creation of new 'product'
 
 dashboard:
 - two tables: produccion del dia + para entregar hoy
