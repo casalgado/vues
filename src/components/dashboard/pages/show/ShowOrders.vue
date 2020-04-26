@@ -15,7 +15,7 @@ import { mapState } from "vuex";
 export default {
   name: "showOrders",
   components: {
-    Table
+    Table,
   },
   data() {
     return {
@@ -25,42 +25,42 @@ export default {
           {
             key: "date",
             label: "Fecha",
-            sortable: true
+            sortable: true,
           },
           {
             key: "client",
             label: "Clientes",
             sortable: true,
-            tdClass: "justifyLeft"
+            tdClass: "justifyLeft",
           },
           {
             key: "products",
             label: "Productos",
             sortable: true,
-            tdClass: "justifyLeft"
+            tdClass: "justifyLeft",
           },
           {
             key: "quantity",
-            label: "CTD",
-            sortable: true
+            label: "C",
+            sortable: true,
           },
           {
             key: "total",
             label: "Total",
-            sortable: true
-          }
+            sortable: true,
+          },
         ],
         formattedObjects: [],
         objects: [],
         selectMode: "multi",
-        pagination: "week"
-      }
+        pagination: "week",
+      },
     };
   },
   computed: mapState(["ref", "date", "period"]),
   methods: {
     getObjects: function() {
-      getByDate(`${this.ref}/orders`, this.date, this.period).then(e => {
+      getByDate(`${this.ref}/orders`, this.date, this.period).then((e) => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
@@ -68,10 +68,10 @@ export default {
       });
     },
     format: function(objects) {
-      let items = objects.map(e => {
+      let items = objects.map((e) => {
         let clone = [...e.products];
-        e.products = e.products.map(e => e.name).join("<br />");
-        e.quantity = clone.map(e => e.quantity).join("<br />");
+        e.products = e.products.map((e) => e.name).join("<br />");
+        e.quantity = clone.map((e) => e.quantity).join("<br />");
         e.date = moment(e.date).format("DD/MM");
         if (e.paid == "") {
           // @refactor
@@ -82,7 +82,7 @@ export default {
         return e;
       });
       return items;
-    }
+    },
   },
   mounted() {
     this.getObjects();
@@ -93,8 +93,8 @@ export default {
     },
     period() {
       this.getObjects();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

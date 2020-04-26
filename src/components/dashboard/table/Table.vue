@@ -4,15 +4,15 @@
       <h4 id="title">{{ table.title }}</h4>
     </b-row>
     <b-row>
-      <b-col sm="12" md="8" id="main">
+      <b-col sm="12" md="8" id="main" class="pr-0 pl-0">
         <Pagination :period="table.pagination" />
         <b-table
           selectable
           striped
           borderless
           id="table"
-          responsive="true"
-          class=""
+          responsive
+          class="text-nowrap pl-0 pr-0"
           :items="table.formattedObjects || table.objects"
           :fields="table.fields"
           :select-mode="selectMode"

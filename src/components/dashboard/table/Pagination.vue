@@ -7,7 +7,7 @@
         />
       </svg>
     </button>
-    <h5 id="date" @click="togglePeriod">{{currentDate()}}</h5>
+    <h5 id="date" @click="togglePeriod">{{ currentDate() }}</h5>
     <button @click="next" class="btn">
       <svg viewBox="0 0 49.2 89.3">
         <path
@@ -22,7 +22,7 @@ import moment from "moment";
 export default {
   name: "Pagination",
   props: {
-    period: String
+    period: String,
   },
   methods: {
     next() {
@@ -46,19 +46,19 @@ export default {
       } else if (period == "month") {
         return moment(date).format("MMMM");
       } else {
-        return `semana ${moment(date)
+        return `${moment(date)
           .startOf(period)
-          .format("DD")}  -  ${moment(date)
+          .format("DD MMM")}  -  ${moment(date)
           .endOf(period)
           .format("DD MMM")}`;
       }
-    }
+    },
   },
   mounted() {
     if (this.period && this.period != "") {
       this.setPeriod(this.period);
     }
-  }
+  },
 };
 </script>
 <style scoped>
