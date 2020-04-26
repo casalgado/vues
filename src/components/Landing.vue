@@ -13,6 +13,7 @@
 
 
 <script>
+// test
 import firebase from "firebase";
 
 export default {

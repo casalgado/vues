@@ -25,7 +25,7 @@
       </transition>
     </div>
     <b-card class="mt-3">
-      <pre class="m-0">{{ this.form }}</pre>
+      <pre class="m-0">{{ this.object }}</pre>
     </b-card>
   </b-form>
 </template>
@@ -33,7 +33,8 @@
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
-import { save, getClientsLastOrder, getMostUsed, getList } from "@/firebase";
+import { save } from "@/firebase";
+import { database } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
@@ -102,6 +103,94 @@ export default {
     remove(payload) {
       this.form.products[payload.id].active = false;
     },
+    setClientSpotlight() {
+      /* 
+      this method presents the most used items at the top of the list. 
+      it can be a method called getPropertyWithSpotlight(ref, property, target_property, spotlight_size)
+      ref = database.ref
+      property = String (property of objects in database to choose from)
+      local_property = String (data property of local component)
+      spotlight_size = Integer
+
+      this method should be imported from firebase
+
+      in this case, 
+      ref = orders,
+      property = client,
+      spotlight_size = 10
+
+      the method should return an array of objects of the form {value: String, text: String}
+      to be sent to a Select component as the prop :options
+      */
+      let spotlight_size = 15;
+      let property = "client";
+      // let local_property = "clients";
+      let ref = database.ref(`${this.ref}/orders`);
+
+      let objects = [];
+      let sorted_unique_strings = [];
+      let most_used = [];
+      ref
+        .once("value")
+        .then(function(snapshot) {
+          let orders = snapshot.val();
+          for (let order in orders) {
+            objects.push(orders[order][property]);
+          }
+          sorted_unique_strings = objects
+            .filter((value, index, self) => {
+              return self.indexOf(value) === index;
+            })
+            .sort();
+          most_used = sorted_unique_strings
+            .map((e) => {
+              let times_used = objects.filter((i) => {
+                return e == i;
+              }).length;
+              return {
+                client: e,
+                use_count: times_used,
+              };
+            })
+            .sort(function(a, b) {
+              var x = a.use_count;
+              var y = b.use_count;
+              return x < y ? 1 : x > y ? -1 : 0;
+            })
+            .splice(0, spotlight_size)
+            .map((e) => {
+              return e.client;
+            });
+          most_used.push({ value: "x", text: "" });
+          most_used.unshift({ value: "", text: "cliente" });
+          return [...most_used, ...sorted_unique_strings];
+        })
+        .then((options) => {
+          this.options.client = options;
+          return options;
+        });
+    },
+    getProductOptions() {
+      database
+        .ref(`${this.ref}/products`)
+        .once("value")
+        .then(function(snapshot) {
+          let options = [];
+          let products = snapshot.val();
+          console.log(products);
+          let keys = Object.keys(products);
+          for (let i = 0; i < keys.length; i++) {
+            options.push(products[keys[i]]);
+          }
+          return options.map((e) => {
+            return { value: e.name, text: e.name, price: e.price };
+          });
+        })
+        .then((options) => {
+          options.unshift({ value: "", text: "producto" });
+          this.options.product = options;
+        });
+    },
     submit(evt) {
       evt.preventDefault();
       let form = Object.assign({}, this.form);
@@ -116,17 +205,15 @@ export default {
       }
       form.total = total;
       form.products = products;
-      form.date = moment(form.date).format();
-      form.delivered = moment(form.delivered).format();
       console.log(form);
       if (this.object.empty) {
         save(`${this.ref}/orders`, form).then(() => {
-          this.$router.push({ path: "/" });
+          this.reset();
         });
       } else {
         console.log(`${this.ref}/orders/${this.object.id}`);
         save(`${this.ref}/orders/${this.object.id}`, form).then(() => {
-          this.$router.push({ path: "/" });
+          this.reset();
         });
       }
     },
@@ -159,21 +246,7 @@ export default {
   },
   watch: {
     client: function(val) {
-      this.form.products = [];
-      getClientsLastOrder(this.ref, val).then((e) => {
-        console.log(e);
-        let products = e.products;
-        for (let i = 0; i < products.length; i++) {
-          this.form.products.push({
-            id: i,
-            active: true,
-            name: products[i].name,
-            unitPrice: products[i].unitPrice,
-            quantity: products[i].quantity,
-            total: products[i].total,
-          });
-        }
-      });
+      console.log(val);
     },
     date: function(val) {
       this.form.delivered = moment(val)
@@ -201,34 +274,24 @@ export default {
     }
   },
   mounted() {
-    getMostUsed(`${this.ref}/orders`, "client", 20).then((options) => {
-      options.unshift({ value: "", text: "cliente" });
-      this.options.client = options;
-    });
-    getList(this.ref, "products").then((options) => {
-      options.unshift({ value: "", text: "producto" });
-      this.options.product = options;
-    });
-    this.form.date = moment().format("YYYY-MM-DD");
-    this.form.delivered = moment()
-      .add(1, "day")
-      .format("YYYY-MM-DD");
+    this.setClientSpotlight();
+    this.getProductOptions();
   },
 };
 </script>
 <style scoped>
-#form {
-  max-width: 500px;
-}
-
 * {
   margin: 5px;
 }
-
 .f-group {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 1fr 8fr;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
 }
 
 .fade-enter-active,

@@ -1,56 +1,63 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from "vue";
+import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
 const routes = [
-	{
-		path      : '/',
-		name      : 'dashboard',
-		component : () => import('@/components/dashboard/Dashboard.vue'),
-		children  : [
-			{
-				path      : 'pedidos/',
-				name      : 'ShowOrders',
-				component : () => import('../components/dashboard/pages/show/ShowOrders.vue')
-			},
-			{
-				path      : 'gastos/',
-				name      : 'ShowExpenses',
-				component : () => import('../components/dashboard/pages/show/ShowExpenses.vue')
-			},
-			{
-				path      : 'porcobrar/',
-				name      : 'ShowUnpaid',
-				component : () => import('../components/dashboard/pages/show/ShowUnpaid.vue')
-			},
-			{
-				path      : 'pedidos/crear/',
-				name      : 'CreateOrder',
-				component : () => import('@/components/dashboard/pages/forms/FormOrder.vue')
-			},
-			{
-				path      : 'productos/crear/',
-				name      : 'CreateProduct',
-				component : () => import('@/components/dashboard/pages/forms/FormProduct.vue')
-			},
-			{
-				path      : 'pedidos/editar/:id',
-				name      : 'EditOrder',
-				component : () => import('@/components/dashboard/pages/forms/FormOrder.vue'),
-				props     : true
-			},
-			{
-				path      : 'console/',
-				name      : 'console',
-				component : () => import('@/components/dashboard/pages/Console.vue')
-			},
-			{
-				path      : 'clientes/crear/',
-				name      : 'FormClient',
-				component : () => import('@/components/dashboard/pages/forms/FormClient.vue')
-			}
-			/*
+  {
+    path: "/",
+    name: "dashboard",
+    component: () => import("@/components/dashboard/Dashboard.vue"),
+    children: [
+      {
+        path: "pedidos/",
+        name: "ShowOrders",
+        component: () =>
+          import("../components/dashboard/pages/show/ShowOrders.vue"),
+      },
+      {
+        path: "gastos/",
+        name: "ShowExpenses",
+        component: () =>
+          import("../components/dashboard/pages/show/ShowExpenses.vue"),
+      },
+      {
+        path: "porcobrar/",
+        name: "ShowUnpaid",
+        component: () =>
+          import("../components/dashboard/pages/show/ShowUnpaid.vue"),
+      },
+      {
+        path: "pedidos/crear/",
+        name: "CreateOrder",
+        component: () =>
+          import("@/components/dashboard/pages/forms/FormOrder.vue"),
+      },
+      {
+        path: "productos/crear/",
+        name: "CreateProduct",
+        component: () =>
+          import("@/components/dashboard/pages/forms/FormProduct.vue"),
+      },
+      {
+        path: "pedidos/editar/:id",
+        name: "EditOrder",
+        component: () =>
+          import("@/components/dashboard/pages/forms/FormOrder.vue"),
+        props: true,
+      },
+      {
+        path: "console/",
+        name: "console",
+        component: () => import("@/components/dashboard/pages/Console.vue"),
+      },
+      {
+        path: "clientes/crear/",
+        name: "FormClient",
+        component: () =>
+          import("@/components/dashboard/pages/forms/FormClient.vue"),
+      },
+      /*
 			{
 				path      : 'pedidos/editar/:id',
 				name      : 'editarPedido',
@@ -78,17 +85,17 @@ const routes = [
 			}
 			,
 			*/
-		]
-	},
-	{
-		path      : '/landing',
-		name      : 'landing',
-		component : () => import('@/components/Landing.vue')
-	}
+    ],
+  },
+  {
+    path: "/landing",
+    name: "landing",
+    component: () => import("@/components/Landing.vue"),
+  },
 ];
 
 const router = new VueRouter({
-	routes
+  routes,
 });
 
 export default router;
