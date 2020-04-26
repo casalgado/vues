@@ -10,6 +10,10 @@ For Forms:
 dashboard:
 - two tables: produccion del dia + para entregar hoy
 
+firebase
+- add indexOn to include performance
+- add security rules
+- add proper user interface
 
 users
 - https://blog.logrocket.com/vue-firebase-authentication/

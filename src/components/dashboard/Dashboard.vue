@@ -1,5 +1,5 @@
 <template>
-  <div id="container" class="shadow-2">
+  <div id="dashboard-container" class="shadow-2">
     <div id="main" class>
       <router-view :key="$route.fullPath" />
     </div>
@@ -13,20 +13,18 @@ import Navigation from "@/components/dashboard/Navigation";
 export default {
   name: "Dashboard",
   components: {
-    Navigation
+    Navigation,
   },
   data() {
     return {
-      items: []
+      items: [],
     };
-  }
+  },
 };
 </script>
 <style scoped>
 @media screen {
-  #container {
-    display: grid;
-    grid-template-columns: 1fr;
+  #dashboard-container {
     color: var(--color-neutral);
     background-color: var(--color-secondary);
     border-radius: var(--border-radius-small);

@@ -1,10 +1,10 @@
 <template>
-  <div id="container">
+  <b-container fluid id="nav-container">
     <b-dropdown
       dropup
       no-caret
-      text="+"
-      offset="-60"
+      text="Crear"
+      offset="-94"
       toggle-class="nav-dropdown"
       class="m-2"
     >
@@ -22,8 +22,8 @@
     <b-dropdown
       dropup
       no-caret
-      text="="
-      offset="-60"
+      text="Mostrar"
+      offset="0"
       toggle-class="nav-dropdown"
       class="m-2"
     >
@@ -40,7 +40,7 @@
         <router-link :to="{ name: 'ShowUnpaid' }">Por Cobrar</router-link>
       </b-dropdown-item-button>
     </b-dropdown>
-  </div>
+  </b-container>
 </template>
 <script>
 export default {
@@ -51,16 +51,12 @@ export default {
 };
 </script>
 <style scoped>
-#container {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
+/* #nav-container {
   justify-items: start;
   align-items: center;
-  grid-gap: 20px;
 }
 
-#container > :first-child {
-  justify-self: end;
+#nav-container > :first-child {
 }
 
 a {
@@ -69,14 +65,9 @@ a {
 }
 
 ul {
-  width: 99vw;
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  padding: 5px;
-  grid-gap: 5px;
 }
 
 li {
   list-style-type: none;
-}
+} */
 </style>
