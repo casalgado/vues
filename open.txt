@@ -1,8 +1,10 @@
 For Forms: 
 - https://medium.com/@mntlmaxi/dry-vue-how-to-reuse-and-prepopulate-forms-83068e142c70
 
+
 CRUD for all
 - in DynamicFields, change field order based on 'priority'
+
 
 dashboard:
 - two tables: produccion del dia + para entregar hoy

@@ -1,7 +1,11 @@
 <template>
   <div>
-    <button @click="importOrders()" class="btn btn-danger">import orders</button>
-    <button @click="importDatabase()" class="btn btn-danger">import rest of database</button>
+    <button @click="importOrders()" class="btn btn-danger">
+      import orders
+    </button>
+    <button @click="importDatabase()" class="btn btn-danger">
+      import rest of database
+    </button>
     <button @click="testUser()" class="btn btn-info">test user</button>
   </div>
 </template>
@@ -17,12 +21,12 @@ export default {
         .ref(`users/${this.uid}`)
         .once("value")
         .then(function(snapshot) {
-          console.log(snapshot.key);
+          alert(snapshot.key);
         });
     },
     importDatabase: function() {
-      let nodes = ["expenses", "products", "clients"];
-      nodes.forEach(node => {
+      let nodes = ["expenses", "clients"];
+      nodes.forEach((node) => {
         database
           .ref("devAccount")
           .child(node)
@@ -31,12 +35,34 @@ export default {
             let objs = snapshot.val();
             return objs;
           })
-          .then(objs => {
+          .then((objs) => {
             console.log(objs);
             for (let i = 0; i < Object.keys(objs).length; i++) {
               let obj = objs[Object.keys(objs)[i]];
               delete obj.id;
               database.ref(`esalimento/${node}`).push(obj);
+            }
+            if (node == "expenses") {
+              let providers = [];
+              for (let i = 0; i < Object.keys(objs).length; i++) {
+                let obj = objs[Object.keys(objs)[i]];
+                let provider = obj.provider;
+                if (!providers.includes(provider)) {
+                  providers.push(provider);
+                  database.ref(`esalimento/providers`).push({ name: provider });
+                }
+              }
+              let categories = [];
+              for (let i = 0; i < Object.keys(objs).length; i++) {
+                let obj = objs[Object.keys(objs)[i]];
+                let category = obj.category;
+                if (!categories.includes(category)) {
+                  categories.push(category);
+                  database
+                    .ref(`esalimento/categories`)
+                    .push({ name: category });
+                }
+              }
             }
           });
       });
@@ -50,7 +76,7 @@ export default {
           let objs = snapshot.val();
           return objs;
         })
-        .then(objs => {
+        .then((objs) => {
           let orders = [];
           for (let i = 0; i < Object.keys(objs).length; i++) {
             // co stands for current object or current order
@@ -68,10 +94,10 @@ export default {
                   name: co.product,
                   quantity: parseInt(co.quantity),
                   unitPrice: parseInt(co.unitPrice),
-                  total: parseInt(co.total)
-                }
+                  total: parseInt(co.total),
+                },
               ],
-              total: parseInt(co.total)
+              total: parseInt(co.total),
             };
             let last_order = orders[orders.length - 1];
             if (
@@ -83,7 +109,7 @@ export default {
                 name: co.product,
                 quantity: parseInt(co.quantity),
                 unitPrice: parseInt(co.unitPrice),
-                total: parseInt(co.total)
+                total: parseInt(co.total),
               });
               let lo = parseInt(last_order.total);
               let cot = parseInt(co.total);
@@ -92,17 +118,26 @@ export default {
               orders.push(new_order);
             }
           }
-          orders.map(e => {
+          orders.map((e) => {
             database.ref(`esalimento/orders`).push(e);
           });
+          let products = [];
+          for (let i = 0; i < Object.keys(objs).length; i++) {
+            let obj = objs[Object.keys(objs)[i]];
+            let product = obj.product;
+            if (!products.includes(product)) {
+              products.push(product);
+              database.ref(`esalimento/products`).push({ name: product });
+            }
+          }
         });
     },
     zeroPad: function(value, digits) {
       var zeroes = new Array(digits).join("0");
       return (zeroes + value).slice(-digits);
-    }
+    },
   },
-  computed: mapState(["uid"])
+  computed: mapState(["uid"]),
 };
 </script>
 <style scoped>
