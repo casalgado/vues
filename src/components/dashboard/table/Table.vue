@@ -67,6 +67,5 @@ export default {
 #title {
   width: 100%;
   text-align: center;
-  background-color: gray;
 }
 </style>

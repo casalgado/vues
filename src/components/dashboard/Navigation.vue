@@ -51,17 +51,17 @@ export default {
 };
 </script>
 <style scoped>
+a {
+  color: var(--color-primary) !important;
+  text-decoration: none !important;
+}
+
 /* #nav-container {
   justify-items: start;
   align-items: center;
 }
 
 #nav-container > :first-child {
-}
-
-a {
-  color: var(--color-primary) !important;
-  text-decoration: none !important;
 }
 
 ul {
