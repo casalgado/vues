@@ -74,6 +74,20 @@ a {
   width: 165px;
 }
 
+@media only screen and (min-width: 768px) {
+  .nav-btn {
+    width: 165px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .nav-btn {
+    width: 165px;
+    /* padding-left: 3px;
+    padding-right: 3px; */
+  }
+}
+
 .custom-dropdown {
   background-color: var(--color-primary) !important;
 }

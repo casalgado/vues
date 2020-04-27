@@ -18,3 +18,4 @@ firebase
 users
 - https://blog.logrocket.com/vue-firebase-authentication/
 - https://www.youtube.com/watch?v=2ciHixbc4HE timestamp 4:05 mins
+

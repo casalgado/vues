@@ -72,11 +72,6 @@ input {
 
 /* global nav styles */
 
-.nav-dropdown {
-  background-color: var(--color-primary) !important;
-  width: 175px;
-}
-
 .dropdown-menu {
   background-color: var(--color-secondary) !important;
   border-color: var(--color-neutral) !important;
@@ -91,6 +86,24 @@ input {
 
 .dropdown-item:hover {
   background-color: var(--color-primary) !important;
+}
+
+.nav-dropdown {
+  background-color: var(--color-primary) !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .nav-dropdown {
+    width: 165px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .nav-dropdown {
+    width: 120px;
+  }
+  .dropdown-menu {
+  }
 }
 
 /* global styles */

@@ -11,7 +11,25 @@
         <br />Total:
         <br />
         {{ totals }}
+        <br />Reporte:
+        <br />
+        {{ this.detailedReport }}
       </p>
+      <table id="reportContainer">
+        <tr>
+          <th>producto</th>
+          <th>cantidad</th>
+          <th>total</th>
+        </tr>
+        <div v-for="(value, name) in this.detailedReport" :key="name">
+          <tr>
+            <td id="tdn">{{ name }}:</td>
+            <td id="tdv">{{ value.quantity }}</td>
+            <td id="tdt">{{ value.total }}</td>
+          </tr>
+        </div>
+      </table>
+
       <div v-if="selectedOne" class="crud-buttons">
         <ButtonPaid :oid="selected[0].id" :path="'orders'" />
         <ButtonEdit :oid="selected[0].id" :path="'orders'" />
@@ -39,18 +57,18 @@ export default {
   name: "Sidebar",
   components: { ButtonPaid, ButtonEdit },
   props: {
-    objects: Array
+    objects: Array,
   },
   methods: {
     exportTable: function() {
       let flattened = [];
-      this.objects.forEach(e => {
+      this.objects.forEach((e) => {
         console.log(e);
         e.date = moment(e.date).format("DD-MM-YYYY");
         e.paid = moment(e.paid).format("DD/MM");
         delete e.bug_probe;
         if (e.products) {
-          e.products.forEach(p => {
+          e.products.forEach((p) => {
             let c = Object.assign({}, e);
             c.product = p.name;
             c.quantity = p.quantity;
@@ -64,13 +82,13 @@ export default {
       });
       console.log(flattened);
       let header = Object.keys(flattened[0]);
-      let rows = flattened.map(e => {
+      let rows = flattened.map((e) => {
         delete e.products;
         return Object.values(e);
       });
-      let csvContent = header + rows.map(e => e.join(",")).join("\n");
+      let csvContent = header + rows.map((e) => e.join(",")).join("\n");
       console.log(csvContent);
-    }
+    },
   },
   computed: {
     selected() {
@@ -80,8 +98,8 @@ export default {
       if (this.selected.length > 0) {
         let client = this.selected[0].client;
         return (
-          this.selected.map(e => e.client).filter(e => e == client).length ==
-          this.selected.length
+          this.selected.map((e) => e.client).filter((e) => e == client)
+            .length == this.selected.length
         );
       } else {
         return false;
@@ -91,11 +109,11 @@ export default {
       if (this.objects.length > 0 && this.objects[0].total) {
         if (this.selected.length == 0) {
           return this.objects.reduce((a, b) => ({
-            total: parseInt(a.total) + parseInt(b.total)
+            total: parseInt(a.total) + parseInt(b.total),
           })).total;
         } else {
           return this.objects.reduce((a, b) => ({
-            total: parseInt(a.total) + parseInt(b.total)
+            total: parseInt(a.total) + parseInt(b.total),
           })).total;
         }
       } else {
@@ -107,8 +125,34 @@ export default {
     },
     selectedMany: function() {
       return this.selected.length > 1;
-    }
-  }
+    },
+    detailedReport: function() {
+      let products = [];
+      this.objects.forEach((e) => {
+        e.products.forEach((p) => {
+          products.push(p);
+        });
+      });
+      let report = {};
+      products.forEach((p) => {
+        console.log(p);
+        let keys = Object.keys(report);
+        if (keys.includes(p.name)) {
+          report[p.name].quantity = report[p.name].quantity + p.quantity;
+          report[p.name].total = report[p.name].total + p.total;
+        } else {
+          report[p.name] = { quantity: p.quantity, total: p.total };
+        }
+      });
+      const ordered = {};
+      Object.keys(report)
+        .sort()
+        .forEach(function(key) {
+          ordered[key] = report[key];
+        });
+      return ordered;
+    },
+  },
 };
 </script>
 <style scoped>
