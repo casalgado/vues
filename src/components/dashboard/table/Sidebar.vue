@@ -13,7 +13,6 @@
         {{ totals }}
         <br />Reporte:
         <br />
-        {{ this.detailedReport }}
       </p>
       <table id="reportContainer">
         <tr>
