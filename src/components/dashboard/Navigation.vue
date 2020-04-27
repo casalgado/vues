@@ -4,15 +4,23 @@
       dropup
       no-caret
       text="Crear"
-      offset="-94"
+      offset=""
       toggle-class="nav-dropdown"
-      class="m-2"
+      class="m-2 custom-dropdown"
     >
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'CreateOrder' }">crear pedido</router-link>
+        <router-link :to="{ name: 'CreateOrder' }"
+          ><b-button variant="secondary" class="nav-btn"
+            >Crear Pedidos</b-button
+          ></router-link
+        >
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'CreateExpense' }">crear gasto</router-link>
+        <router-link :to="{ name: 'CreateExpense' }"
+          ><b-button variant="secondary" class="nav-btn"
+            >Crear Gasto</b-button
+          ></router-link
+        >
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link :to="{ name: 'console' }">console</router-link>
@@ -23,15 +31,21 @@
       dropup
       no-caret
       text="Mostrar"
-      offset="0"
+      offset=""
       toggle-class="nav-dropdown"
       class="m-2"
     >
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'ShowOrders' }">Pedidos</router-link>
+        <router-link :to="{ name: 'ShowOrders' }">
+          <b-button variant="secondary" class="nav-btn">Pedidos</b-button>
+        </router-link>
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'ShowExpenses' }">Gastos</router-link>
+        <router-link :to="{ name: 'ShowExpenses' }"
+          ><b-button variant="secondary" class="nav-btn"
+            >Gastos</b-button
+          ></router-link
+        >
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link :to="{ name: 'clientes' }">Clientes</router-link>
@@ -52,10 +66,17 @@ export default {
 </script>
 <style scoped>
 a {
-  color: var(--color-primary) !important;
+  color: var(--color-neutral) !important;
   text-decoration: none !important;
 }
 
+.nav-btn {
+  width: 165px;
+}
+
+.custom-dropdown {
+  background-color: var(--color-primary) !important;
+}
 /* #nav-container {
   justify-items: start;
   align-items: center;
