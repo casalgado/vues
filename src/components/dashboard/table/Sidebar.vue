@@ -134,7 +134,7 @@ export default {
       });
       let report = {};
       products.forEach((p) => {
-        console.log(p);
+        p.name = p.name.trim();
         let keys = Object.keys(report);
         if (keys.includes(p.name)) {
           report[p.name].quantity = report[p.name].quantity + p.quantity;
