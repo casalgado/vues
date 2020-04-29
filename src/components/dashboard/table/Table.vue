@@ -4,7 +4,7 @@
       <h4 id="title">{{ table.title }}</h4>
     </b-row>
     <b-row>
-      <b-col sm="12" md="8" id="main" class="pr-0 pl-0">
+      <b-col sm="12" md="6" id="main" class="pr-0 pl-0">
         <Pagination :period="table.pagination" />
         <b-table
           selectable
