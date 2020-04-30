@@ -136,6 +136,10 @@ export default {
   #page {
     display: grid;
   }
+
+  #title {
+    width: 100%;
+  }
 }
 
 @media print {

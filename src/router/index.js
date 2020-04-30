@@ -6,75 +6,65 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "dashboard",
-    component: () => import("@/components/dashboard/Dashboard.vue"),
+    name: "home",
+    component: () => import("@/components/Home.vue"),
     children: [
       {
         path: "pedidos/",
         name: "ShowOrders",
-        component: () =>
-          import("../components/dashboard/pages/show/ShowOrders.vue"),
+        component: () => import("../components/pages/show/ShowOrders.vue"),
       },
       {
         path: "gastos/",
         name: "ShowExpenses",
-        component: () =>
-          import("../components/dashboard/pages/show/ShowExpenses.vue"),
+        component: () => import("../components/pages/show/ShowExpenses.vue"),
       },
       {
         path: "clients/",
         name: "ShowClients",
-        component: () =>
-          import("../components/dashboard/pages/show/ShowClients.vue"),
+        component: () => import("../components/pages/show/ShowClients.vue"),
       },
       {
         path: "porcobrar/",
         name: "ShowUnpaid",
-        component: () =>
-          import("../components/dashboard/pages/show/ShowUnpaid.vue"),
+        component: () => import("../components/pages/show/ShowUnpaid.vue"),
       },
       {
         path: "dashboard/",
         name: "ShowDashboard",
-        component: () =>
-          import("../components/dashboard/pages/show/ShowDashboard.vue"),
+        component: () => import("../components/pages/show/ShowDashboard.vue"),
       },
       {
         path: "crear/pedido/",
         name: "CreateOrder",
-        component: () =>
-          import("@/components/dashboard/pages/forms/FormOrder.vue"),
+        component: () => import("@/components/pages/forms/FormOrder.vue"),
       },
 
       {
         path: "/editar/pedido/:id",
         name: "EditOrder",
-        component: () =>
-          import("@/components/dashboard/pages/forms/FormOrder.vue"),
+        component: () => import("@/components/pages/forms/FormOrder.vue"),
         props: true,
       },
       {
         path: "crear/gasto/",
         name: "CreateExpense",
-        component: () =>
-          import("@/components/dashboard/pages/forms/FormExpense.vue"),
+        component: () => import("@/components/pages/forms/FormExpense.vue"),
       },
       {
         path: "crear/producto/",
         name: "CreateProduct",
-        component: () =>
-          import("@/components/dashboard/pages/forms/FormProduct.vue"),
+        component: () => import("@/components/pages/forms/FormProduct.vue"),
       },
       {
         path: "console/",
         name: "console",
-        component: () => import("@/components/dashboard/pages/Console.vue"),
+        component: () => import("@/components/pages/Console.vue"),
       },
       {
         path: "crear/cliente/",
         name: "FormClient",
-        component: () =>
-          import("@/components/dashboard/pages/forms/FormClient.vue"),
+        component: () => import("@/components/pages/forms/FormClient.vue"),
       },
       /*
 			{

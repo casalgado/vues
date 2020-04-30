@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard-container" class="shadow-2">
+  <div id="home-container" class="shadow-2">
     <div id="main" class>
       <router-view :key="$route.fullPath" />
     </div>
@@ -9,10 +9,10 @@
   </div>
 </template>
 <script>
-import Navigation from "@/components/dashboard/Navigation";
+import Navigation from "@/components/Navigation";
 import moment from "moment";
 export default {
-  name: "Dashboard",
+  name: "Home",
   components: {
     Navigation,
   },
@@ -28,7 +28,7 @@ export default {
 </script>
 <style scoped>
 @media screen {
-  #dashboard-container {
+  #home-container {
     color: var(--color-neutral);
     background-color: var(--color-secondary);
     border-radius: var(--border-radius-small);
