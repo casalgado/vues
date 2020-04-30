@@ -36,6 +36,9 @@ export default new Vuex.Store({
         .subtract(1, state.period)
         .format();
     },
+    setDate(state, payload) {
+      state.date = payload.date;
+    },
     setPeriod(state, payload) {
       state.period = payload.period;
     },

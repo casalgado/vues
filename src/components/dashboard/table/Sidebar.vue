@@ -51,10 +51,17 @@
 <script>
 import ButtonPaid from "./../buttons/ButtonPaid";
 import ButtonEdit from "./../buttons/ButtonEdit";
+import { getAll } from "@/firebase";
+import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "Sidebar",
   components: { ButtonPaid, ButtonEdit },
+  data() {
+    return {
+      products: [],
+    };
+  },
   props: {
     objects: Array,
   },
@@ -126,31 +133,49 @@ export default {
       return this.selected.length > 1;
     },
     detailedReport: function() {
-      let products = [];
-      this.objects.forEach((e) => {
-        e.products.forEach((p) => {
-          products.push(p);
-        });
+      let show = "n";
+      if (show == "y") {
+        let products = [];
+        /*
+      the three lines in this block can me toggled to display full list of products 
+      or only the ones present on current table. Used to facilitate copying and pasting to sheets. 
+
+      products = this.products.map((e) => {
+        return { name: e.name, quantity: 0, total: 0 };
       });
-      let report = {};
-      products.forEach((p) => {
-        p.name = p.name.trim();
-        let keys = Object.keys(report);
-        if (keys.includes(p.name)) {
-          report[p.name].quantity = report[p.name].quantity + p.quantity;
-          report[p.name].total = report[p.name].total + p.total;
-        } else {
-          report[p.name] = { quantity: p.quantity, total: p.total };
-        }
-      });
-      const ordered = {};
-      Object.keys(report)
-        .sort()
-        .forEach(function(key) {
-          ordered[key] = report[key];
+      */
+        this.objects.forEach((e) => {
+          e.products.forEach((p) => {
+            products.push(p);
+          });
         });
-      return ordered;
+        let report = {};
+        products.forEach((p) => {
+          let keys = Object.keys(report);
+          if (keys.includes(p.name)) {
+            report[p.name].quantity = report[p.name].quantity + p.quantity;
+            report[p.name].total = report[p.name].total + p.total;
+          } else {
+            report[p.name] = { quantity: p.quantity, total: p.total };
+          }
+        });
+        const ordered = {};
+        Object.keys(report)
+          .sort()
+          .forEach(function(key) {
+            ordered[key] = report[key];
+          });
+        return ordered;
+      } else {
+        return {};
+      }
     },
+    ...mapState(["ref"]),
+  },
+  mounted() {
+    getAll(`${this.ref}/products`).then((products) => {
+      this.products = products;
+    });
   },
 };
 </script>

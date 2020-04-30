@@ -90,6 +90,7 @@ export default {
               paid: co.paid,
               invoice: "",
               date: co.produced,
+              deliver: co.delivered,
               products: [
                 {
                   name: this.sanitize(co.product),

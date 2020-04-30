@@ -4,7 +4,7 @@
       <h4 id="title">{{ table.title }}</h4>
     </b-row>
     <b-row>
-      <b-col sm="12" md="6" id="main" class="pr-0 pl-0">
+      <b-col sm="12" md="12" id="main" class="pr-0 pl-0">
         <Pagination :period="table.pagination" />
         <b-table
           selectable
@@ -12,7 +12,7 @@
           borderless
           id="table"
           responsive
-          class="text-nowrap pl-0 pr-0"
+          class="text-nowrap"
           :items="table.formattedObjects || table.objects"
           :fields="table.fields"
           :select-mode="selectMode"
@@ -27,7 +27,7 @@
           </template>
         </b-table>
       </b-col>
-      <b-col auto>
+      <b-col v-if="this.sidebar" auto>
         <TableSidebar :objects="table.objects" />
       </b-col>
     </b-row>
@@ -44,6 +44,7 @@ export default {
   },
   props: {
     table: Object,
+    sidebar: { default: true, type: Boolean },
   },
   data() {
     return {

@@ -10,6 +10,7 @@
 </template>
 <script>
 import Navigation from "@/components/dashboard/Navigation";
+import moment from "moment";
 export default {
   name: "Dashboard",
   components: {
@@ -20,6 +21,9 @@ export default {
       items: [],
     };
   },
+  mounted() {
+    this.$store.commit("setDate", { date: moment().format() });
+  },
 };
 </script>
 <style scoped>
@@ -28,6 +32,7 @@ export default {
     color: var(--color-neutral);
     background-color: var(--color-secondary);
     border-radius: var(--border-radius-small);
+    padding-bottom: 100px;
   }
 
   #header {

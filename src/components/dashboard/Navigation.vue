@@ -48,7 +48,11 @@
         >
       </b-dropdown-item-button>
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'clientes' }">Clientes</router-link>
+        <router-link :to="{ name: 'ShowClients' }"
+          ><b-button variant="secondary" class="nav-btn"
+            >Clientes</b-button
+          ></router-link
+        >
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link :to="{ name: 'ShowUnpaid' }">Por Cobrar</router-link>

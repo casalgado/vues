@@ -72,6 +72,34 @@ export function getByDate(ref, date, period) {
   });
 }
 
+export function getByDateDeliver(ref, date, period) {
+  return new Promise(function(resolve) {
+    database
+      .ref(ref)
+      .orderByChild("deliver")
+      .startAt(
+        moment(date)
+          .startOf(period)
+          .format()
+      )
+      .endAt(
+        moment(date)
+          .endOf(period)
+          .format()
+      )
+      .once("value")
+      .then(function(snapshot) {
+        let data = snapshot.val();
+        let objects = [];
+        for (let key in data) {
+          data[key].id = key;
+          objects.push(data[key]);
+        }
+        resolve(objects);
+      });
+  });
+}
+
 export function getAll(ref) {
   return new Promise(function(resolve) {
     database

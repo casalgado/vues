@@ -22,10 +22,22 @@ const routes = [
           import("../components/dashboard/pages/show/ShowExpenses.vue"),
       },
       {
+        path: "clients/",
+        name: "ShowClients",
+        component: () =>
+          import("../components/dashboard/pages/show/ShowClients.vue"),
+      },
+      {
         path: "porcobrar/",
         name: "ShowUnpaid",
         component: () =>
           import("../components/dashboard/pages/show/ShowUnpaid.vue"),
+      },
+      {
+        path: "dashboard/",
+        name: "ShowDashboard",
+        component: () =>
+          import("../components/dashboard/pages/show/ShowDashboard.vue"),
       },
       {
         path: "crear/pedido/",

@@ -15,6 +15,9 @@ firebase
 - add security rules
 - add proper user interface
 
+table
+- fix totals when selected (view backup)
+
 users
 - https://blog.logrocket.com/vue-firebase-authentication/
 - https://www.youtube.com/watch?v=2ciHixbc4HE timestamp 4:05 mins
