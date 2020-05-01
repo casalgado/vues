@@ -7,6 +7,7 @@ const routes = [
   {
     path: "/",
     name: "home",
+    redirect: "/dashboard",
     component: () => import("@/components/Home.vue"),
     children: [
       {
@@ -35,11 +36,22 @@ const routes = [
         component: () => import("../components/pages/show/ShowDashboard.vue"),
       },
       {
+        path: "ingresos/",
+        name: "ShowCashIn",
+        component: () => import("../components/pages/show/ShowCashIn.vue"),
+      },
+      {
+        path: "egresos/",
+        name: "ShowCashOut",
+        props: { pagination: "day" },
+        component: () => import("../components/pages/show/ShowExpenses.vue"),
+      },
+
+      {
         path: "crear/pedido/",
         name: "CreateOrder",
         component: () => import("@/components/pages/forms/FormOrder.vue"),
       },
-
       {
         path: "/editar/pedido/:id",
         name: "EditOrder",

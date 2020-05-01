@@ -11,6 +11,7 @@
 <script>
 import Navigation from "@/components/Navigation";
 import moment from "moment";
+import { mapState } from "vuex";
 export default {
   name: "Home",
   components: {
@@ -21,8 +22,12 @@ export default {
       items: [],
     };
   },
+  computed: mapState(["uid"]),
   mounted() {
     this.$store.commit("setDate", { date: moment().format() });
+    if (this.uid == null) {
+      this.$router.push({ path: "/landing" });
+    }
   },
 };
 </script>

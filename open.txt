@@ -17,6 +17,8 @@ firebase
 
 table
 - fix totals when selected (view backup)
+- add accounting library to display $ amounts
+
 
 users
 - https://blog.logrocket.com/vue-firebase-authentication/

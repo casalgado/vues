@@ -4,13 +4,14 @@ import moment from "moment";
 import store from "./store";
 // @refactor
 // where should the momentjs code go?
-moment.locale("es");
+
 moment.locale("en", {
   week: {
     dow: 0,
     doy: moment.localeData("en").firstDayOfYear(),
   },
 });
+moment.locale("es");
 
 const app = initializeApp({
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -44,39 +45,11 @@ export function getUser() {
   return firebase.auth().currentUser;
 }
 
-export function getByDate(ref, date, period) {
+export function getByDate(ref, propname, date, period) {
   return new Promise(function(resolve) {
     database
       .ref(ref)
-      .orderByChild("date")
-      .startAt(
-        moment(date)
-          .startOf(period)
-          .format()
-      )
-      .endAt(
-        moment(date)
-          .endOf(period)
-          .format()
-      )
-      .once("value")
-      .then(function(snapshot) {
-        let data = snapshot.val();
-        let objects = [];
-        for (let key in data) {
-          data[key].id = key;
-          objects.push(data[key]);
-        }
-        resolve(objects);
-      });
-  });
-}
-
-export function getByDateDeliver(ref, date, period) {
-  return new Promise(function(resolve) {
-    database
-      .ref(ref)
-      .orderByChild("deliver")
+      .orderByChild(propname)
       .startAt(
         moment(date)
           .startOf(period)

@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid id="nav-container">
+  <div fluid id="nav-container">
     <b-dropdown
       dropup
       no-caret
@@ -19,6 +19,13 @@
         <router-link :to="{ name: 'CreateExpense' }"
           ><b-button variant="secondary" class="nav-btn"
             >Crear Gasto</b-button
+          ></router-link
+        >
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'CreateProduct' }"
+          ><b-button variant="secondary" class="nav-btn"
+            >Crear Producto</b-button
           ></router-link
         >
       </b-dropdown-item-button>
@@ -48,6 +55,20 @@
         >
       </b-dropdown-item-button>
       <b-dropdown-item-button>
+        <router-link :to="{ name: 'ShowCashIn' }"
+          ><b-button variant="secondary" class="nav-btn"
+            >Ingresos</b-button
+          ></router-link
+        >
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'ShowCashOut' }"
+          ><b-button variant="secondary" class="nav-btn"
+            >Egresos</b-button
+          ></router-link
+        >
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
         <router-link :to="{ name: 'ShowClients' }"
           ><b-button variant="secondary" class="nav-btn"
             >Clientes</b-button
@@ -58,7 +79,7 @@
         <router-link :to="{ name: 'ShowUnpaid' }">Por Cobrar</router-link>
       </b-dropdown-item-button>
     </b-dropdown>
-  </b-container>
+  </div>
 </template>
 <script>
 export default {
@@ -72,10 +93,6 @@ export default {
 a {
   color: var(--color-neutral) !important;
   text-decoration: none !important;
-}
-
-.nav-btn {
-  width: 165px;
 }
 
 @media only screen and (min-width: 768px) {

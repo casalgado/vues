@@ -18,7 +18,7 @@
 <script>
 // import PrintOrders from "../../print/PrintOrders";
 import Table from "../../table/Table";
-import { getByDate, getByDateDeliver } from "@/firebase";
+import { getByDate } from "@/firebase";
 import moment from "moment";
 import { mapState } from "vuex";
 
@@ -86,13 +86,15 @@ export default {
   computed: mapState(["ref", "date", "period"]),
   methods: {
     getObjects: function() {
-      getByDate(`${this.ref}/orders`, this.date, this.period).then((e) => {
-        this.tableProduce.objects = JSON.parse(JSON.stringify(e));
-        this.tableProduce.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e))
-        );
-      });
-      getByDateDeliver(`${this.ref}/orders`, this.date, this.period).then(
+      getByDate(`${this.ref}/orders`, "date", this.date, this.period).then(
+        (e) => {
+          this.tableProduce.objects = JSON.parse(JSON.stringify(e));
+          this.tableProduce.formattedObjects = this.format(
+            JSON.parse(JSON.stringify(e))
+          );
+        }
+      );
+      getByDate(`${this.ref}/orders`, "deliver", this.date, this.period).then(
         (e) => {
           this.tableDeliver.objects = JSON.parse(JSON.stringify(e));
           this.tableDeliver.formattedObjects = this.format(

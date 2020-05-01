@@ -1,29 +1,40 @@
 <template>
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
-    <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
-    <InputBasic v-model="form.price" :type="'text'" :label="'precio'" />
     <b-button type="submit" variant="primary">Submit</b-button>
+    <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
+    <InputBasic v-model="form.price" :type="'text'" :label="'precio venta'" />
+    <InputBasic v-model="form.cost" :type="'text'" :label="'precio costo'" />
+    <InputSelect
+      v-model="form.category"
+      :options="this.options.categories"
+      :label="'categoria'"
+    />
   </b-form>
 </template>
 <script>
 import InputBasic from "../../inputs/InputBasic";
-import { save } from "@/firebase";
-// import { database } from "@/firebase";
+import InputSelect from "../../inputs/InputSelect";
+import { save, getList } from "@/firebase";
 import { mapState } from "vuex";
 export default {
-  name: "FormClient",
-  components: { InputBasic },
+  name: "FormProduct",
+  components: { InputBasic, InputSelect },
   data() {
     return {
       form: {
         name: "",
-        price: ""
+        price: "",
+        cost: "",
+        category: "",
       },
-      show: true
+      options: {
+        categories: [],
+      },
+      show: true,
     };
   },
   computed: {
-    ...mapState(["ref"])
+    ...mapState(["ref"]),
   },
   methods: {
     submit(evt) {
@@ -44,9 +55,15 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    }
+    },
   },
-  created() {}
+  mounted() {
+    getList(this.ref, "categoriesProducts").then((options) => {
+      console.log(options);
+      options.unshift({ value: "", text: "categorias" });
+      this.options.categories = options;
+    });
+  },
 };
 </script>
 <style scoped>

@@ -60,7 +60,7 @@ export default {
                 if (!categories.includes(category)) {
                   categories.push(category);
                   database
-                    .ref(`esalimento/categories`)
+                    .ref(`esalimento/categoriesExpenses`)
                     .push({ name: category });
                 }
               }
@@ -121,18 +121,59 @@ export default {
             }
           }
           orders.map((e) => {
-            database.ref(`esalimento/orders`).push(e);
+            console.log(e);
+            //database.ref(`esalimento/orders`).push(e);
           });
           let products = [];
+          let productCategories = [
+            "panes",
+            "tortas",
+            "fermentos",
+            "brownies",
+            "galletas",
+            "helados",
+            "vinagres",
+            "otros",
+          ];
           for (let i = 0; i < Object.keys(objs).length; i++) {
             let obj = objs[Object.keys(objs)[i]];
             let product = this.sanitize(obj.product);
             if (!products.includes(product)) {
               products.push(product);
-              database.ref(`esalimento/products`).push({ name: product });
+              let firstWord = product.split(" ")[0];
+              let category;
+              if (firstWord == "pan" || firstWord == "panes") {
+                category = "panes";
+              } else if (firstWord == "torta") {
+                category = "tortas";
+              } else if (firstWord == "fermento") {
+                category = "fermentos";
+              } else if (firstWord == "brownie") {
+                category = "brownies";
+              } else if (firstWord == "galleta") {
+                category = "galletas";
+              } else if (firstWord == "helado") {
+                category = "helados";
+              } else if (firstWord == "vinagre") {
+                category = "vinagres";
+              } else {
+                category = "otros";
+              }
+              let remove = [
+                "biscochuelo",
+                "crema para french toast",
+                "stand de ventas",
+              ];
+              if (!remove.includes(product)) {
+                database
+                  .ref(`esalimento/products`)
+                  .push({ name: product, category: category });
+              }
             }
           }
-          console.log(products.sort());
+          productCategories.forEach((e) => {
+            database.ref(`esalimento/categoriesProducts`).push({ name: e });
+          });
         });
     },
     sanitize: function(string) {
@@ -280,8 +321,8 @@ export default {
         ? (string = "pan de bono paquete")
         : null;
       "torta de chia" == string ? (string = "torta de naranja") : null;
-      "briosh" == string ? (string = "brioche") : null;
-      "brioshe" == string ? (string = "brioche") : null;
+      "briosh" == string ? (string = "pan brioche") : null;
+      "brioshe" == string ? (string = "pan brioche") : null;
       "pan de hamburguesa 80 gr" == string
         ? (string = "pan de hamburguesa")
         : null;

@@ -11,7 +11,6 @@
   </div>
 </template>
 
-
 <script>
 // test
 import firebase from "firebase";
@@ -21,7 +20,7 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
     };
   },
   methods: {
@@ -32,10 +31,10 @@ export default {
         .then(() => {
           this.email = "";
           this.password = "";
-          this.$router.replace({ name: "dashboard" });
+          this.$router.push({ path: "/dashboard" });
           alert("user signed in successfully");
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = err.message;
         });
     },
@@ -44,8 +43,8 @@ export default {
     },
     logout() {
       firebase.auth().signOut();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

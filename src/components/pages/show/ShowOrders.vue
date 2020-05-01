@@ -60,12 +60,14 @@ export default {
   computed: mapState(["ref", "date", "period"]),
   methods: {
     getObjects: function() {
-      getByDate(`${this.ref}/orders`, this.date, this.period).then((e) => {
-        this.table.objects = JSON.parse(JSON.stringify(e));
-        this.table.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e))
-        );
-      });
+      getByDate(`${this.ref}/orders`, "date", this.date, this.period).then(
+        (e) => {
+          this.table.objects = JSON.parse(JSON.stringify(e));
+          this.table.formattedObjects = this.format(
+            JSON.parse(JSON.stringify(e))
+          );
+        }
+      );
     },
     format: function(objects) {
       let items = objects.map((e) => {

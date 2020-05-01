@@ -4,7 +4,7 @@
       <h4 id="title">{{ table.title }}</h4>
     </b-row>
     <b-row>
-      <b-col sm="12" md="12" id="main" class="pr-0 pl-0">
+      <b-col sm="12" :md="this.mdsize" id="main" class="pr-0 pl-0">
         <Pagination :period="table.pagination" />
         <b-table
           selectable
@@ -27,7 +27,7 @@
           </template>
         </b-table>
       </b-col>
-      <b-col v-if="this.sidebar" auto>
+      <b-col v-if="this.sidebar" sm="12" md="6">
         <TableSidebar :objects="table.objects" />
       </b-col>
     </b-row>
@@ -55,6 +55,11 @@ export default {
   methods: {
     onRowSelected(items) {
       this.selected = items;
+    },
+  },
+  computed: {
+    mdsize: function() {
+      return this.sidebar ? "6" : "12";
     },
   },
   watch: {

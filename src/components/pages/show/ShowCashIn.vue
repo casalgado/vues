@@ -1,43 +1,42 @@
 <template>
   <div>
     <Table :table="table" />
+    <!-- change printorders to 'invoice' -->
+    <!-- <PrintOrders :objects="table.objects" /> -->
   </div>
 </template>
 <script>
+// import PrintOrders from "../../print/PrintOrders";
 import Table from "../../table/Table";
 import { getByDate } from "@/firebase";
-import { mapState } from "vuex";
 import moment from "moment";
+import { mapState } from "vuex";
 
 export default {
-  name: "ShowExpenses",
+  name: "ShowCashIn",
   components: {
     Table,
   },
-  props: { pagination: String },
   data() {
     return {
       table: {
-        title: "Gastos",
+        title: "Ingresos",
         fields: [
           {
-            key: "date",
-            label: "Fecha",
+            key: "client",
+            label: "Clientes",
             sortable: true,
+            tdClass: "justifyLeft",
           },
           {
-            key: "provider",
-            label: "Proveedor",
+            key: "products",
+            label: "Productos",
             sortable: true,
-          },
-          {
-            key: "name",
-            label: "Nombre",
-            sortable: true,
+            tdClass: "justifyLeft",
           },
           {
             key: "quantity",
-            label: "CTD",
+            label: "C",
             sortable: true,
           },
           {
@@ -49,14 +48,14 @@ export default {
         formattedObjects: [],
         objects: [],
         selectMode: "multi",
-        pagination: "week",
+        pagination: "day",
       },
     };
   },
   computed: mapState(["ref", "date", "period"]),
   methods: {
     getObjects: function() {
-      getByDate(`${this.ref}/expenses`, "date", this.date, this.period).then(
+      getByDate(`${this.ref}/orders`, "paid", this.date, this.period).then(
         (e) => {
           this.table.objects = JSON.parse(JSON.stringify(e));
           this.table.formattedObjects = this.format(
@@ -67,18 +66,20 @@ export default {
     },
     format: function(objects) {
       let items = objects.map((e) => {
+        let clone = [...e.products];
+        e.products = e.products.map((e) => e.name).join("<br />");
+        e.quantity = clone.map((e) => e.quantity).join("<br />");
         e.date = moment(e.date).format("DD/MM");
-
+        if (e.paid == "") {
+          // @refactor
+          e.paid = "";
+        } else {
+          e.paid = moment(e.paid).format("DD/MM");
+        }
         return e;
       });
       return items;
     },
-  },
-  created() {
-    if (this.pagination) {
-      this.table.pagination = "day";
-      this.table.title = "Egresos";
-    }
   },
   mounted() {
     this.getObjects();
@@ -93,3 +94,23 @@ export default {
   },
 };
 </script>
+<style scoped>
+@media screen {
+  #page {
+    display: grid;
+  }
+}
+
+@media print {
+  #container,
+  #title,
+  #sidebar-content {
+    display: none;
+  }
+
+  #page {
+    color: black;
+    display: grid;
+  }
+}
+</style>
