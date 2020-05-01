@@ -34,14 +34,7 @@ input {
 
 .btn {
   cursor: pointer;
-}
-.btn-primary {
-  background-color: var(--color-secondary-light);
-  border-color: var(--color-primary);
-}
-.btn-primary:hover {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+  font-weight: 500;
 }
 
 /* global table styles */
@@ -76,6 +69,21 @@ input {
   background-color: var(--color-secondary) !important;
   border-color: var(--color-neutral) !important;
   padding-top: 1px;
+}
+
+@media only screen and (max-width: 768px) {
+  .custom-dropdown .dropdown-menu {
+    left: -24% !important;
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  .custom-dropdown .dropdown-menu {
+    left: 0px !important;
+  }
+  .custom-create-dropdown .dropdown-menu {
+    left: -24% !important;
+  }
 }
 
 .dropdown-item {

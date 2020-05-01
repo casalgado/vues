@@ -38,6 +38,7 @@ export default {
     background-color: var(--color-secondary);
     border-radius: var(--border-radius-small);
     padding-bottom: 100px;
+    overflow: hidden;
   }
 
   #header {

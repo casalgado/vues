@@ -6,31 +6,28 @@
       text="Crear"
       offset=""
       toggle-class="nav-dropdown"
-      class="m-2 custom-dropdown"
+      class="m-2 custom-dropdown custom-create-dropdown"
     >
       <b-dropdown-item-button>
         <router-link :to="{ name: 'CreateOrder' }"
-          ><b-button variant="secondary" class="nav-btn"
-            >Crear Pedidos</b-button
+          ><b-button variant="dark" class="nav-btn"
+            >Pedido</b-button
           ></router-link
         >
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link :to="{ name: 'CreateExpense' }"
-          ><b-button variant="secondary" class="nav-btn"
-            >Crear Gasto</b-button
+          ><b-button variant="dark" class="nav-btn"
+            >Gasto</b-button
           ></router-link
         >
       </b-dropdown-item-button>
       <b-dropdown-item-button>
         <router-link :to="{ name: 'CreateProduct' }"
-          ><b-button variant="secondary" class="nav-btn"
-            >Crear Producto</b-button
+          ><b-button variant="dark" class="nav-btn"
+            >Producto</b-button
           ></router-link
         >
-      </b-dropdown-item-button>
-      <b-dropdown-item-button>
-        <router-link :to="{ name: 'console' }">console</router-link>
       </b-dropdown-item-button>
     </b-dropdown>
 
@@ -40,43 +37,59 @@
       text="Mostrar"
       offset=""
       toggle-class="nav-dropdown"
-      class="m-2"
+      class="m-2 custom-dropdown"
     >
       <b-dropdown-item-button>
         <router-link :to="{ name: 'ShowOrders' }">
-          <b-button variant="secondary" class="nav-btn">Pedidos</b-button>
+          <b-button variant="dark" class="nav-btn">Pedidos</b-button>
         </router-link>
       </b-dropdown-item-button>
+
       <b-dropdown-item-button>
         <router-link :to="{ name: 'ShowExpenses' }"
-          ><b-button variant="secondary" class="nav-btn"
+          ><b-button variant="dark" class="nav-btn"
             >Gastos</b-button
           ></router-link
         >
       </b-dropdown-item-button>
-      <b-dropdown-item-button>
-        <router-link :to="{ name: 'ShowCashIn' }"
-          ><b-button variant="secondary" class="nav-btn"
-            >Ingresos</b-button
-          ></router-link
-        >
-      </b-dropdown-item-button>
-      <b-dropdown-item-button>
-        <router-link :to="{ name: 'ShowCashOut' }"
-          ><b-button variant="secondary" class="nav-btn"
-            >Egresos</b-button
-          ></router-link
-        >
-      </b-dropdown-item-button>
+
       <b-dropdown-item-button>
         <router-link :to="{ name: 'ShowClients' }"
-          ><b-button variant="secondary" class="nav-btn"
+          ><b-button variant="dark" class="nav-btn"
             >Clientes</b-button
           ></router-link
         >
       </b-dropdown-item-button>
+
       <b-dropdown-item-button>
-        <router-link :to="{ name: 'ShowUnpaid' }">Por Cobrar</router-link>
+        <router-link :to="{ name: 'ShowCashIn' }"
+          ><b-button variant="success" class="nav-btn"
+            >Ingresos</b-button
+          ></router-link
+        >
+      </b-dropdown-item-button>
+
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'ShowCashOut' }"
+          ><b-button variant="success" class="nav-btn"
+            >Egresos</b-button
+          ></router-link
+        >
+      </b-dropdown-item-button>
+
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'ShowUnpaid' }"
+          ><b-button variant="success" class="nav-btn"
+            >Por Cobrar</b-button
+          ></router-link
+        >
+      </b-dropdown-item-button>
+      <b-dropdown-item-button>
+        <router-link :to="{ name: 'ShowDashboard' }"
+          ><b-button variant="primary" class="nav-btn"
+            >Dashboard</b-button
+          ></router-link
+        >
       </b-dropdown-item-button>
     </b-dropdown>
   </div>
