@@ -15,20 +15,17 @@
 <script>
 import { database } from "@/firebase";
 import { mapState } from "vuex";
+import { JSON } from "@/clientJSON";
 
 export default {
   name: "Console",
   data() {
     return {
-      clientJSON: [],
+      clientJSON: JSON,
     };
   },
   methods: {
     importClients: function() {
-      let clientCategories = ["instagram", "recomendacion"];
-      clientCategories.forEach((e) => {
-        database.ref(`esalimento/clientCategories`).push({ name: e });
-      });
       let clientListJSON = this.clientJSON.map((e) => {
         return e.Nombre.toLowerCase();
       });
@@ -81,6 +78,10 @@ export default {
           });
           finalList.forEach((e) => {
             console.log(e);
+          });
+          let clientCategories = ["instagram", "recomendacion"];
+          clientCategories.forEach((e) => {
+            database.ref(`esalimento/clientCategories`).push({ name: e });
           });
           finalList.forEach((e) => {
             database.ref(`esalimento/clients`).push(e);

@@ -7,6 +7,7 @@
 import Table from "../../table/Table";
 import { getAll } from "@/firebase";
 import { mapState } from "vuex";
+import moment from "moment";
 
 export default {
   name: "Clients",
@@ -63,8 +64,13 @@ export default {
       });
     },
     format: function(objects) {
-      console.log(objects);
-      return false;
+      let items = objects.map((e) => {
+        if (e.birthday !== "") {
+          e.birthday = moment(e.birthday).format("MMM DD");
+        }
+        return e;
+      });
+      return items;
     },
   },
   mounted() {
