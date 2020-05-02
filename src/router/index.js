@@ -69,15 +69,16 @@ const routes = [
         component: () => import("@/components/pages/forms/FormProduct.vue"),
       },
       {
+        path: "crear/cliente/",
+        name: "CreateClient",
+        component: () => import("@/components/pages/forms/FormClient.vue"),
+      },
+      {
         path: "console/",
         name: "console",
         component: () => import("@/components/pages/Console.vue"),
       },
-      {
-        path: "crear/cliente/",
-        name: "FormClient",
-        component: () => import("@/components/pages/forms/FormClient.vue"),
-      },
+
       /*
 			{
 				path      : 'pedidos/editar/:id',

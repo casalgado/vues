@@ -67,8 +67,9 @@ input {
 
 .dropdown-menu {
   background-color: var(--color-secondary) !important;
-  border-color: var(--color-neutral) !important;
+  border-color: var(--color-primary) !important;
   padding-top: 1px;
+  padding-bottom: 10px;
 }
 
 @media only screen and (max-width: 768px) {
@@ -87,13 +88,11 @@ input {
 }
 
 .dropdown-item {
-  padding-left: 4px !important;
-  padding-right: 4px !important;
-  padding-bottom: 0px;
+  padding: 2px 4px 2px 4px !important;
 }
 
 .dropdown-item:hover {
-  background-color: var(--color-primary) !important;
+  background-color: var(--color-secondary) !important;
 }
 
 .nav-dropdown {

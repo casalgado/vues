@@ -183,7 +183,7 @@ export default {
           }
           orders.map((e) => {
             console.log(e);
-            //database.ref(`esalimento/orders`).push(e);
+            database.ref(`esalimento/orders`).push(e);
           });
           let products = [];
           let productCategories = [
