@@ -81,7 +81,14 @@ export default {
         }
         e.products = e.products.join("<br />");
         e.date = moment(e.date).format("DD/MM");
-        e.total = numeral(e.total).format("0,0");
+        if (e.total % 1000 == "0") {
+          e.total = numeral(e.total).format("0,0a");
+        } else {
+          e.total =
+            numeral(e.total)
+              .divide(1000)
+              .format("0.0") + "k";
+        }
         if (e.paid == "") {
           // @refactor
           e.paid = "";
