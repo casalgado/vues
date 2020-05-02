@@ -1,5 +1,13 @@
 <template>
-  <b-form id="form" @submit="submit" @reset="reset" v-if="show">
+  <b-form
+    id="form"
+    @submit="
+      submit($event);
+      createRecord();
+    "
+    @reset="reset"
+    v-if="show"
+  >
     <b-button @click="add" variant="info">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
     <InputSelect
@@ -24,12 +32,13 @@
         />
       </transition>
     </div>
-    <b-card class="mt-3">
+    <!-- <b-card class="mt-3">
       <pre class="m-0">{{ this.form }}</pre>
-    </b-card>
+    </b-card> -->
   </b-form>
 </template>
 <script>
+import { dynamicFieldsMixin } from "@/mixins/dynamicFieldsMixin";
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
@@ -38,6 +47,7 @@ import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "CreateOrder",
+  mixins: [dynamicFieldsMixin],
   components: { InputSelect, InputBasic, InputDynamic },
   props: {
     object: {
@@ -63,6 +73,7 @@ export default {
           },
         ],
       },
+      table: "orders",
       options: {
         client: [],
         product: [],
@@ -80,100 +91,30 @@ export default {
     },
   },
   methods: {
-    add() {
-      let id = this.form.products.length;
-      console.log(id);
-      this.form.products.push({
-        id: id,
-        active: true,
-        name: "",
-        unitPrice: 0,
-        quantity: 0,
-        total: 0,
-      });
-    },
-    update(payload) {
-      console.log(payload.name);
-      this.form.products[payload.id].name = payload.name;
-      this.form.products[payload.id].unitPrice = payload.unitPrice;
-      this.form.products[payload.id].quantity = payload.quantity;
-      this.form.products[payload.id].total = payload.total;
-    },
-    remove(payload) {
-      this.form.products[payload.id].active = false;
-    },
-    submit(evt) {
-      evt.preventDefault();
-      let form = Object.assign({}, this.form);
-      let products = this.form.products.filter((e) => e.active == true);
-      console.log(products);
-      let total = 0;
-      for (let i = 0; i < products.length; i++) {
-        delete products[i].id;
-        delete products[i].active;
-        total += products[i].total;
-        form.products.push(products[i]);
+    createRecord() {
+      if (!this.options.client.includes(this.form.client)) {
+        save(`${this.ref}/clients`, { name: this.form.client, birthday: "" });
       }
-      form.total = total;
-      form.products = products;
-      form.date = moment(form.date).format();
-      form.delivered = moment(form.delivered).format();
-      console.log(form);
-      if (this.object.empty) {
-        save(`${this.ref}/orders`, form).then(() => {
-          this.$router.push({ path: "/" });
-        });
-      } else {
-        console.log(`${this.ref}/orders/${this.object.id}`);
-        save(`${this.ref}/orders/${this.object.id}`, form).then(() => {
-          this.$router.push({ path: "/" });
-        });
-      }
-    },
-    reset(evt) {
-      if (evt) {
-        evt.preventDefault();
-      }
-      this.form = {
-        client: "",
-        date: "",
-        delivered: "",
-        paid: "",
-        products: [
-          {
-            id: 0,
-            active: true,
-            name: "",
-            unitPrice: 1,
-            quantity: 1,
-            total: 1,
-          },
-        ],
-      };
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
     },
   },
   watch: {
     client: function(val) {
-      this.form.products = [];
-      getClientsLastOrder(this.ref, val).then((e) => {
-        console.log(e);
-        let products = e.products;
-        for (let i = 0; i < products.length; i++) {
-          this.form.products.push({
-            id: i,
-            active: true,
-            name: products[i].name,
-            unitPrice: products[i].unitPrice,
-            quantity: products[i].quantity,
-            total: products[i].total,
-          });
-        }
-      });
+      if (this.options.client.includes(this.form.client)) {
+        this.form.products = [];
+        getClientsLastOrder(this.ref, val).then((e) => {
+          let products = e.products;
+          for (let i = 0; i < products.length; i++) {
+            this.form.products.push({
+              id: i,
+              active: true,
+              name: products[i].name,
+              unitPrice: products[i].unitPrice,
+              quantity: products[i].quantity,
+              total: products[i].total,
+            });
+          }
+        });
+      }
     },
     date: function(val) {
       this.form.delivered = moment(val)

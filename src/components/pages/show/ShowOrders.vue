@@ -7,7 +7,7 @@
 </template>
 <script>
 // import PrintOrders from "../../print/PrintOrders";
-import { ordersMixin } from "../../../mixins/ordersMixin";
+import { ordersMixin } from "@/mixins/ordersMixin";
 import Table from "../../table/Table";
 import { getByDate } from "@/firebase";
 import { mapState } from "vuex";

@@ -15,11 +15,11 @@ export default {
   props: {
     type: String,
     label: String,
-    value: String
+    value: String,
   },
   data() {
     return {};
   },
-  methods: {}
+  methods: {},
 };
 </script>

@@ -9,9 +9,24 @@
       v-model="input.name"
       :options="options"
       size="sm"
+      v-if="!this.onlyText"
     ></b-form-select>
+    <b-form-input
+      id="product-select"
+      class="custom-input"
+      @change="onChange('name')"
+      v-model="input.name"
+      placeholder="..."
+      type="text"
+      size="sm"
+      v-else
+    ></b-form-input>
 
-    <b-form-group class="f-group price-group" label="$ Unitario" size="sm"></b-form-group>
+    <b-form-group
+      class="f-group price-group"
+      label="$ Unitario"
+      size="sm"
+    ></b-form-group>
     <b-form-input
       class="custom-input price-input"
       @change="onChange('unitPrice')"
@@ -47,17 +62,21 @@ export default {
     property: String,
     id: Number,
     priority: String,
-    populate: Object
+    populate: Object,
+    onlyText: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       input: {
         name: "",
-        unitPrice: 0,
+        unitPrice: 1,
         quantity: 1,
-        total: 0
+        total: 1,
       },
-      payload: {}
+      payload: {},
     };
   },
   methods: {
@@ -70,7 +89,7 @@ export default {
       } else if (field == "total") {
         this.input.unitPrice = Math.floor(total / quantity);
       } else if (field == "quantity" && this.priority == "total") {
-        this.input.unitPrice = Math.floor((total * 10) / quantity) / 10;
+        this.input.unitPrice = Math.floor((total * 100) / quantity) / 100;
       } else if (field == "quantity" && this.priority == "unitPrice") {
         this.input.total = Math.floor(unitPrice * quantity);
       }
@@ -81,14 +100,14 @@ export default {
     remove() {
       console.log(this.id);
       this.$emit("remove-field", { id: this.id });
-    }
+    },
   },
   created() {
     this.input.name = this.populate.name;
     this.input.unitPrice = this.populate.unitPrice;
     this.input.quantity = this.populate.quantity;
     this.input.total = this.populate.total;
-  }
+  },
 };
 </script>
 <style scoped>

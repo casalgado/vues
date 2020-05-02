@@ -1,6 +1,13 @@
 <template>
   <div class="f-group select-group">
-    <b-button id="toggle-button" @click="toggleSelect" variant="info">+</b-button>
+    <b-button
+      v-if="this.allowText"
+      id="toggle-button"
+      @click="toggleSelect"
+      variant="info"
+      >+</b-button
+    >
+    <label :for="value" v-if="!this.allowText">{{ this.label }}</label>
     <b-form-select
       v-if="select"
       :value="value"
@@ -26,18 +33,22 @@ export default {
   props: {
     options: Array,
     label: String,
-    value: String
+    value: String,
+    allowText: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
-      select: true
+      select: true,
     };
   },
   methods: {
     toggleSelect() {
       this.select = !this.select;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

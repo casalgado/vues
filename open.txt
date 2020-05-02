@@ -25,6 +25,9 @@ clients
 - add id's as key's instead of names
 - add order history
 
+orders
+- refactor getMostUsed() //method is too slow
+
 users
 - https://blog.logrocket.com/vue-firebase-authentication/
 - https://www.youtube.com/watch?v=2ciHixbc4HE timestamp 4:05 mins

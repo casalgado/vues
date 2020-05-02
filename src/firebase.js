@@ -111,7 +111,7 @@ export function getAllWithProp(ref, prop, value) {
 
 export function save(fullPath, payload) {
   console.log("before save():");
-  console.log(payload);
+  console.log(fullPath);
   return new Promise(function(resolve) {
     database
       .ref(fullPath)

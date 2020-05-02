@@ -13,7 +13,7 @@ export default new Vuex.Store({
     date: moment().format(),
     activeForm: {},
     dynamicFields: {
-      0: { id: 0, active: true, name: "", unitPrice: 0, quantity: 0, total: 0 },
+      0: { id: 0, active: true, name: "", unitPrice: 1, quantity: 1, total: 1 },
     },
     selected: [],
   },
@@ -71,9 +71,9 @@ export default new Vuex.Store({
         id: id,
         active: true,
         name: "",
-        unitPrice: 0,
-        quantity: 0,
-        total: 0,
+        unitPrice: 1,
+        quantity: 1,
+        total: 1,
       });
     },
     removeField(state, payload) {
@@ -86,9 +86,9 @@ export default new Vuex.Store({
           id: 0,
           active: true,
           name: "",
-          unitPrice: 0,
-          quantity: 0,
-          total: 0,
+          unitPrice: 1,
+          quantity: 1,
+          total: 1,
         },
       };
     },
