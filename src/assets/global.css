@@ -37,7 +37,7 @@ input {
   font-weight: 500;
 }
 
-/* global table styles */
+/* table styles */
 
 .b-table {
   color: var(--color-neutral);
@@ -67,7 +67,7 @@ input {
   padding: 12px !important;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 668px) {
   .orderClient {
     max-width: 110px;
   }
@@ -85,6 +85,11 @@ input {
   min-width: 150px;
 }
 
+.paginationControls {
+  position: sticky !important;
+  top: 0 !important;
+}
+
 /* global nav styles */
 
 .dropdown-menu {
@@ -94,7 +99,7 @@ input {
   padding-bottom: 10px;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 668px) {
   .custom-dropdown .dropdown-menu {
     left: -24% !important;
   }
@@ -121,13 +126,13 @@ input {
   background-color: var(--color-primary) !important;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 668px) {
   .nav-dropdown {
     width: 175px;
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 668px) {
   .nav-dropdown {
     width: 120px;
   }

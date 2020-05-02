@@ -4,7 +4,7 @@
       <h6 id="title">{{ table.title }}</h6>
     </b-row>
     <b-row>
-      <b-col sm="12" :md="this.mdsize" id="main" class="pr-0 pl-0">
+      <b-col id="main" class="pr-0 pl-0">
         <Pagination :period="table.pagination" />
         <b-table
           selectable
@@ -26,20 +26,15 @@
           </template>
         </b-table>
       </b-col>
-      <b-col v-if="this.sidebar" sm="12" md="6">
-        <TableSidebar :objects="table.objects" />
-      </b-col>
     </b-row>
   </b-container>
 </template>
 <script>
 import Pagination from "./Pagination";
-import TableSidebar from "./Sidebar";
 export default {
   name: "Table",
   components: {
     Pagination,
-    TableSidebar,
   },
   props: {
     table: Object,
@@ -73,5 +68,13 @@ export default {
   width: 100%;
   text-align: center;
   font-weight: bold;
+}
+
+#table {
+  border-bottom: 5px solid var(--color-secondary-light);
+}
+
+#table-container {
+  max-width: 680px;
 }
 </style>

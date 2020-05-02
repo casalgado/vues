@@ -1,5 +1,5 @@
 <template>
-  <div id="controls" v-if="period">
+  <div class="paginationControls" v-if="period">
     <button @click="previous" class="btn fas fa-caret-right fa-lg">
       <svg viewBox="0 0 49.2 89.3">
         <path
@@ -62,9 +62,7 @@ export default {
 };
 </script>
 <style scoped>
-#controls {
-  position: sticky;
-  top: 0px;
+.paginationControls {
   background-color: var(--color-secondary);
   align-content: center;
   align-items: baseline;

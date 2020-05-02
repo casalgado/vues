@@ -8,6 +8,7 @@ import Table from "../../table/Table";
 import { getByDate } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
+import numeral from "numeral";
 
 export default {
   name: "ShowExpenses",
@@ -36,11 +37,6 @@ export default {
             sortable: true,
           },
           {
-            key: "quantity",
-            label: "CTD",
-            sortable: true,
-          },
-          {
             key: "total",
             label: "Total",
             sortable: true,
@@ -48,7 +44,7 @@ export default {
         ],
         formattedObjects: [],
         objects: [],
-        selectMode: "multi",
+        selectMode: "single",
         pagination: "week",
       },
     };
@@ -68,7 +64,18 @@ export default {
     format: function(objects) {
       let items = objects.map((e) => {
         e.date = moment(e.date).format("DD/MM");
-
+        if (e.quantity == 1) {
+          e.quantity = "";
+        }
+        e.name = `${e.quantity}  ${e.name}`.trim();
+        if (e.total % 1000 == "0") {
+          e.total = numeral(e.total).format("0,0a");
+        } else {
+          e.total =
+            numeral(e.total)
+              .divide(1000)
+              .format("0.0") + "k";
+        }
         return e;
       });
       return items;

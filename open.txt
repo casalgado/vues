@@ -11,14 +11,19 @@ dashboard:
 - two tables: produccion del dia + para entregar hoy
 
 firebase
-- add indexOn to include performance
 - add security rules
-- add proper user interface
+- add proper users interface
 
 table
 - fix totals when selected (view backup)
 - add accounting library to display $ amounts
 
+expenses
+- add nested products like in orders
+
+clients
+- add id's as key's instead of names
+- add order history
 
 users
 - https://blog.logrocket.com/vue-firebase-authentication/

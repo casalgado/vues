@@ -20,7 +20,7 @@ export default {
   name: "Console",
   data() {
     return {
-      clientdb: [],
+      clientJSON: [],
     };
   },
   methods: {
@@ -29,10 +29,10 @@ export default {
       clientCategories.forEach((e) => {
         database.ref(`esalimento/clientCategories`).push({ name: e });
       });
-      let clientdbList = this.clientdb.map((e) => {
+      let clientListJSON = this.clientJSON.map((e) => {
         return e.Nombre.toLowerCase();
       });
-      console.log(clientdbList);
+      console.log(clientListJSON);
       database
         .ref("devAccount")
         .child("clients")
@@ -46,24 +46,24 @@ export default {
           let finalList = [];
           ckeys.forEach((k) => {
             let obj = objs[k];
-            if (clientdbList.includes(obj.name)) {
-              const index = clientdbList.indexOf(obj.name);
-              let cdbo = this.clientdb[index];
+            if (clientListJSON.includes(obj.name)) {
+              const index = clientListJSON.indexOf(obj.name);
+              let cJSON = this.clientJSON[index];
               let origin;
               if (
-                cdbo["De Donde Vienen"] !== "" &&
-                cdbo["De Donde Vienen"] !== "instagram"
+                cJSON["De Donde Vienen"] !== "" &&
+                cJSON["De Donde Vienen"] !== "instagram"
               ) {
                 origin = "recomendacion";
               } else {
-                origin = cdbo["De Donde Vienen"];
+                origin = cJSON["De Donde Vienen"];
               }
               finalList.push({
-                name: cdbo.Nombre.toLowerCase(),
-                email: cdbo.Correo,
-                address: cdbo.Direccion,
-                birthday: cdbo.Cumpleaños,
-                phone: cdbo.Telefono,
+                name: cJSON.Nombre.toLowerCase(),
+                email: cJSON.Correo,
+                address: cJSON.Direccion,
+                birthday: cJSON.Cumpleanos,
+                phone: cJSON.Telefono,
                 category: origin,
                 comment: "",
               });
