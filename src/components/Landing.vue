@@ -45,6 +45,11 @@ export default {
       firebase.auth().signOut();
     },
   },
+  mounted() {
+    if (this.uid !== null) {
+      this.$router.push({ path: "/dashboard" });
+    }
+  },
 };
 </script>
 <style scoped>
