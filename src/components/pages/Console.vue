@@ -4,9 +4,11 @@
       import orders
     </button>
     <button @click="importDatabase()" class="btn btn-danger">
-      import rest of database
+      import expenses
     </button>
-    <button @click="testUser()" class="btn btn-info">test user</button>
+    <button @click="importClients()" class="btn btn-danger">
+      import clients
+    </button>
     <p>{{ this.sanitize("medio pan masa madre") }}</p>
   </div>
 </template>
@@ -16,17 +18,77 @@ import { mapState } from "vuex";
 
 export default {
   name: "Console",
+  data() {
+    return {
+      clientdb: [],
+    };
+  },
   methods: {
-    testUser: function() {
+    importClients: function() {
+      let clientCategories = ["instagram", "recomendacion"];
+      clientCategories.forEach((e) => {
+        database.ref(`esalimento/clientCategories`).push({ name: e });
+      });
+      let clientdbList = this.clientdb.map((e) => {
+        return e.Nombre.toLowerCase();
+      });
+      console.log(clientdbList);
       database
-        .ref(`users/${this.uid}`)
+        .ref("devAccount")
+        .child("clients")
         .once("value")
         .then(function(snapshot) {
-          alert(snapshot.key);
+          let objs = snapshot.val();
+          return objs;
+        })
+        .then((objs) => {
+          let ckeys = Object.keys(objs);
+          let finalList = [];
+          ckeys.forEach((k) => {
+            let obj = objs[k];
+            if (clientdbList.includes(obj.name)) {
+              const index = clientdbList.indexOf(obj.name);
+              let cdbo = this.clientdb[index];
+              let origin;
+              if (
+                cdbo["De Donde Vienen"] !== "" &&
+                cdbo["De Donde Vienen"] !== "instagram"
+              ) {
+                origin = "recomendacion";
+              } else {
+                origin = cdbo["De Donde Vienen"];
+              }
+              finalList.push({
+                name: cdbo.Nombre.toLowerCase(),
+                email: cdbo.Correo,
+                address: cdbo.Direccion,
+                birthday: cdbo.Cumpleaños,
+                phone: cdbo.Telefono,
+                category: origin,
+                comment: "",
+              });
+            } else {
+              finalList.push({
+                name: obj.name,
+                email: obj.email,
+                address: obj.address,
+                birthday: "",
+                phone: obj.phone,
+                category: "",
+                comment: obj.comment || "",
+              });
+            }
+          });
+          finalList.forEach((e) => {
+            console.log(e);
+          });
+          finalList.forEach((e) => {
+            database.ref(`esalimento/clients`).push(e);
+          });
         });
     },
     importDatabase: function() {
-      let nodes = ["expenses", "clients"];
+      let nodes = ["expenses"];
       nodes.forEach((node) => {
         database
           .ref("devAccount")
@@ -37,7 +99,6 @@ export default {
             return objs;
           })
           .then((objs) => {
-            console.log(objs);
             for (let i = 0; i < Object.keys(objs).length; i++) {
               let obj = objs[Object.keys(objs)[i]];
               delete obj.id;
@@ -60,7 +121,7 @@ export default {
                 if (!categories.includes(category)) {
                   categories.push(category);
                   database
-                    .ref(`esalimento/categoriesExpenses`)
+                    .ref(`esalimento/expenseCategories`)
                     .push({ name: category });
                 }
               }
@@ -172,7 +233,7 @@ export default {
             }
           }
           productCategories.forEach((e) => {
-            database.ref(`esalimento/categoriesProducts`).push({ name: e });
+            database.ref(`esalimento/productCategories`).push({ name: e });
           });
         });
     },

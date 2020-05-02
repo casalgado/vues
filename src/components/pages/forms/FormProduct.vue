@@ -58,7 +58,7 @@ export default {
     },
   },
   mounted() {
-    getList(this.ref, "categoriesProducts").then((options) => {
+    getList(this.ref, "productCategories").then((options) => {
       console.log(options);
       options.unshift({ value: "", text: "categorias" });
       this.options.categories = options;
