@@ -16,12 +16,14 @@
       :options="this.options.provider"
       :label="'proveedor'"
     />
+
     <InputSelect
       v-model="form.category"
       :options="this.options.category"
       :allowText="false"
       :label="'categoria'"
     />
+
     <InputBasic v-model="form.date" :type="'date'" :label="'fecha'" />
 
     <div v-for="field in this.form.products" :key="field.id">
@@ -38,6 +40,8 @@
         />
       </transition>
     </div>
+    <p v-if="$v.form.provider.$error"><kbd>Debe incluir proveedor</kbd></p>
+    <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
     <!-- <b-card class="mt-3">
       <pre class="m-0">{{ this.form }}</pre>
     </b-card> -->
@@ -45,6 +49,8 @@
 </template>
 <script>
 import { dynamicFieldsMixin } from "@/mixins/dynamicFieldsMixin";
+import { validationMixin } from "vuelidate";
+import { required, minLength } from "vuelidate/lib/validators";
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
@@ -53,7 +59,7 @@ import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "CreateExpense",
-  mixins: [dynamicFieldsMixin],
+  mixins: [dynamicFieldsMixin, validationMixin],
   components: { InputSelect, InputBasic, InputDynamic },
   props: {
     object: {
@@ -85,6 +91,17 @@ export default {
       },
       show: true,
     };
+  },
+  validations: {
+    form: {
+      provider: {
+        required,
+        minLength: minLength(2),
+      },
+      category: {
+        required,
+      },
+    },
   },
   computed: {
     ...mapState(["ref"]),

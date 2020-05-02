@@ -16,7 +16,7 @@
       :options="this.options.client"
       :label="'cliente'"
     />
-    <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
+
     <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
     <InputBasic v-model="form.delivered" :type="'date'" :label="'entregar'" />
 
@@ -33,6 +33,7 @@
           @update-field="update"
         />
       </transition>
+      <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
     </div>
 
     <!-- <b-card class="mt-3">

@@ -9,16 +9,21 @@
       v-model="form.category"
       :options="this.options.categories"
       :label="'categoria'"
+      :allowText="false"
     />
+    <p v-if="$v.form.name.$error"><kbd>Debe incluir nombre</kbd></p>
   </b-form>
 </template>
 <script>
+import { validationMixin } from "vuelidate";
+import { required, minLength } from "vuelidate/lib/validators";
 import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
 import { save, getList } from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "CreateClient",
+  mixins: [validationMixin],
   components: { InputBasic, InputSelect },
   data() {
     return {
@@ -37,17 +42,31 @@ export default {
       show: true,
     };
   },
+  validations: {
+    form: {
+      name: {
+        required,
+        minLength: minLength(2),
+      },
+    },
+  },
   computed: {
     ...mapState(["ref"]),
   },
   methods: {
     submit(evt) {
-      if (evt) {
-        evt.preventDefault();
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        console.log("invalid");
+        this.submitStatus = "ERROR";
+      } else {
+        if (evt) {
+          evt.preventDefault();
+        }
+        save(`${this.ref}/clients`, this.form).then(() => {
+          this.reset();
+        });
       }
-      save(`${this.ref}/clients`, this.form).then(() => {
-        this.reset();
-      });
     },
     reset(evt) {
       if (evt) {
