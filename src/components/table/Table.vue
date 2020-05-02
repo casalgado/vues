@@ -1,7 +1,7 @@
 <template>
   <b-container fluid id="table-container" class>
     <b-row>
-      <h4 id="title">{{ table.title }}</h4>
+      <h6 id="title">{{ table.title }}</h6>
     </b-row>
     <b-row>
       <b-col sm="12" :md="this.mdsize" id="main" class="pr-0 pl-0">
@@ -72,5 +72,6 @@ export default {
 #title {
   width: 100%;
   text-align: center;
+  font-weight: bold;
 }
 </style>

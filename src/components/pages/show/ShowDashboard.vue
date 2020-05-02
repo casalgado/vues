@@ -2,9 +2,6 @@
   <div>
     <b-container fluid>
       <b-row>
-        <h4 id="title">Dashboard</h4>
-      </b-row>
-      <b-row>
         <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
           <Table :table="tableProduce" :sidebar="false" />
         </b-col>

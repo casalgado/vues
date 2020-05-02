@@ -7,7 +7,7 @@
         />
       </svg>
     </button>
-    <h5 id="date" @click="togglePeriod">{{ currentDate() }}</h5>
+    <h6 id="date" @click="togglePeriod">{{ currentDate() }}</h6>
     <button @click="next" class="btn">
       <svg viewBox="0 0 49.2 89.3">
         <path
