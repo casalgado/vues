@@ -54,6 +54,7 @@ import ButtonEdit from "./../buttons/ButtonEdit";
 import { getAll } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
+import numeral from "numeral";
 export default {
   name: "Sidebar",
   components: { ButtonPaid, ButtonEdit },
@@ -114,13 +115,17 @@ export default {
     totals: function() {
       if (this.objects.length > 0 && this.objects[0].total) {
         if (this.selected.length == 0) {
-          return this.objects.reduce((a, b) => ({
-            total: parseInt(a.total) + parseInt(b.total),
-          })).total;
+          return numeral(
+            this.objects.reduce((a, b) => ({
+              total: parseInt(a.total) + parseInt(b.total),
+            })).total
+          ).format("0,0");
         } else {
-          return this.objects.reduce((a, b) => ({
-            total: parseInt(a.total) + parseInt(b.total),
-          })).total;
+          return numeral(
+            this.objects.reduce((a, b) => ({
+              total: parseInt(a.total) + parseInt(b.total),
+            })).total
+          ).format("0,0");
         }
       } else {
         return "-";

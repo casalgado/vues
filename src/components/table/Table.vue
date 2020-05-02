@@ -11,8 +11,7 @@
           striped
           borderless
           id="table"
-          responsive
-          class="text-nowrap"
+          class=""
           :items="table.formattedObjects || table.objects"
           :fields="table.fields"
           :select-mode="selectMode"

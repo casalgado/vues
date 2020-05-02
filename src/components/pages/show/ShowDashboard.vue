@@ -5,10 +5,10 @@
         <h4 id="title">Dashboard</h4>
       </b-row>
       <b-row>
-        <b-col>
+        <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
           <Table :table="tableProduce" :sidebar="false" />
         </b-col>
-        <b-col>
+        <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
           <Table :table="tableDeliver" :sidebar="false" />
         </b-col>
       </b-row>
@@ -21,6 +21,7 @@ import Table from "../../table/Table";
 import { getByDate } from "@/firebase";
 import moment from "moment";
 import { mapState } from "vuex";
+import numeral from "numeral";
 
 export default {
   name: "showOrders",
@@ -34,20 +35,17 @@ export default {
         fields: [
           {
             key: "client",
-            label: "Clientes",
+            label: "Cliente",
             sortable: true,
-            tdClass: "justifyLeft",
+            tdClass: "justifyLeft slim dashOrderClient",
+            thClass: "slim",
           },
           {
             key: "products",
             label: "Productos",
             sortable: true,
-            tdClass: "justifyLeft",
-          },
-          {
-            key: "quantity",
-            label: "C",
-            sortable: true,
+            tdClass: "justifyLeft slim orderProduct",
+            thClass: "slim",
           },
         ],
         formattedObjects: [],
@@ -60,20 +58,17 @@ export default {
         fields: [
           {
             key: "client",
-            label: "Clientes",
+            label: "Cliente",
             sortable: true,
-            tdClass: "justifyLeft",
+            tdClass: "justifyLeft slim dashOrderClient",
+            thClass: "slim",
           },
           {
             key: "products",
             label: "Productos",
             sortable: true,
-            tdClass: "justifyLeft",
-          },
-          {
-            key: "quantity",
-            label: "C",
-            sortable: true,
+            tdClass: "justifyLeft slim orderProduct",
+            thClass: "slim",
           },
         ],
         formattedObjects: [],
@@ -106,9 +101,14 @@ export default {
     format: function(objects) {
       let items = objects.map((e) => {
         let clone = [...e.products];
-        e.products = e.products.map((e) => e.name).join("<br />");
-        e.quantity = clone.map((e) => e.quantity).join("<br />");
+        e.products = e.products.map((e) => e.name);
+        e.quantity = clone.map((e) => e.quantity);
+        for (let i = 0; i < e.products.length; i++) {
+          e.products[i] = `${e.quantity[i]}  ${e.products[i]}`;
+        }
+        e.products = e.products.join("<br />");
         e.date = moment(e.date).format("DD/MM");
+        e.total = numeral(e.total).format("0,0a");
         if (e.paid == "") {
           // @refactor
           e.paid = "";
@@ -134,6 +134,12 @@ export default {
 };
 </script>
 <style scoped>
+@media only screen and (min-width: 768px) {
+  .dashcol {
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+  }
+}
 @media screen {
   #page {
     display: grid;

@@ -41,8 +41,8 @@ input {
 
 .b-table {
   color: var(--color-neutral);
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 1.5;
 }
 
@@ -61,6 +61,28 @@ input {
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 10px;
   margin: 10px;
+}
+
+.slim {
+  padding: 12px !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .orderClient {
+    max-width: 110px;
+  }
+
+  .dashOrderClient {
+    padding-left: 12px !important;
+  }
+
+  .slim {
+    padding: 12px 5px 12px 5px !important;
+  }
+}
+
+.orderProduct {
+  min-width: 150px;
 }
 
 /* global nav styles */
@@ -129,11 +151,11 @@ body {
   text-align: right;
 }
 
-@import url("https://fonts.googleapis.com/css?family=Muli&display=swap");
-@import url("https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Palanquin:wght@300;400;500&display=swap");
 
 #app {
-  font-family: sans-serif;
+  font-family: "Palanquin", sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
