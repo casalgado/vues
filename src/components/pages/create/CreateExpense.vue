@@ -41,7 +41,7 @@ import { save, getList } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
-  name: "FormOrder",
+  name: "CreateExpense",
   components: { InputSelect, InputBasic, InputDynamic },
   props: {
     object: {

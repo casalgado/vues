@@ -2,9 +2,8 @@
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
     <b-button type="submit" variant="primary">Submit</b-button>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
-    <InputBasic v-model="form.phone" :type="'text'" :label="'telefono'" />
-    <InputBasic v-model="form.address" :type="'text'" :label="'direccion'" />
-    <InputBasic v-model="form.birthday" :type="'date'" :label="'cumpleaños'" />
+    <InputBasic v-model="form.price" :type="'text'" :label="'precio venta'" />
+    <InputBasic v-model="form.cost" :type="'text'" :label="'precio costo'" />
     <InputSelect
       v-model="form.category"
       :options="this.options.categories"
@@ -18,17 +17,14 @@ import InputSelect from "../../inputs/InputSelect";
 import { save, getList } from "@/firebase";
 import { mapState } from "vuex";
 export default {
-  name: "FormClient",
+  name: "CreateProduct",
   components: { InputBasic, InputSelect },
   data() {
     return {
       form: {
         name: "",
-        phone: "",
-        address: "",
-        birthday: "",
-        details: "",
-        comment: "",
+        price: "",
+        cost: "",
         category: "",
       },
       options: {
@@ -45,7 +41,7 @@ export default {
       if (evt) {
         evt.preventDefault();
       }
-      save(`${this.ref}/clients`, this.form).then(() => {
+      save(`${this.ref}/products`, this.form).then(() => {
         this.reset();
       });
     },
@@ -54,11 +50,7 @@ export default {
         evt.preventDefault();
       }
       this.name = "";
-      this.phone = "";
-      this.address = "";
-      this.birthday = "";
-      this.comment = "";
-      this.category = "";
+      this.price = "";
       this.show = false;
       this.$nextTick(() => {
         this.show = true;
@@ -66,9 +58,9 @@ export default {
     },
   },
   mounted() {
-    getList(this.ref, "clientCategories").then((options) => {
+    getList(this.ref, "productCategories").then((options) => {
       console.log(options);
-      options.unshift({ value: "", text: "origen" });
+      options.unshift({ value: "", text: "categorias" });
       this.options.categories = options;
     });
   },

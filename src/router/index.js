@@ -50,28 +50,28 @@ const routes = [
       {
         path: "crear/pedido/",
         name: "CreateOrder",
-        component: () => import("@/components/pages/forms/FormOrder.vue"),
+        component: () => import("@/components/pages/create/CreateOrder.vue"),
       },
       {
         path: "/editar/pedido/:id",
         name: "EditOrder",
-        component: () => import("@/components/pages/forms/FormOrder.vue"),
+        component: () => import("@/components/pages/create/CreateOrder.vue"),
         props: true,
       },
       {
         path: "crear/gasto/",
         name: "CreateExpense",
-        component: () => import("@/components/pages/forms/FormExpense.vue"),
+        component: () => import("@/components/pages/create/CreateExpense.vue"),
       },
       {
         path: "crear/producto/",
         name: "CreateProduct",
-        component: () => import("@/components/pages/forms/FormProduct.vue"),
+        component: () => import("@/components/pages/create/CreateProduct.vue"),
       },
       {
         path: "crear/cliente/",
         name: "CreateClient",
-        component: () => import("@/components/pages/forms/FormClient.vue"),
+        component: () => import("@/components/pages/create/CreateClient.vue"),
       },
       {
         path: "console/",
