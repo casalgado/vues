@@ -25,9 +25,6 @@ export default {
   computed: mapState(["uid"]),
   mounted() {
     this.$store.commit("setDate", { date: moment().format() });
-    if (this.uid == null) {
-      this.$router.push({ path: "/landing" });
-    }
   },
 };
 </script>
