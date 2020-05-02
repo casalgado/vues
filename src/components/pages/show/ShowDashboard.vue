@@ -95,6 +95,9 @@ export default {
       );
     },
   },
+  beforeRouteUpdate() {
+    this.getObjects();
+  },
   mounted() {
     this.getObjects();
   },
