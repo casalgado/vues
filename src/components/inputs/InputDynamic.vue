@@ -32,6 +32,7 @@
       @change="onChange('unitPrice')"
       v-model="input.unitPrice"
       type="number"
+      step=".01"
       size="sm"
     ></b-form-input>
 

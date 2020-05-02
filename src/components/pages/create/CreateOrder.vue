@@ -3,10 +3,11 @@
     id="form"
     @submit="
       submit($event);
-      createRecord();
+      updateClientInfo();
     "
     @reset="reset"
     v-if="show"
+    novalidate
   >
     <b-button @click="add" variant="info">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
@@ -15,6 +16,7 @@
       :options="this.options.client"
       :label="'cliente'"
     />
+    <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
     <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
     <InputBasic v-model="form.delivered" :type="'date'" :label="'entregar'" />
 
@@ -32,6 +34,7 @@
         />
       </transition>
     </div>
+
     <!-- <b-card class="mt-3">
       <pre class="m-0">{{ this.form }}</pre>
     </b-card> -->
@@ -39,6 +42,8 @@
 </template>
 <script>
 import { dynamicFieldsMixin } from "@/mixins/dynamicFieldsMixin";
+import { validationMixin } from "vuelidate";
+import { required, minLength } from "vuelidate/lib/validators";
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
@@ -47,7 +52,7 @@ import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "CreateOrder",
-  mixins: [dynamicFieldsMixin],
+  mixins: [dynamicFieldsMixin, validationMixin],
   components: { InputSelect, InputBasic, InputDynamic },
   props: {
     object: {
@@ -81,6 +86,14 @@ export default {
       show: true,
     };
   },
+  validations: {
+    form: {
+      client: {
+        required,
+        minLength: minLength(4),
+      },
+    },
+  },
   computed: {
     ...mapState(["ref"]),
     client() {
@@ -91,9 +104,15 @@ export default {
     },
   },
   methods: {
-    createRecord() {
-      if (!this.options.client.includes(this.form.client)) {
-        save(`${this.ref}/clients`, { name: this.form.client, birthday: "" });
+    updateClientInfo() {
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        console.log("invalid");
+        this.submitStatus = "ERROR";
+      } else {
+        if (!this.options.client.includes(this.form.client)) {
+          save(`${this.ref}/clients`, { name: this.form.client, birthday: "" });
+        }
       }
     },
   },

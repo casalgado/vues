@@ -24,32 +24,41 @@ export const dynamicFieldsMixin = {
     remove(payload) {
       this.form.products[payload.id].active = false;
     },
+
     submit(evt) {
-      if (confirm("continuar?")) {
-        evt.preventDefault();
-        let form = Object.assign({}, this.form);
-        let products = this.form.products.filter((e) => e.active == true);
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        console.log("invalid");
+        this.submitStatus = "ERROR";
+      } else {
+        if (confirm("continuar?")) {
+          evt.preventDefault();
+          let form = Object.assign({}, this.form);
+          let products = this.form.products.filter((e) => e.active == true);
 
-        let total = 0;
-        for (let i = 0; i < products.length; i++) {
-          delete products[i].id;
-          delete products[i].active;
-          total += products[i].total;
-          form.products.push(products[i]);
-        }
-        form.total = total;
-        form.products = products;
-        form.date = moment(form.date).format();
-        form.delivered = moment(form.delivered).format();
+          let total = 0;
+          for (let i = 0; i < products.length; i++) {
+            delete products[i].id;
+            delete products[i].active;
+            total += products[i].total;
+            form.products.push(products[i]);
+          }
+          form.total = total;
+          form.products = products;
+          form.date = moment(form.date).format();
+          form.delivered = moment(form.delivered).format();
 
-        if (this.object.empty) {
-          save(`${this.ref}/${this.table}`, form).then(() => {
-            // this.$router.push({ path: "/" });
-          });
-        } else {
-          save(`${this.ref}/${this.table}/${this.object.id}`, form).then(() => {
-            // this.$router.push({ path: "/" });
-          });
+          if (this.object.empty) {
+            save(`${this.ref}/${this.table}`, form).then(() => {
+              // this.$router.push({ path: "/" });
+            });
+          } else {
+            save(`${this.ref}/${this.table}/${this.object.id}`, form).then(
+              () => {
+                // this.$router.push({ path: "/" });
+              }
+            );
+          }
         }
       }
     },

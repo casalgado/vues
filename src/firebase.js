@@ -149,16 +149,18 @@ export function getMostUsed(fullPath, property, size) {
 	to be sent to a Select component as the prop :options
 	*/
   return new Promise(function(resolve) {
+    console.log("1");
     let ref = database.ref(fullPath);
 
     let objects = [];
     let sorted_unique = [];
     let most_used = [];
     ref.once("value").then(function(snapshot) {
-      let orders = snapshot.val();
-      for (let order in orders) {
-        objects.push(orders[order][property]);
-      }
+      let keys = Object.keys(snapshot.val());
+      keys.forEach((k) => {
+        objects.push(snapshot.val()[k][property]);
+      });
+      console.log("2");
       sorted_unique = objects
         .filter((value, index, self) => {
           return self.indexOf(value) === index;
@@ -189,11 +191,11 @@ export function getMostUsed(fullPath, property, size) {
   });
 }
 
-export function getList(ref, collection) {
+export function getList(ref, table) {
   console.log(ref);
   return new Promise(function(resolve) {
     database
-      .ref(`${ref}/${collection}`)
+      .ref(`${ref}/${table}`)
       .once("value")
       .then(function(snapshot) {
         let options = [];
