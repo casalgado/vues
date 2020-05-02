@@ -7,17 +7,17 @@
 </template>
 <script>
 // import PrintOrders from "../../print/PrintOrders";
+import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
 import { getByDate } from "@/firebase";
-import moment from "moment";
 import { mapState } from "vuex";
-import numeral from "numeral";
 
 export default {
   name: "showOrders",
   components: {
     Table,
   },
+  mixins: [ordersMixin],
   data() {
     return {
       table: {
@@ -70,34 +70,6 @@ export default {
           );
         }
       );
-    },
-    format: function(objects) {
-      let items = objects.map((e) => {
-        let clone = [...e.products];
-        e.products = e.products.map((e) => e.name);
-        e.quantity = clone.map((e) => e.quantity);
-        for (let i = 0; i < e.products.length; i++) {
-          e.products[i] = `${e.quantity[i]}  ${e.products[i]}`;
-        }
-        e.products = e.products.join("<br />");
-        e.date = moment(e.date).format("MM/DD");
-        if (e.total % 1000 == "0") {
-          e.total = numeral(e.total).format("0,0a");
-        } else {
-          e.total =
-            numeral(e.total)
-              .divide(1000)
-              .format("0.0") + "k";
-        }
-        if (e.paid == "") {
-          // @refactor
-          e.paid = "";
-        } else {
-          e.paid = moment(e.paid).format("MM/DD");
-        }
-        return e;
-      });
-      return items;
     },
   },
   mounted() {
