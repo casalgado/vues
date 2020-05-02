@@ -76,7 +76,7 @@ export default {
           e.products[i] = `${e.quantity[i]}  ${e.products[i]}`;
         }
         e.products = e.products.join("<br />");
-        e.date = moment(e.date).format("DD/MM");
+        e.date = moment(e.date).format("MM/DD");
         if (e.total % 1000 == "0") {
           e.total = numeral(e.total).format("0,0a");
         } else {

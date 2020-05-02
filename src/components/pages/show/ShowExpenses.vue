@@ -63,7 +63,7 @@ export default {
     },
     format: function(objects) {
       let items = objects.map((e) => {
-        e.date = moment(e.date).format("DD/MM");
+        e.date = moment(e.date).format("MM/DD");
         if (e.quantity == 1) {
           e.quantity = "";
         }
