@@ -3,9 +3,13 @@
     <b-container fluid>
       <b-row>
         <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
+          <h6 id="title">{{ tableProduce.title }}</h6>
+          <Pagination period="day" />
           <Table :table="tableProduce" :sidebar="false" />
         </b-col>
         <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
+          <h6 id="title">{{ tableDeliver.title }}</h6>
+          <Pagination period="day" />
           <Table :table="tableDeliver" :sidebar="false" />
         </b-col>
       </b-row>
@@ -15,6 +19,7 @@
 <script>
 import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
+import Pagination from "../../table/Pagination";
 import { getByDate } from "@/firebase";
 import { mapState } from "vuex";
 
@@ -23,6 +28,7 @@ export default {
   mixins: [ordersMixin],
   components: {
     Table,
+    Pagination,
   },
   data() {
     return {
@@ -47,7 +53,6 @@ export default {
         formattedObjects: [],
         objects: [],
         selectMode: "single",
-        pagination: "day",
       },
       tableDeliver: {
         title: "Entregar",
@@ -70,7 +75,6 @@ export default {
         formattedObjects: [],
         objects: [],
         selectMode: "single",
-        pagination: "day",
       },
     };
   },

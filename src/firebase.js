@@ -191,6 +191,16 @@ export function getMostUsed(fullPath, property, size) {
   });
 }
 
+export function update(fullPath, property, newValue, component) {
+  database.ref(`${fullPath}`).update({ [property]: newValue }, function(error) {
+    if (error) {
+      alert(error);
+    } else {
+      component.$alert("success");
+    }
+  });
+}
+
 export function getList(ref, path) {
   console.log(ref);
   return new Promise(function(resolve) {

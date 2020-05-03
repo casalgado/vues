@@ -1,10 +1,20 @@
 <template>
   <div>
+    <h6 id="title">{{ table.title }}</h6>
+    <Pagination :period="table.pagination" />
     <Table :table="table" />
+    <TableTotals :objects="this.table.objects" />
+    <b-card id="toolbox" v-if="this.selected.length > 0">
+      <TableTotals :objects="this.selected" />
+      {{ this.selectedIds }}
+    </b-card>
   </div>
 </template>
 <script>
+import { toolboxMixin } from "@/mixins/toolboxMixin";
 import Table from "../../table/Table";
+import Pagination from "../../table/Pagination";
+import TableTotals from "../../table/TableTotals";
 import { getByDate } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
@@ -12,8 +22,11 @@ import numeral from "numeral";
 
 export default {
   name: "ShowExpenses",
+  mixins: [toolboxMixin],
   components: {
     Table,
+    Pagination,
+    TableTotals,
   },
   props: { pagination: String },
   data() {
@@ -49,7 +62,7 @@ export default {
       },
     };
   },
-  computed: mapState(["ref", "date", "period"]),
+  computed: { ...mapState(["ref", "date", "period"]) },
   methods: {
     getObjects: function() {
       getByDate(`${this.ref}/expenses`, "date", this.date, this.period).then(

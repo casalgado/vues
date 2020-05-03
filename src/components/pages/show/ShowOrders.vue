@@ -6,7 +6,7 @@
     <TableTotals :objects="this.table.objects" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
       <TableTotals :objects="this.selected" />
-      {{ this.selectedIds }}
+      <ButtonPaid :ids="this.selectedIds" />
     </b-card>
     <!-- change printorders to 'invoice' -->
     <!-- <PrintOrders :objects="table.objects" /> -->
@@ -15,6 +15,8 @@
 <script>
 // import PrintOrders from "../../print/PrintOrders";
 import { ordersMixin } from "@/mixins/ordersMixin";
+import { toolboxMixin } from "@/mixins/toolboxMixin";
+import ButtonPaid from "../../buttons/ButtonPaid";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
@@ -27,8 +29,9 @@ export default {
     Table,
     TableTotals,
     Pagination,
+    ButtonPaid,
   },
-  mixins: [ordersMixin],
+  mixins: [ordersMixin, toolboxMixin],
   data() {
     return {
       table: {
@@ -71,14 +74,6 @@ export default {
     };
   },
   computed: {
-    selectedIds() {
-      return this.$store.state.selected.map((e) => {
-        return e.id;
-      });
-    },
-    selected() {
-      return this.$store.state.selected;
-    },
     ...mapState(["ref", "date", "period"]),
   },
   methods: {

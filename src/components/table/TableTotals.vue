@@ -15,14 +15,12 @@ export default {
     total: function() {
       if (this.objects.length > 0) {
         if (this.selected.length == 0) {
-          console.log("o");
           return numeral(
             this.objects.reduce((a, b) => ({
               total: parseInt(a.total) + parseInt(b.total),
             })).total
           ).format("0,0");
         } else {
-          console.log("so");
           let total = 0;
           this.selected.forEach((e) => {
             total =

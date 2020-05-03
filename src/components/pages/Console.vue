@@ -1,10 +1,10 @@
 <template>
   <div>
     <button @click="importOrders()" class="btn btn-danger">
-      import orders
+      import orders + products
     </button>
     <button @click="importDatabase()" class="btn btn-danger">
-      import expenses
+      import expenses + providers
     </button>
     <button @click="importClients()" class="btn btn-danger">
       import clients

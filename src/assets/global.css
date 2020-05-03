@@ -10,6 +10,14 @@
   --border-radius-small: 2px;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  padding-right: 0px !important;
+}
+
 /* bootstrap classes */
 
 a,
@@ -207,4 +215,23 @@ body {
 }
 .shadow-5 {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+/* alert classes */
+#swal2-content {
+  color: var(--color-neutral);
+}
+
+.swal2-container.swal2-shown {
+  background-color: transparent !important;
+  padding: 0px !important;
+}
+
+.swal2-show {
+  -webkit-animation: swal2-show 0s !important;
+  animation: swal2-show 0s !important;
+}
+
+.swal2-shown swal2-height-auto {
+  padding-right: 0px !important;
 }
