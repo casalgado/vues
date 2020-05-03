@@ -105,12 +105,17 @@ input {
   width: 100%;
   max-width: 640px;
   background-color: var(--color-primary);
-  bottom: 20%;
+  bottom: 10%;
 }
 @media only screen and (min-width: 668px) {
   #toolbox {
     left: 50%;
     margin-left: -320px;
+  }
+}
+
+@media only screen and (max-width: 668px) {
+  #toolbox {
   }
 }
 
