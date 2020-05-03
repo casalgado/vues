@@ -141,9 +141,18 @@ export default {
         })
         .then((objs) => {
           let orders = [];
-          for (let i = 0; i < Object.keys(objs).length; i++) {
+          let objects = [];
+          Object.keys(objs).forEach((e) => {
+            objects.push(objs[e]);
+          });
+          let sorted = objects.sort((a, b) =>
+            a.client > b.client ? 1 : b.client > a.client ? -1 : 0
+          );
+
+          for (let i = 0; i < sorted.length; i++) {
             // co stands for current object or current order
-            let co = objs[Object.keys(objs)[i]];
+            let co = sorted[i];
+            console.log(co);
             let new_order = {
               name: "P-" + this.zeroPad(orders.length + 1, 3),
               client: co.client,
@@ -183,7 +192,6 @@ export default {
             }
           }
           orders.map((e) => {
-            console.log(e);
             database.ref(`esalimento/orders`).push(e);
           });
           let products = [];
@@ -203,7 +211,7 @@ export default {
             if (!products.includes(product)) {
               products.push(product);
               let firstWord = product.split(" ")[0];
-              let category;
+              let category = "";
               if (firstWord == "pan" || firstWord == "panes") {
                 category = "panes";
               } else if (firstWord == "torta") {

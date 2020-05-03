@@ -90,6 +90,22 @@ input {
   top: 0 !important;
 }
 
+/* toolbox styles */
+
+#toolbox {
+  position: fixed;
+  width: 100%;
+  max-width: 640px;
+  background-color: var(--color-primary);
+  bottom: 20%;
+}
+@media only screen and (min-width: 668px) {
+  #toolbox {
+    left: 50%;
+    margin-left: -320px;
+  }
+}
+
 /* global nav styles */
 
 .dropdown-menu {

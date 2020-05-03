@@ -79,7 +79,7 @@ export default {
           },
         ],
       },
-      table: "orders",
+      path: "orders",
       options: {
         client: [],
         product: [],

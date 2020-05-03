@@ -191,11 +191,11 @@ export function getMostUsed(fullPath, property, size) {
   });
 }
 
-export function getList(ref, table) {
+export function getList(ref, path) {
   console.log(ref);
   return new Promise(function(resolve) {
     database
-      .ref(`${ref}/${table}`)
+      .ref(`${ref}/${path}`)
       .once("value")
       .then(function(snapshot) {
         let options = [];

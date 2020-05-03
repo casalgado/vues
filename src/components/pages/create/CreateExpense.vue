@@ -84,7 +84,7 @@ export default {
           },
         ],
       },
-      table: "expenses",
+      path: "expenses",
       options: {
         provider: [],
         category: [],

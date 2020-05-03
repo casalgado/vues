@@ -1,5 +1,5 @@
 <template>
-  <div class="paginationControls" v-if="period">
+  <b-container fluid class="paginationControls" v-if="period">
     <button @click="previous" class="btn fas fa-caret-right fa-lg">
       <svg viewBox="0 0 49.2 89.3">
         <path
@@ -15,7 +15,7 @@
         />
       </svg>
     </button>
-  </div>
+  </b-container>
 </template>
 <script>
 import moment from "moment";
@@ -72,6 +72,7 @@ export default {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 10px;
   border-bottom: 1px solid var(--color-neutral);
+  max-width: 680px;
 }
 
 #date {

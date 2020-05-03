@@ -1,6 +1,13 @@
 <template>
   <div>
+    <h6 id="title">{{ table.title }}</h6>
+    <Pagination :period="table.pagination" />
     <Table :table="table" />
+    <TableTotals :objects="this.table.objects" />
+    <b-card id="toolbox" v-if="this.selected.length > 0">
+      <TableTotals :objects="this.selected" />
+      {{ this.selectedIds }}
+    </b-card>
     <!-- change printorders to 'invoice' -->
     <!-- <PrintOrders :objects="table.objects" /> -->
   </div>
@@ -9,6 +16,8 @@
 // import PrintOrders from "../../print/PrintOrders";
 import { ordersMixin } from "@/mixins/ordersMixin";
 import Table from "../../table/Table";
+import Pagination from "../../table/Pagination";
+import TableTotals from "../../table/TableTotals";
 import { getByDate } from "@/firebase";
 import { mapState } from "vuex";
 
@@ -16,6 +25,8 @@ export default {
   name: "showOrders",
   components: {
     Table,
+    TableTotals,
+    Pagination,
   },
   mixins: [ordersMixin],
   data() {
@@ -59,7 +70,17 @@ export default {
       },
     };
   },
-  computed: mapState(["ref", "date", "period"]),
+  computed: {
+    selectedIds() {
+      return this.$store.state.selected.map((e) => {
+        return e.id;
+      });
+    },
+    selected() {
+      return this.$store.state.selected;
+    },
+    ...mapState(["ref", "date", "period"]),
+  },
   methods: {
     getObjects: function() {
       getByDate(`${this.ref}/orders`, "date", this.date, this.period).then(
@@ -86,6 +107,11 @@ export default {
 };
 </script>
 <style scoped>
+#title {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
 @media screen {
   #page {
     display: grid;

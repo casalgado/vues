@@ -22,11 +22,12 @@ expenses
 - add nested products like in orders
 
 clients
-- add id's as key's instead of names
+- add id's as key's instead of names?
 - add order history
 
 orders
 - refactor getMostUsed() //method is too slow
+- when import, make sure orders are consolidating properly
 
 users
 - https://blog.logrocket.com/vue-firebase-authentication/
