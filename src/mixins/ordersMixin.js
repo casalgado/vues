@@ -13,7 +13,13 @@ export const ordersMixin = {
         }
         e.products = e.products.join("<br />");
         e.date = moment(e.date).format("MM/DD");
-        if (e.total % 1000 == "0") {
+        console.log(e.total);
+        if (e.total > 1000000) {
+          e.total =
+            numeral(e.total)
+              .divide(1000)
+              .format("0,0") + "k";
+        } else if (e.total % 1000 == "0") {
           e.total = numeral(e.total).format("0,0a");
         } else {
           e.total =
