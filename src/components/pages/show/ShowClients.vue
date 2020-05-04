@@ -1,10 +1,15 @@
 <template>
   <div>
     <Table :table="table" />
+    <b-card id="toolbox" v-if="this.selected.length > 0">
+      <ClientHistorySummary :dbref="this.ref" :cid="this.selectedIds[0]" />
+    </b-card>
   </div>
 </template>
 <script>
+import { toolboxMixin } from "@/mixins/toolboxMixin";
 import Table from "../../table/Table";
+import ClientHistorySummary from "../../tools/ClientHistorySummary";
 import { getAll } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
@@ -13,7 +18,9 @@ export default {
   name: "Clients",
   components: {
     Table,
+    ClientHistorySummary,
   },
+  mixins: [toolboxMixin],
   data() {
     return {
       table: {
@@ -40,11 +47,6 @@ export default {
             label: "Direccion",
             sortable: true,
           },
-          {
-            key: "comment",
-            label: "Comentario",
-            sortable: true,
-          },
         ],
         formattedObjects: [],
         objects: [],
@@ -53,7 +55,9 @@ export default {
       },
     };
   },
-  computed: mapState(["ref", "date", "period"]),
+  computed: {
+    ...mapState(["ref", "date", "period"]),
+  },
   methods: {
     getObjects: function() {
       getAll(`${this.ref}/clients`).then((e) => {
