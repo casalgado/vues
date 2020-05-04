@@ -1,6 +1,6 @@
 <template>
   <table>
-    <tr v-for="item in this.history" :key="item">
+    <tr v-for="(item, index) in this.history" :key="index">
       <td id="tdn">{{ item[0] }}</td>
       <td id="tdv">{{ item[1] }}</td>
     </tr>
@@ -22,15 +22,22 @@ export default {
   },
   mounted() {
     getById(`${this.dbref}/clients/${this.cid}`).then((e) => {
-      let keys = Object.keys(e.history);
-      keys.forEach((k) => {
-        e.history[k].products.forEach((p) => {
-          this.history.push([
-            `${moment(e.history[k].date).format("MM/DD")}`,
-            `${p.quantity} ${p.name}`,
-          ]);
+      if (e.history) {
+        let keys = Object.keys(e.history);
+        let ordersTotal = 0;
+        keys.forEach((k) => {
+          ordersTotal++;
+          e.history[k].products.forEach((p) => {
+            this.history.push([
+              `${moment(e.history[k].date).format("MM/DD")}`,
+              `${p.quantity} ${p.name}`,
+            ]);
+          });
         });
-      });
+        this.history.unshift([ordersTotal, "pedidos"]);
+      } else {
+        this.history.unshift([0, "pedidos"]);
+      }
     });
   },
 };

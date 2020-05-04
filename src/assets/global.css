@@ -106,7 +106,14 @@ input {
   max-width: 640px;
   background-color: var(--color-primary);
   bottom: 10%;
+  max-height: 90vh;
+  overflow-y: scroll;
 }
+
+#toolbox::-webkit-scrollbar {
+  display: none;
+}
+
 @media only screen and (min-width: 668px) {
   #toolbox {
     left: 50%;
