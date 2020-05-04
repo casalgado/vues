@@ -5,10 +5,10 @@ import store from "./store";
 // @refactor
 // where should the momentjs code go?
 
-moment.locale("en", {
+moment.locale("es", {
   week: {
     dow: 0,
-    doy: moment.localeData("en").firstDayOfYear(),
+    doy: moment.localeData("es").firstDayOfYear(),
   },
 });
 moment.locale("es");
