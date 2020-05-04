@@ -13,7 +13,6 @@ export const ordersMixin = {
         }
         e.products = e.products.join("<br />");
         e.date = moment(e.date).format("MM/DD");
-        console.log(e.total);
         if (e.total > 1000000) {
           e.total =
             numeral(e.total)

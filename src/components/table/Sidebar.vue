@@ -138,7 +138,7 @@ export default {
       return this.selected.length > 1;
     },
     detailedReport: function() {
-      let show = "n";
+      let show = "y";
       if (show == "y") {
         let products = [];
         /*
@@ -149,6 +149,9 @@ export default {
         return { name: e.name, quantity: 0, total: 0 };
       });
       */
+        products = this.products.map((e) => {
+          return { name: e.name, quantity: 0, total: 0 };
+        });
         this.objects.forEach((e) => {
           e.products.forEach((p) => {
             products.push(p);

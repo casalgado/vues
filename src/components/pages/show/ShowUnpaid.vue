@@ -13,7 +13,7 @@
 <script>
 import { ordersMixin } from "@/mixins/ordersMixin";
 import { toolboxMixin } from "@/mixins/toolboxMixin";
-import ButtonPaid from "../../buttons/ButtonPaid";
+import ButtonPaid from "../../tools/ButtonPaid";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";

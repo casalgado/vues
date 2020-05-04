@@ -9,6 +9,9 @@
     <button @click="importClients()" class="btn btn-danger">
       import clients
     </button>
+    <button @click="clientHistory()" class="btn btn-danger">
+      add client order history
+    </button>
     <p>{{ this.sanitize("medio pan masa madre") }}</p>
   </div>
 </template>
@@ -25,6 +28,49 @@ export default {
     };
   },
   methods: {
+    clientHistory: function() {
+      database
+        .ref("esalimento")
+        .child("orders")
+        .once("value")
+        .then(function(snapshot) {
+          let orders = snapshot.val();
+          return orders;
+        })
+        .then((orders) => {
+          let okeys = Object.keys(orders);
+          database
+            .ref("esalimento")
+            .child("clients")
+            .once("value")
+            .then(function(snapshot) {
+              let clients = snapshot.val();
+              return clients;
+            })
+            .then((clients) => {
+              let ckeys = Object.keys(clients);
+              console.log(clients[ckeys[0]]);
+              ckeys.forEach((ck) => {
+                okeys.forEach((ok) => {
+                  if (clients[ck].name == orders[ok].client) {
+                    console.log(ck);
+                    database
+                      .ref("esalimento/clients/" + ck + "/history")
+                      .update({
+                        [ok]: {
+                          date: orders[ok].date,
+                          products: orders[ok].products,
+                        },
+                      });
+                  }
+                });
+              });
+              // orders[okeys[0]].products.forEach((e) => {
+              //   console.log(`${e.quantity} ${e.name}`);
+              // });
+            });
+        });
+    },
     importClients: function() {
       let clientListJSON = this.clientJSON.map((e) => {
         return e.Nombre.toLowerCase();

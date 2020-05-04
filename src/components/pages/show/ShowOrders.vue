@@ -8,6 +8,14 @@
       <TableTotals :objects="this.selected" />
       <ButtonPaid :ids="this.selectedIds" />
     </b-card>
+    <table v-if="this.detailedReport">
+      <tr v-for="(value, name) in this.detailedReport" :key="name">
+        <td id="tdn">{{ name }}:</td>
+        <td id="tdv">{{ value.quantity }}</td>
+        <td id="tdt">{{ value.total }}</td>
+      </tr>
+    </table>
+
     <!-- change printorders to 'invoice' -->
     <!-- <PrintOrders :objects="table.objects" /> -->
   </div>
@@ -16,7 +24,7 @@
 // import PrintOrders from "../../print/PrintOrders";
 import { ordersMixin } from "@/mixins/ordersMixin";
 import { toolboxMixin } from "@/mixins/toolboxMixin";
-import ButtonPaid from "../../buttons/ButtonPaid";
+import ButtonPaid from "../../tools/ButtonPaid";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
@@ -74,6 +82,44 @@ export default {
     };
   },
   computed: {
+    detailedReport: function() {
+      let show = "n";
+      if (show == "y") {
+        let products = [];
+        /*
+      the three lines in this block can me toggled to display full list of products 
+      or only the ones present on current table. Used to facilitate copying and pasting to sheets. 
+
+      products = this.products.map((e) => {
+        return { name: e.name, quantity: 0, total: 0 };
+      });
+      */
+        this.table.objects.forEach((e) => {
+          e.products.forEach((p) => {
+            products.push(p);
+          });
+        });
+        let report = {};
+        products.forEach((p) => {
+          let keys = Object.keys(report);
+          if (keys.includes(p.name)) {
+            report[p.name].quantity = report[p.name].quantity + p.quantity;
+            report[p.name].total = report[p.name].total + p.total;
+          } else {
+            report[p.name] = { quantity: p.quantity, total: p.total };
+          }
+        });
+        const ordered = {};
+        Object.keys(report)
+          .sort()
+          .forEach(function(key) {
+            ordered[key] = report[key];
+          });
+        return ordered;
+      } else {
+        return false;
+      }
+    },
     ...mapState(["ref", "date", "period"]),
   },
   methods: {
