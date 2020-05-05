@@ -38,17 +38,18 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 const database = app.database();
-
 export { database };
+
+const ref = database.ref(store.state.ref);
 
 export function getUser() {
   return firebase.auth().currentUser;
 }
 
-export function getByDate(ref, propname, date, period) {
-  return new Promise(function(resolve) {
-    database
-      .ref(ref)
+export function getByDateRange(path, propname, date, period) {
+  return new Promise((resolve) => {
+    ref
+      .child(path)
       .orderByChild(propname)
       .startAt(
         moment(date)
@@ -60,50 +61,48 @@ export function getByDate(ref, propname, date, period) {
           .endOf(period)
           .format()
       )
-      .once("value")
-      .then(function(snapshot) {
-        let data = snapshot.val();
+      .on("value", (snap) => {
         let objects = [];
-        for (let key in data) {
-          data[key].id = key;
-          objects.push(data[key]);
-        }
+        snap.forEach((csnap) => {
+          let key = csnap.key;
+          let data = csnap.val();
+          data.id = key;
+          objects.push(data);
+        });
         resolve(objects);
       });
   });
 }
 
-export function getAll(ref) {
-  return new Promise(function(resolve) {
-    database
-      .ref(ref)
-      .once("value")
-      .then(function(snapshot) {
-        let data = snapshot.val();
-        let objects = [];
-        for (let key in data) {
-          data[key].id = key;
-          objects.push(data[key]);
-        }
-        resolve(objects);
+export function getAll(path) {
+  return new Promise((resolve) => {
+    ref.child(path).on("value", (snap) => {
+      let objects = [];
+      snap.forEach((csnap) => {
+        let key = csnap.key;
+        let data = csnap.val();
+        data.id = key;
+        objects.push(data);
       });
+      resolve(objects);
+    });
   });
 }
 
-export function getAllWithProp(ref, prop, value) {
-  return new Promise(function(resolve) {
-    database
-      .ref(ref)
+export function getAllWhere(path, prop, value) {
+  return new Promise((resolve) => {
+    ref
+      .child(path)
       .orderByChild(prop)
       .equalTo(value)
-      .once("value")
-      .then(function(snapshot) {
-        let data = snapshot.val();
+      .on("value", (snap) => {
         let objects = [];
-        for (let key in data) {
-          data[key].id = key;
-          objects.push(data[key]);
-        }
+        snap.forEach((csnap) => {
+          let key = csnap.key;
+          let data = csnap.val();
+          data.id = key;
+          objects.push(data);
+        });
         resolve(objects);
       });
   });
@@ -112,21 +111,18 @@ export function getAllWithProp(ref, prop, value) {
 export function save(fullPath, payload) {
   console.log("before save():");
   console.log(fullPath);
-  return new Promise(function(resolve) {
+  return new Promise(() => {
     database
       .ref(fullPath)
-      .push()
-      .set(payload, function(error) {
+      .push(payload, function(error) {
         if (error) {
           alert("Data could not be saved." + error);
         } else {
           alert("Data saved successfully.");
         }
       })
-      .then(function(value) {
-        resolve(value);
+      .then(() => {
         console.log("after save():");
-        console.log(value);
         console.log("-------------");
       });
   });

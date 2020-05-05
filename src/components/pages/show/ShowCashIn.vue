@@ -8,7 +8,7 @@
 <script>
 import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
-import { getByDate } from "@/firebase";
+import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 
 export default {
@@ -47,17 +47,15 @@ export default {
       },
     };
   },
-  computed: mapState(["ref", "date", "period"]),
+  computed: mapState(["date", "period"]),
   methods: {
     getObjects: function() {
-      getByDate(`${this.ref}/orders`, "paid", this.date, this.period).then(
-        (e) => {
-          this.table.objects = JSON.parse(JSON.stringify(e));
-          this.table.formattedObjects = this.format(
-            JSON.parse(JSON.stringify(e))
-          );
-        }
-      );
+      getByDateRange(`orders`, "paid", this.date, this.period).then((e) => {
+        this.table.objects = JSON.parse(JSON.stringify(e));
+        this.table.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
+      });
     },
   },
   mounted() {

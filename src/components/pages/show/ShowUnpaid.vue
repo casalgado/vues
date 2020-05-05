@@ -17,7 +17,7 @@ import ButtonPaid from "../../tools/ButtonPaid";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
-import { getAllWithProp } from "@/firebase";
+import { getAllWhere } from "@/firebase";
 import { mapState } from "vuex";
 
 export default {
@@ -73,8 +73,7 @@ export default {
   computed: mapState(["ref", "date", "period"]),
   methods: {
     getObjects: function() {
-      getAllWithProp(`${this.ref}/orders`, "paid", "").then((e) => {
-        console.log(e);
+      getAllWhere(`orders`, "paid", "").then((e) => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))

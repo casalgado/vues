@@ -49,11 +49,9 @@ export default {
             })
             .then((clients) => {
               let ckeys = Object.keys(clients);
-              console.log(clients[ckeys[0]]);
               ckeys.forEach((ck) => {
                 okeys.forEach((ok) => {
                   if (clients[ck].name == orders[ok].client) {
-                    console.log(ck);
                     database
                       .ref("esalimento/clients/" + ck + "/history")
                       .update({

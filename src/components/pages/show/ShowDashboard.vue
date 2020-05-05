@@ -20,7 +20,7 @@
 import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
-import { getByDate } from "@/firebase";
+import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 
 export default {
@@ -78,25 +78,21 @@ export default {
       },
     };
   },
-  computed: mapState(["ref", "date", "period"]),
+  computed: mapState(["date", "period"]),
   methods: {
     getObjects: function() {
-      getByDate(`${this.ref}/orders`, "date", this.date, this.period).then(
-        (e) => {
-          this.tableProduce.objects = JSON.parse(JSON.stringify(e));
-          this.tableProduce.formattedObjects = this.format(
-            JSON.parse(JSON.stringify(e))
-          );
-        }
-      );
-      getByDate(`${this.ref}/orders`, "deliver", this.date, this.period).then(
-        (e) => {
-          this.tableDeliver.objects = JSON.parse(JSON.stringify(e));
-          this.tableDeliver.formattedObjects = this.format(
-            JSON.parse(JSON.stringify(e))
-          );
-        }
-      );
+      getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
+        this.tableProduce.objects = JSON.parse(JSON.stringify(e));
+        this.tableProduce.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
+      });
+      getByDateRange(`orders`, "deliver", this.date, this.period).then((e) => {
+        this.tableDeliver.objects = JSON.parse(JSON.stringify(e));
+        this.tableDeliver.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
+      });
     },
   },
   beforeRouteUpdate() {

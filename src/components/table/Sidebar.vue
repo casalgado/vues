@@ -181,7 +181,7 @@ export default {
     ...mapState(["ref"]),
   },
   mounted() {
-    getAll(`${this.ref}/products`).then((products) => {
+    getAll(`products`).then((products) => {
       this.products = products;
     });
   },

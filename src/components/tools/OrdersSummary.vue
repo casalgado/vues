@@ -56,7 +56,7 @@ export default {
     },
   },
   mounted() {
-    getAll(`${this.dbref}/products`).then((p) => {
+    getAll(`products`).then((p) => {
       console.log(p);
       this.products = p;
     });

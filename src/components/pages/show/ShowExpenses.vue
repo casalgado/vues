@@ -15,7 +15,7 @@ import { toolboxMixin } from "@/mixins/toolboxMixin";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
-import { getByDate } from "@/firebase";
+import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 import numeral from "numeral";
@@ -62,17 +62,15 @@ export default {
       },
     };
   },
-  computed: { ...mapState(["ref", "date", "period"]) },
+  computed: { ...mapState(["date", "period"]) },
   methods: {
     getObjects: function() {
-      getByDate(`${this.ref}/expenses`, "date", this.date, this.period).then(
-        (e) => {
-          this.table.objects = JSON.parse(JSON.stringify(e));
-          this.table.formattedObjects = this.format(
-            JSON.parse(JSON.stringify(e))
-          );
-        }
-      );
+      getByDateRange(`expenses`, "date", this.date, this.period).then((e) => {
+        this.table.objects = JSON.parse(JSON.stringify(e));
+        this.table.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
+      });
     },
     format: function(objects) {
       let items = objects.map((e) => {

@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     getObjects: function() {
-      getAll(`${this.ref}/clients`).then((e) => {
+      getAll(`clients`).then((e) => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
