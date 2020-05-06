@@ -51,7 +51,7 @@ import InputDynamic from "../../inputs/InputDynamic";
 import {
   save,
   getClientsLastOrder,
-  getMostUsed,
+  getMostUsedClients,
   getAsOptionsForSelect,
 } from "@/firebase";
 import { mapState } from "vuex";
@@ -175,7 +175,7 @@ export default {
     this.form.delivered = moment()
       .add(1, "day")
       .format("YYYY-MM-DD");
-    getMostUsed(`orders`, "client", 20).then((options) => {
+    getMostUsedClients(20).then((options) => {
       options.unshift({ value: "", text: "cliente" });
       this.options.client = options;
     });

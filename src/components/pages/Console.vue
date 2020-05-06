@@ -1,19 +1,22 @@
 <template>
   <div>
     <button @click="deleteDatabase()" class="btn btn-danger">
-      DELETE
+      DELETE EVERYTHING
     </button>
-    <button @click="importOrders()" class="btn btn-danger">
+    <button @click="importOrders()" class="btn btn-primary">
       import orders + products
     </button>
-    <button @click="importDatabase()" class="btn btn-danger">
+    <button @click="importDatabase()" class="btn btn-primary">
       import expenses + providers
     </button>
-    <button @click="importClients()" class="btn btn-danger">
+    <button @click="importClients()" class="btn btn-primary">
       import clients
     </button>
-    <button @click="clientHistory()" class="btn btn-danger">
+    <button @click="clientHistory()" class="btn btn-info">
       add client order history
+    </button>
+    <button @click="clientList()" class="btn btn-info">
+      add client list
     </button>
     <p>{{ this.sanitize("medio pan masa madre") }}</p>
   </div>
@@ -70,66 +73,115 @@ export default {
                   }
                 });
               });
-              // orders[okeys[0]].products.forEach((e) => {
-              //   console.log(`${e.quantity} ${e.name}`);
-              // });
+              orders[okeys[0]].products.forEach((e) => {
+                console.log(`${e.quantity} ${e.name}`);
+              });
             });
         });
     },
-    importClients: function() {
-      let clientListJSON = this.clientJSON.map((e) => {
-        return e.Nombre.toLowerCase();
-      });
-      console.log(clientListJSON);
+    clientList: function() {
       database
-        .ref("devAccount")
-        .child("clients")
+        .ref("esalimento")
+        .child("orders")
         .once("value")
         .then(function(snapshot) {
           let objs = snapshot.val();
           return objs;
         })
         .then((objs) => {
-          let ckeys = Object.keys(objs);
+          let objects = [];
+          Object.keys(objs).forEach((e) => {
+            objs[e].id = e;
+            objects.push(objs[e]);
+          });
+          objects = this.sanitizeClients(objects);
           let finalList = [];
-          ckeys.forEach((k) => {
-            let obj = objs[k];
-            if (clientListJSON.includes(obj.name)) {
-              const index = clientListJSON.indexOf(obj.name);
-              let cJSON = this.clientJSON[index];
-              let origin;
-              if (
-                cJSON["De Donde Vienen"] !== "" &&
-                cJSON["De Donde Vienen"] !== "instagram"
-              ) {
-                origin = "recomendacion";
+          objects.forEach((o) => {
+            if (!finalList.includes(o.client)) {
+              finalList.push(o.client);
+            }
+            database.ref("esalimento/clientList").update({
+              [o.id]: {
+                name: o.client,
+              },
+            });
+          });
+          console.log(finalList);
+        });
+    },
+    importClients: function() {
+      let clientJSON = this.clientJSON;
+      let clientListJSON = this.clientJSON.map((e) => {
+        return e.Nombre.toLowerCase();
+      });
+      console.log(
+        this.clientJSON.map((e) => {
+          return e.Nombre;
+        })
+      );
+      database
+        .ref("devAccount")
+        .child("orders")
+        .once("value")
+        .then(function(snapshot) {
+          let objs = snapshot.val();
+          return objs;
+        })
+        .then((objs) => {
+          let objects = [];
+          Object.keys(objs).forEach((e) => {
+            objects.push(objs[e]);
+          });
+          objects = this.sanitizeClients(objects);
+          let finalList = [];
+          let alreadyIn = [];
+          objects.forEach((k) => {
+            let obj = k;
+            if (!alreadyIn.includes(obj.client)) {
+              alreadyIn.push(obj.client);
+
+              if (clientListJSON.includes(obj.client)) {
+                const index = clientListJSON.indexOf(obj.client);
+
+                let cJSON = clientJSON[index];
+                let origin;
+                if (
+                  cJSON["De Donde Vienen"] !== "" &&
+                  cJSON["De Donde Vienen"] !== "instagram"
+                ) {
+                  origin = "recomendacion";
+                } else {
+                  origin = cJSON["De Donde Vienen"];
+                }
+                finalList.push({
+                  name: cJSON.Nombre.toLowerCase(),
+                  email: cJSON.Correo,
+                  address: cJSON.Direccion,
+                  birthday: cJSON.Cumpleanos,
+                  phone: cJSON.Telefono,
+                  category: origin,
+                  comment: "",
+                });
               } else {
-                origin = cJSON["De Donde Vienen"];
+                finalList.push({
+                  name: obj.client,
+                  email: "",
+                  address: "",
+                  birthday: "",
+                  phone: "",
+                  category: "",
+                  comment: "",
+                });
               }
-              finalList.push({
-                name: cJSON.Nombre.toLowerCase(),
-                email: cJSON.Correo,
-                address: cJSON.Direccion,
-                birthday: cJSON.Cumpleanos,
-                phone: cJSON.Telefono,
-                category: origin,
-                comment: "",
-              });
-            } else {
-              finalList.push({
-                name: obj.name,
-                email: obj.email,
-                address: obj.address,
-                birthday: "",
-                phone: obj.phone,
-                category: "",
-                comment: obj.comment || "",
-              });
             }
           });
-          finalList.forEach((e) => {
-            console.log(e);
-          });
+          console.log(
+            finalList
+              .map((e) => {
+                return e.name;
+              })
+              .sort()
+          );
           let clientCategories = ["instagram", "recomendacion"];
           clientCategories.forEach((e) => {
             database.ref(`esalimento/clientCategories`).push({ name: e });
@@ -196,14 +248,17 @@ export default {
           Object.keys(objs).forEach((e) => {
             objects.push(objs[e]);
           });
+          objects = this.sanitizeClients(objects);
           let sorted = objects.sort((a, b) =>
             a.client > b.client ? 1 : b.client > a.client ? -1 : 0
           );
+          let resorted = objects.sort((a, b) =>
+            a.date > b.date ? 1 : b.date > a.date ? -1 : 0
+          );
 
-          for (let i = 0; i < sorted.length; i++) {
-            // co stands for current object or current order
+          for (let i = 0; i < resorted.length; i++) {
+            /** co stands for current object or current order */
             let co = sorted[i];
-            console.log(co);
             let new_order = {
               name: "P-" + this.zeroPad(orders.length + 1, 3),
               client: co.client,
@@ -242,9 +297,20 @@ export default {
               orders.push(new_order);
             }
           }
-          orders.map((e) => {
-            database.ref(`esalimento/orders`).push(e);
+          orders.forEach((e) => {
+            console.time(e);
+            /** */ database.ref(`esalimento/orders`).push(e);
           });
+          console.time(
+            orders
+              .map((o) => {
+                return o.client;
+              })
+              .sort()
+              .filter((value, index, self) => {
+                return self.indexOf(value) === index;
+              })
+          );
           let products = [];
           let productCategories = [
             "panes",
@@ -286,16 +352,63 @@ export default {
                 "stand de ventas",
               ];
               if (!remove.includes(product)) {
-                database
-                  .ref(`esalimento/products`)
-                  .push({ name: product, category: category });
+                console.time(category);
+                /** */ database
+                  /** */ .ref(`esalimento/products`)
+                  /** */ .push({ name: product, category: category });
               }
             }
           }
           productCategories.forEach((e) => {
-            database.ref(`esalimento/productCategories`).push({ name: e });
+            console.time(e);
+            /** */ database
+              .ref(`esalimento/productCategories`)
+              .push({ name: e });
           });
         });
+    },
+    sanitizeClients: function(array) {
+      array.forEach((o) => {
+        o.client = o.client.trim();
+        if (o.client == "piury") {
+          o.client = "andres vergara";
+        }
+        if (o.client == "elena carriazo") {
+          o.client = "helena carriazo";
+        }
+        if (o.client == "esteban") {
+          o.client = "esteban salgado";
+        }
+        if (o.client == "rodolfo schmulson") {
+          o.client = "lopi";
+        }
+        if (o.client == "piuri") {
+          o.client = "andres vergara";
+        }
+        if (o.client == "andrés vergara") {
+          o.client = "andres vergara";
+        }
+        if (o.client == "andrés perez") {
+          o.client = "andres perez";
+        }
+        if (o.client == "andrés santiago") {
+          o.client = "andres santiago";
+        }
+        if (o.client == "roberto cuello") {
+          o.client = "bob santiago";
+        }
+      });
+      console.log(
+        array
+          .map((o) => {
+            return o.client;
+          })
+          .sort()
+          .filter((value, index, self) => {
+            return self.indexOf(value) === index;
+          })
+      );
+      return array;
     },
     sanitize: function(string) {
       string = string.trim();
