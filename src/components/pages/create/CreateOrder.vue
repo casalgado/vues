@@ -167,7 +167,7 @@ export default {
     }
   },
   mounted() {
-    getMostUsed(`${this.ref}/orders`, "client", 20).then((options) => {
+    getMostUsed(`orders`, "client", 20).then((options) => {
       options.unshift({ value: "", text: "cliente" });
       this.options.client = options;
     });

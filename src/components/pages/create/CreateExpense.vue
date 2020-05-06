@@ -141,7 +141,7 @@ export default {
     }
   },
   mounted() {
-    getMostUsed(`${this.ref}/expenses`, "provider", 20).then((options) => {
+    getMostUsed(`expenses`, "provider", 20).then((options) => {
       options.unshift({ value: "", text: "proveedor" });
       this.options.provider = options;
     });

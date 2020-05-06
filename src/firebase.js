@@ -48,6 +48,7 @@ export function getUser() {
 
 export function getByDateRange(path, propname, date, period) {
   return new Promise((resolve) => {
+    console.time("getByDateRange");
     ref
       .child(path)
       .orderByChild(propname)
@@ -69,6 +70,7 @@ export function getByDateRange(path, propname, date, period) {
           data.id = key;
           objects.push(data);
         });
+        console.timeEnd("getByDateRange");
         resolve(objects);
       });
   });
@@ -76,6 +78,7 @@ export function getByDateRange(path, propname, date, period) {
 
 export function getAll(path) {
   return new Promise((resolve) => {
+    console.time("getAll");
     ref.child(path).on("value", (snap) => {
       let objects = [];
       snap.forEach((csnap) => {
@@ -84,6 +87,7 @@ export function getAll(path) {
         data.id = key;
         objects.push(data);
       });
+      console.timeEnd("getAll");
       resolve(objects);
     });
   });
@@ -91,6 +95,7 @@ export function getAll(path) {
 
 export function getAllWhere(path, prop, value) {
   return new Promise((resolve) => {
+    console.time("getAllWhere");
     ref
       .child(path)
       .orderByChild(prop)
@@ -103,6 +108,7 @@ export function getAllWhere(path, prop, value) {
           data.id = key;
           objects.push(data);
         });
+        console.timeEnd("getAllWhere");
         resolve(objects);
       });
   });
@@ -110,16 +116,18 @@ export function getAllWhere(path, prop, value) {
 
 export function getById(path, id) {
   return new Promise(function(resolve) {
+    console.time("getById");
     ref
       .child(path)
       .child(id)
       .on("value", function(snapshot) {
+        console.timeEnd("getById");
         resolve(snapshot.val());
       });
   });
 }
 
-export function getMostUsed(fullPath, property, size) {
+export function getMostUsed(path, property, size) {
   /* 
 	the method returns an array of objects of the form {value: String, text: String}
 	to be sent to a Select component as the prop :options
@@ -127,11 +135,11 @@ export function getMostUsed(fullPath, property, size) {
   return new Promise(function(resolve) {
     console.time("1");
     console.time("2");
-    let ref = database.ref(fullPath);
+    console.time("getMostUsed");
     let objects = [];
     let sorted_unique = [];
     let most_used = [];
-    ref.once("value").then(function(snap) {
+    ref.child(path).once("value", function(snap) {
       console.timeEnd("1");
       snap.forEach((csnap) => {
         let data = csnap.val();
@@ -163,6 +171,7 @@ export function getMostUsed(fullPath, property, size) {
           return e.client;
         });
       most_used.push({ value: "x", text: "" });
+      console.timeEnd("getMostUsed");
       resolve([...most_used, ...sorted_unique]);
     });
   });
@@ -170,6 +179,7 @@ export function getMostUsed(fullPath, property, size) {
 
 export function getAsOptionsForSelect(path) {
   return new Promise(function(resolve) {
+    console.time("getAsOptionsForSelect");
     ref.child(path).once("value", function(snap) {
       let options = [];
       let objects = [];
@@ -190,7 +200,7 @@ export function getAsOptionsForSelect(path) {
           if (nA > nB) return 1;
           return 0;
         });
-
+      console.timeEnd("getAsOptionsForSelect");
       resolve(options);
     });
   });
@@ -198,20 +208,21 @@ export function getAsOptionsForSelect(path) {
 
 export function getClientsLastOrder(client) {
   return new Promise(function(resolve) {
+    console.time("getClientsLastOrder");
     ref
       .child(`orders`)
       .orderByChild("client")
       .equalTo(client)
       .limitToLast(1)
       .once("value", function(snapshot) {
+        console.timeEnd("getClientsLastOrder");
         resolve(Object.values(snapshot.val())[0]);
       });
   });
 }
 
 export function save(path, payload) {
-  console.log("before save():");
-  console.log(path);
+  console.time("save");
   return new Promise(() => {
     ref
       .child(path)
@@ -223,8 +234,7 @@ export function save(path, payload) {
         }
       })
       .then(() => {
-        console.log("after save():");
-        console.log("-------------");
+        console.timeEnd("save");
       });
   });
 }

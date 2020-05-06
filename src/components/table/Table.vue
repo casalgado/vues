@@ -44,7 +44,6 @@ export default {
       this.selected = items;
     },
     rowClass(item) {
-      console.log(item);
       if (item.paid) {
         return "paid";
       } else {
