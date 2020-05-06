@@ -57,7 +57,6 @@ export default {
     submit(evt) {
       this.$v.$touch();
       if (this.$v.$invalid) {
-        console.log("invalid");
         this.submitStatus = "ERROR";
       } else {
         if (evt) {
@@ -86,7 +85,6 @@ export default {
   },
   mounted() {
     getAsOptionsForSelect("clientCategories").then((options) => {
-      console.log(options);
       options.unshift({ value: "", text: "origen" });
       this.options.categories = options;
     });

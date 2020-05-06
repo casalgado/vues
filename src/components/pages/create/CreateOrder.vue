@@ -3,7 +3,7 @@
     id="form"
     @submit="
       submit($event);
-      updateClientInfo();
+      saveClient();
     "
     @reset="reset"
     v-if="show"
@@ -110,14 +110,14 @@ export default {
     },
   },
   methods: {
-    updateClientInfo() {
+    saveClient() {
       this.$v.$touch();
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
       } else {
         if (!this.options.client.includes(this.form.client)) {
-          save(`/clients`, { name: this.form.client, birthday: "" });
+          save(`clients`, { name: this.form.client, birthday: "" });
         }
       }
     },

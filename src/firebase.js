@@ -133,19 +133,19 @@ export function getMostUsed(path, property, size) {
 	to be sent to a Select component as the prop :options
 	*/
   return new Promise(function(resolve) {
-    console.time("1");
-    console.time("2");
-    console.time("getMostUsed");
+    console.time("getMostUsed 1");
+    console.time("getMostUsed 2");
+    console.time("getMostUsed 3");
     let objects = [];
     let sorted_unique = [];
     let most_used = [];
     ref.child(path).once("value", function(snap) {
-      console.timeEnd("1");
+      console.timeEnd("getMostUsed 1");
       snap.forEach((csnap) => {
         let data = csnap.val();
         objects.push(data[property]);
       });
-      console.timeEnd("2");
+      console.timeEnd("getMostUsed 2");
       sorted_unique = objects
         .filter((value, index, self) => {
           return self.indexOf(value) === index;
@@ -171,7 +171,7 @@ export function getMostUsed(path, property, size) {
           return e.client;
         });
       most_used.push({ value: "x", text: "" });
-      console.timeEnd("getMostUsed");
+      console.timeEnd("getMostUsed 3");
       resolve([...most_used, ...sorted_unique]);
     });
   });
