@@ -267,19 +267,32 @@ export function getClientsLastOrder(client) {
 
 export function save(path, payload) {
   console.time("save");
+  return new Promise((resolve) => {
+    var id = ref.child(path).push(payload, function(error) {
+      if (error) {
+        alert("Data could not be saved." + error);
+      } else {
+        alert("Data saved successfully.");
+      }
+    }).key;
+    console.log(id);
+    console.timeEnd("save");
+    resolve(id);
+  });
+}
+
+export function update(path, payload) {
+  console.time("update");
   return new Promise(() => {
-    ref
-      .child(path)
-      .push(payload, function(error) {
-        if (error) {
-          alert("Data could not be saved." + error);
-        } else {
-          alert("Data saved successfully.");
-        }
-      })
-      .then(() => {
-        console.timeEnd("save");
-      });
+    ref.child(path).update(payload, function(error) {
+      if (error) {
+        alert("Data could not be saved." + error);
+      } else {
+        alert("Data saved successfully.");
+      }
+    });
+  }).then(() => {
+    console.timeEnd("update");
   });
 }
 

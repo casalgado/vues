@@ -7,6 +7,11 @@
     <b-card id="toolbox" v-if="this.selected.length > 0">
       <TableTotals :objects="this.selected" />
       <ButtonPaid :ids="this.selectedIds" />
+      <ButtonEdit
+        v-if="this.selected.length == 1"
+        :oid="this.selectedIds[0]"
+        destination="EditOrder"
+      />
     </b-card>
 
     <OrdersSummary
@@ -23,6 +28,7 @@
 import { ordersMixin } from "@/mixins/ordersMixin";
 import { toolboxMixin } from "@/mixins/toolboxMixin";
 import ButtonPaid from "../../tools/ButtonPaid";
+import ButtonEdit from "../../tools/ButtonEdit";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
@@ -38,6 +44,7 @@ export default {
     Pagination,
     ButtonPaid,
     OrdersSummary,
+    ButtonEdit,
   },
   mixins: [ordersMixin, toolboxMixin],
   data() {

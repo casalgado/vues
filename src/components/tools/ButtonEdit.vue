@@ -1,42 +1,30 @@
 <template>
-  <b-button @click="edit">edit</b-button>
+  <b-button @click="edit" variant="primary">edit</b-button>
 </template>
 <script>
-import { getById } from "@/firebase";
-import { mapState } from "vuex";
-
 export default {
-  name: "ButtonPaid",
+  name: "ButtonEdit",
   props: {
     oid: String,
-    path: String,
+    destination: String,
   },
   data() {
     return {
       object: {},
     };
   },
-  computed: {
-    ...mapState(["ref"]),
-    paid() {
-      return this.object.paid != "";
-    },
-  },
+  computed: {},
   methods: {
     edit: function() {
-      console.log(this.object);
-      this.$router.push({
-        name: "EditOrder",
-        params: { object: this.object },
-      });
+      console.log(this.destination);
+      console.log(this.oid);
+      // this.$router.push({
+      //   name: "EditOrder",
+      //   params: { object: this.object },
+      // });
     },
   },
-  mounted() {
-    getById(`${this.path}`, `${this.oid}`).then((e) => {
-      e.id = this.oid;
-      this.object = e;
-    });
-  },
+  mounted() {},
 };
 </script>
 <style scoped></style>

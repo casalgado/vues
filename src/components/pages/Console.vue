@@ -6,7 +6,7 @@
     <button @click="importOrders()" class="btn btn-primary">
       import orders + products
     </button>
-    <button @click="importDatabase()" class="btn btn-primary">
+    <button @click="importExpenses()" class="btn btn-primary">
       import expenses + providers
     </button>
     <button @click="importClients()" class="btn btn-primary">
@@ -17,6 +17,9 @@
     </button>
     <button @click="clientList()" class="btn btn-info">
       add client list
+    </button>
+    <button @click="providerList()" class="btn btn-info">
+      add provider list
     </button>
     <p>{{ this.sanitize("medio pan masa madre") }}</p>
   </div>
@@ -109,6 +112,30 @@ export default {
           console.log(finalList);
         });
     },
+    providerList: function() {
+      database
+        .ref("esalimento")
+        .child("expenses")
+        .once("value")
+        .then(function(snapshot) {
+          let objs = snapshot.val();
+          return objs;
+        })
+        .then((objs) => {
+          let objects = [];
+          Object.keys(objs).forEach((e) => {
+            objs[e].id = e;
+            objects.push(objs[e]);
+          });
+          objects.forEach((o) => {
+            database.ref("esalimento/optionsForMenus/providers").update({
+              [o.id]: {
+                name: o.provider,
+              },
+            });
+          });
+        });
+    },
     importClients: function() {
       let clientJSON = this.clientJSON;
       let clientListJSON = this.clientJSON.map((e) => {
@@ -191,47 +218,58 @@ export default {
           });
         });
     },
-    importDatabase: function() {
-      let nodes = ["expenses"];
-      nodes.forEach((node) => {
-        database
-          .ref("devAccount")
-          .child(node)
-          .once("value")
-          .then(function(snapshot) {
-            let objs = snapshot.val();
-            return objs;
-          })
-          .then((objs) => {
-            for (let i = 0; i < Object.keys(objs).length; i++) {
-              let obj = objs[Object.keys(objs)[i]];
-              delete obj.id;
-              database.ref(`esalimento/${node}`).push(obj);
+    importExpenses: function() {
+      database
+        .ref("devAccount")
+        .child("expenses")
+        .once("value")
+        .then(function(snapshot) {
+          let objs = snapshot.val();
+          return objs;
+        })
+        .then((objs) => {
+          let okeys = Object.keys(objs);
+          for (let i = 0; i < okeys.length; i++) {
+            let obj = objs[okeys[i]];
+            obj.products = [
+              {
+                name: this.sanitize(obj.name),
+                quantity: parseInt(obj.quantity),
+                unitPrice: parseInt(obj.unitPrice),
+                total: parseInt(obj.total),
+              },
+            ];
+            delete obj.name;
+            delete obj.quantity;
+            delete obj.unitPrice;
+            delete obj.bug_probe;
+            console.log(obj);
+            if (obj.products[0].name && obj.products[0].quantity) {
+              console.log("t");
+              // database.ref(`esalimento/expenses`).push(obj);
             }
-            if (node == "expenses") {
-              let providers = [];
-              for (let i = 0; i < Object.keys(objs).length; i++) {
-                let obj = objs[Object.keys(objs)[i]];
-                let provider = obj.provider;
-                if (!providers.includes(provider)) {
-                  providers.push(provider);
-                  database.ref(`esalimento/providers`).push({ name: provider });
-                }
-              }
-              let categories = [];
-              for (let i = 0; i < Object.keys(objs).length; i++) {
-                let obj = objs[Object.keys(objs)[i]];
-                let category = obj.category;
-                if (!categories.includes(category)) {
-                  categories.push(category);
-                  database
-                    .ref(`esalimento/expenseCategories`)
-                    .push({ name: category });
-                }
-              }
+          }
+          let providers = [];
+          for (let i = 0; i < okeys.length; i++) {
+            let obj = objs[okeys[i]];
+            let provider = obj.provider;
+            if (!providers.includes(provider)) {
+              providers.push(provider);
+              // database.ref(`esalimento/providers`).push({ name: provider });
             }
-          });
-      });
+          }
+          let categories = [];
+          for (let i = 0; i < okeys.length; i++) {
+            let obj = objs[okeys[i]];
+            let category = obj.category;
+            if (!categories.includes(category)) {
+              categories.push(category);
+              // database
+              //   .ref(`esalimento/expenseCategories`)
+              //   .push({ name: category });
+            }
+          }
+        });
     },
     importOrders: function() {
       database

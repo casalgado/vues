@@ -2,6 +2,11 @@
   <div>
     <Table :table="table" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
+      <ButtonEdit
+        v-if="this.selected.length == 1"
+        :oid="this.selectedIds[0]"
+        destination="EditClient"
+      />
       <ClientHistorySummary :dbref="this.ref" :cid="this.selectedIds[0]" />
     </b-card>
   </div>
@@ -9,6 +14,7 @@
 <script>
 import { toolboxMixin } from "@/mixins/toolboxMixin";
 import Table from "../../table/Table";
+import ButtonEdit from "../../tools/ButtonEdit";
 import ClientHistorySummary from "../../tools/ClientHistorySummary";
 import { getAll } from "@/firebase";
 import { mapState } from "vuex";
@@ -19,6 +25,7 @@ export default {
   components: {
     Table,
     ClientHistorySummary,
+    ButtonEdit,
   },
   mixins: [toolboxMixin],
   data() {

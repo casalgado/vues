@@ -9,7 +9,7 @@
     v-if="show"
     novalidate
   >
-    <b-button @click="add" variant="info">+ producto</b-button>
+    <b-button @click="addProduct" variant="info">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
     <InputSelect
       v-model="form.client"
@@ -29,8 +29,8 @@
           :id="field.id"
           :priority="'unitPrice'"
           :populate="field"
-          @remove-field="remove"
-          @update-field="update"
+          @remove-field="removeField"
+          @update-field="updateField"
         />
       </transition>
       <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>

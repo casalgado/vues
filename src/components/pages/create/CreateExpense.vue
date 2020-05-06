@@ -8,7 +8,7 @@
     @reset="reset"
     v-if="show"
   >
-    <b-button @click="add" variant="info">+ producto</b-button>
+    <b-button @click="addProduct" variant="info">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
 
     <InputSelect
@@ -35,8 +35,8 @@
           :priority="'total'"
           :populate="field"
           :onlyText="true"
-          @remove-field="remove"
-          @update-field="update"
+          @remove-field="removeField"
+          @update-field="updateField"
         />
       </transition>
     </div>

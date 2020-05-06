@@ -1,9 +1,9 @@
-import { save } from "@/firebase";
+import { save, update, getAllWhere } from "@/firebase";
 import moment from "moment";
 
 export const dynamicFieldsMixin = {
   methods: {
-    add() {
+    addProduct() {
       let id = this.form.products.length;
       this.form.products.push({
         id: id,
@@ -14,14 +14,14 @@ export const dynamicFieldsMixin = {
         total: 1,
       });
     },
-    update(payload) {
+    updateField(payload) {
       console.log(payload.name);
       this.form.products[payload.id].name = payload.name;
       this.form.products[payload.id].unitPrice = payload.unitPrice;
       this.form.products[payload.id].quantity = payload.quantity;
       this.form.products[payload.id].total = payload.total;
     },
-    remove(payload) {
+    removeField(payload) {
       this.form.products[payload.id].active = false;
     },
 
@@ -49,7 +49,24 @@ export const dynamicFieldsMixin = {
           form.delivered = moment(form.delivered).format();
 
           if (this.object.empty) {
-            save(`${this.path}`, form).then(() => {
+            save(`${this.path}`, form).then((id) => {
+              if (this.path == "orders") {
+                console.log(id);
+                // add client to optionsForMenus list
+                update("optionsForMenus/clients", {
+                  [id]: { name: form.client },
+                });
+                // update client order history
+                getAllWhere("clients", "name", form.client).then((objs) => {
+                  let ck = objs[0].id;
+                  update("clients/" + ck + "/history", {
+                    [id]: {
+                      date: form.date,
+                      products: form.products,
+                    },
+                  });
+                });
+              }
               // this.$router.push({ path: "/" });
             });
           } else {

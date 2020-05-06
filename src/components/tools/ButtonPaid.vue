@@ -58,10 +58,8 @@ export default {
       }
     },
     getOrders: function() {
-      console.log("t");
       this.objects = [];
       this.ids.forEach((i) => {
-        console.log(i);
         getById("orders", `${i}`).then((e) => {
           this.objects.push(e);
         });

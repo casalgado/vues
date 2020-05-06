@@ -6,27 +6,32 @@
     <TableTotals :objects="this.table.objects" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
       <TableTotals :objects="this.selected" />
-      {{ this.selectedIds }}
+      <ButtonEdit
+        v-if="this.selected.length == 1"
+        :oid="this.selectedIds[0]"
+        destination="EditExpense"
+      />
     </b-card>
   </div>
 </template>
 <script>
 import { toolboxMixin } from "@/mixins/toolboxMixin";
+import { ordersMixin } from "@/mixins/ordersMixin";
 import Table from "../../table/Table";
+import ButtonEdit from "../../tools/ButtonEdit";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
-import moment from "moment";
-import numeral from "numeral";
 
 export default {
   name: "ShowExpenses",
-  mixins: [toolboxMixin],
+  mixins: [toolboxMixin, ordersMixin],
   components: {
     Table,
     Pagination,
     TableTotals,
+    ButtonEdit,
   },
   props: { pagination: String },
   data() {
@@ -45,8 +50,8 @@ export default {
             sortable: true,
           },
           {
-            key: "name",
-            label: "Nombre",
+            key: "products",
+            label: "Items",
             sortable: true,
           },
           {
@@ -70,26 +75,23 @@ export default {
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
         );
+        this.table.formattedObjects.forEach((o) => {
+          o.products = this.removeOneFromQuantites(o.products);
+        });
+        console.log(this.table.formattedObjects);
       });
     },
-    format: function(objects) {
-      let items = objects.map((e) => {
-        e.date = moment(e.date).format("MM/DD");
-        if (e.quantity == 1) {
-          e.quantity = "";
-        }
-        e.name = `${e.quantity}  ${e.name}`.trim();
-        if (e.total % 1000 == "0") {
-          e.total = numeral(e.total).format("0,0a");
-        } else {
-          e.total =
-            numeral(e.total)
-              .divide(1000)
-              .format("0.0") + "k";
-        }
-        return e;
-      });
-      return items;
+    removeOneFromQuantites: function(string) {
+      return string
+        .split("<br />")
+        .map((s) => {
+          if (s[0] == "1" && s[1] == " ") {
+            return s.substr(1).trim();
+          } else {
+            return s;
+          }
+        })
+        .join("<br />");
     },
   },
   created() {

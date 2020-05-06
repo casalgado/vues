@@ -18,9 +18,6 @@
           <template v-slot:cell(products)="data">
             <span v-html="data.value"></span>
           </template>
-          <template v-slot:cell(quantity)="data">
-            <span v-html="data.value"></span>
-          </template>
         </b-table>
       </b-col>
     </b-row>
@@ -44,7 +41,6 @@ export default {
       this.selected = items;
     },
     rowClass(item) {
-      console.log(item);
       if (item.displayPaid && item.paid) {
         return "paid";
       } else {

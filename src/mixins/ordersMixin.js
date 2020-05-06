@@ -1,6 +1,7 @@
 import moment from "moment";
 import numeral from "numeral";
 
+// change name to formatProducts mixin
 export const ordersMixin = {
   methods: {
     format: function(objects) {
