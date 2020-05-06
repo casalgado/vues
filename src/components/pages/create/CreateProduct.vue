@@ -2,8 +2,8 @@
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
     <b-button type="submit" variant="primary">Submit</b-button>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
-    <InputBasic v-model="form.price" :type="'text'" :label="'precio venta'" />
-    <InputBasic v-model="form.cost" :type="'text'" :label="'precio costo'" />
+    <InputBasic v-model="form.price" :type="'text'" :label="'p venta'" />
+    <InputBasic v-model="form.cost" :type="'text'" :label="'p costo'" />
     <InputSelect
       v-model="form.category"
       :options="this.options.categories"
@@ -18,7 +18,7 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
-import { save, getList } from "@/firebase";
+import { save, getAsOptionsForSelect } from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "CreateProduct",
@@ -60,7 +60,7 @@ export default {
           if (evt) {
             evt.preventDefault();
           }
-          save(`${this.ref}/products`, this.form).then(() => {
+          save(`/products`, this.form).then(() => {
             this.reset();
           });
         }
@@ -79,7 +79,7 @@ export default {
     },
   },
   mounted() {
-    getList(this.ref, "productCategories").then((options) => {
+    getAsOptionsForSelect("productCategories").then((options) => {
       console.log(options);
       options.unshift({ value: "", text: "categoria" });
       this.options.categories = options;

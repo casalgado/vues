@@ -1,10 +1,11 @@
 <template>
   <b-button :variant="this.paid" @click="togglePaid">
-    <div>paid</div>
+    <div v-if="this.paid == 'success'">paid</div>
+    <div v-else>unpaid</div>
   </b-button>
 </template>
 <script>
-import { getById, update } from "@/firebase";
+import { getById, updateSingleProp } from "@/firebase";
 import moment from "moment";
 import { mapState } from "vuex";
 
@@ -45,39 +46,35 @@ export default {
       if (this.paid == "danger" || this.paid == "dark") {
         this.$confirm(`Set ${this.ids.length} orders Paid?`).then(() => {
           this.ids.forEach((i) => {
-            update(`${this.ref}/orders/${i}`, "paid", moment().format(), this);
+            updateSingleProp(`orders`, `${i}`, "paid", moment().format(), this);
           });
         });
       } else if (this.paid == "success") {
         this.$confirm(`Set ${this.ids.length} orders Unpaid?`).then(() => {
           this.ids.forEach((i) => {
-            update(`${this.ref}/orders/${i}`, "paid", "", this);
+            updateSingleProp(`orders`, `${i}`, "paid", "", this);
           });
         });
       }
     },
-  },
-  watch: {
-    selected() {
+    getOrders: function() {
       console.log("t");
       this.objects = [];
       this.ids.forEach((i) => {
         console.log(i);
-        getById(`${this.ref}/orders/${i}`).then((e) => {
+        getById("orders", `${i}`).then((e) => {
           this.objects.push(e);
         });
       });
     },
   },
+  watch: {
+    selected() {
+      this.getOrders();
+    },
+  },
   mounted() {
-    console.log("p");
-    this.objects = [];
-    this.ids.forEach((i) => {
-      console.log(i);
-      getById(`${this.ref}/orders/${i}`).then((e) => {
-        this.objects.push(e);
-      });
-    });
+    this.getOrders();
   },
 };
 </script>

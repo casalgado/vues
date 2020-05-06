@@ -19,7 +19,7 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
-import { save, getList } from "@/firebase";
+import { save, getAsOptionsForSelect } from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "CreateClient",
@@ -63,7 +63,7 @@ export default {
         if (evt) {
           evt.preventDefault();
         }
-        save(`${this.ref}/clients`, this.form).then(() => {
+        save(`clients`, this.form).then(() => {
           this.reset();
         });
       }
@@ -85,7 +85,7 @@ export default {
     },
   },
   mounted() {
-    getList(this.ref, "clientCategories").then((options) => {
+    getAsOptionsForSelect("clientCategories").then((options) => {
       console.log(options);
       options.unshift({ value: "", text: "origen" });
       this.options.categories = options;

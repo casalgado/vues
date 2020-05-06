@@ -13,6 +13,7 @@
           :select-mode="selectMode"
           selected-variant="active"
           @row-selected="onRowSelected"
+          :tbody-tr-class="rowClass"
         >
           <template v-slot:cell(products)="data">
             <span v-html="data.value"></span>
@@ -41,6 +42,14 @@ export default {
   methods: {
     onRowSelected(items) {
       this.selected = items;
+    },
+    rowClass(item) {
+      console.log(item);
+      if (item.paid) {
+        return "paid";
+      } else {
+        return "";
+      }
     },
   },
   computed: {},

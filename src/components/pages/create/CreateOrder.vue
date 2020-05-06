@@ -48,7 +48,12 @@ import { required, minLength } from "vuelidate/lib/validators";
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
-import { save, getClientsLastOrder, getMostUsed, getList } from "@/firebase";
+import {
+  save,
+  getClientsLastOrder,
+  getMostUsed,
+  getAsOptionsForSelect,
+} from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
@@ -112,7 +117,7 @@ export default {
         this.submitStatus = "ERROR";
       } else {
         if (!this.options.client.includes(this.form.client)) {
-          save(`${this.ref}/clients`, { name: this.form.client, birthday: "" });
+          save(`/clients`, { name: this.form.client, birthday: "" });
         }
       }
     },
@@ -121,7 +126,7 @@ export default {
     client: function(val) {
       if (this.options.client.includes(this.form.client)) {
         this.form.products = [];
-        getClientsLastOrder(this.ref, val).then((e) => {
+        getClientsLastOrder(val).then((e) => {
           let products = e.products;
           for (let i = 0; i < products.length; i++) {
             this.form.products.push({
@@ -166,7 +171,7 @@ export default {
       options.unshift({ value: "", text: "cliente" });
       this.options.client = options;
     });
-    getList(this.ref, "products").then((options) => {
+    getAsOptionsForSelect("products").then((options) => {
       options.unshift({ value: "", text: "producto" });
       this.options.product = options;
     });

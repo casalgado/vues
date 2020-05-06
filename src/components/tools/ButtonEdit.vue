@@ -9,35 +9,34 @@ export default {
   name: "ButtonPaid",
   props: {
     oid: String,
-    path: String
+    path: String,
   },
   data() {
     return {
-      object: {}
+      object: {},
     };
   },
   computed: {
     ...mapState(["ref"]),
     paid() {
       return this.object.paid != "";
-    }
+    },
   },
   methods: {
     edit: function() {
       console.log(this.object);
       this.$router.push({
         name: "EditOrder",
-        params: { object: this.object }
+        params: { object: this.object },
       });
-    }
+    },
   },
   mounted() {
-    getById(`${this.ref}/${this.path}/${this.oid}`).then(e => {
+    getById(`${this.path}`, `${this.oid}`).then((e) => {
       e.id = this.oid;
       this.object = e;
     });
-  }
+  },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

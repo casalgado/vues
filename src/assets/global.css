@@ -4,6 +4,7 @@
   --color-primary: #1d1c1c;
   --color-secondary: rgb(38, 38, 38);
   --color-secondary-light: rgb(55, 55, 55);
+  --color-secondary-lighter: rgb(109, 109, 109);
   --color-neutral: rgb(226, 226, 226);
   --color-background: rgb(38, 38, 38);
   --border-radius-large: 5px;
@@ -73,6 +74,14 @@ input {
 
 .slim {
   padding: 12px !important;
+}
+
+.paid {
+  color: var(--color-secondary-lighter) !important;
+}
+
+.allwaysUnpaid {
+  color: var(--color-neutral) !important;
 }
 
 @media only screen and (max-width: 668px) {

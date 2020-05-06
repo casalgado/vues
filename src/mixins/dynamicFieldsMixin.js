@@ -49,7 +49,7 @@ export const dynamicFieldsMixin = {
           form.delivered = moment(form.delivered).format();
 
           if (this.object.empty) {
-            save(`${this.ref}/${this.path}`, form).then(() => {
+            save(`${this.path}`, form).then(() => {
               // this.$router.push({ path: "/" });
             });
           } else {

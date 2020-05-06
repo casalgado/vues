@@ -1,5 +1,8 @@
 <template>
   <div>
+    <button @click="deleteDatabase()" class="btn btn-danger">
+      DELETE
+    </button>
     <button @click="importOrders()" class="btn btn-danger">
       import orders + products
     </button>
@@ -28,6 +31,10 @@ export default {
     };
   },
   methods: {
+    deleteDatabase: function() {
+      console.log("t");
+      database.ref("esalimento").remove();
+    },
     clientHistory: function() {
       database
         .ref("esalimento")

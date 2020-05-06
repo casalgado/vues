@@ -54,7 +54,7 @@ import { required, minLength } from "vuelidate/lib/validators";
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
-import { save, getMostUsed, getList } from "@/firebase";
+import { save, getMostUsed, getAsOptionsForSelect } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
@@ -115,7 +115,7 @@ export default {
   methods: {
     createRecord() {
       if (!this.options.provider.includes(this.form.provider)) {
-        save(`${this.ref}/providers`, { name: this.form.provider });
+        save(`/providers`, { name: this.form.provider });
       }
     },
   },
@@ -145,7 +145,7 @@ export default {
       options.unshift({ value: "", text: "proveedor" });
       this.options.provider = options;
     });
-    getList(this.ref, "expenseCategories").then((options) => {
+    getAsOptionsForSelect("expenseCategories").then((options) => {
       options.unshift({ value: "", text: "categoria" });
       this.options.category = options;
     });

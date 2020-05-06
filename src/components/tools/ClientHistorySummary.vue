@@ -21,7 +21,7 @@ export default {
     };
   },
   mounted() {
-    getById(`${this.dbref}/clients/${this.cid}`).then((e) => {
+    getById("clients", `${this.cid}`).then((e) => {
       if (e.history) {
         let keys = Object.keys(e.history);
         let ordersTotal = 0;

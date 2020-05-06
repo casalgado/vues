@@ -108,32 +108,12 @@ export function getAllWhere(path, prop, value) {
   });
 }
 
-export function save(fullPath, payload) {
-  console.log("before save():");
-  console.log(fullPath);
-  return new Promise(() => {
-    database
-      .ref(fullPath)
-      .push(payload, function(error) {
-        if (error) {
-          alert("Data could not be saved." + error);
-        } else {
-          alert("Data saved successfully.");
-        }
-      })
-      .then(() => {
-        console.log("after save():");
-        console.log("-------------");
-      });
-  });
-}
-
-export function getById(fullPath) {
+export function getById(path, id) {
   return new Promise(function(resolve) {
-    database
-      .ref(fullPath)
-      .once("value")
-      .then(function(snapshot) {
+    ref
+      .child(path)
+      .child(id)
+      .on("value", function(snapshot) {
         resolve(snapshot.val());
       });
   });
@@ -145,18 +125,19 @@ export function getMostUsed(fullPath, property, size) {
 	to be sent to a Select component as the prop :options
 	*/
   return new Promise(function(resolve) {
-    console.log("1");
+    console.time("1");
+    console.time("2");
     let ref = database.ref(fullPath);
-
     let objects = [];
     let sorted_unique = [];
     let most_used = [];
-    ref.once("value").then(function(snapshot) {
-      let keys = Object.keys(snapshot.val());
-      keys.forEach((k) => {
-        objects.push(snapshot.val()[k][property]);
+    ref.once("value").then(function(snap) {
+      console.timeEnd("1");
+      snap.forEach((csnap) => {
+        let data = csnap.val();
+        objects.push(data[property]);
       });
-      console.log("2");
+      console.timeEnd("2");
       sorted_unique = objects
         .filter((value, index, self) => {
           return self.indexOf(value) === index;
@@ -187,61 +168,76 @@ export function getMostUsed(fullPath, property, size) {
   });
 }
 
-export function update(fullPath, property, newValue, component) {
-  database.ref(`${fullPath}`).update({ [property]: newValue }, function(error) {
-    if (error) {
-      alert(error);
-    } else {
-      component.$alert("success");
-    }
-  });
-}
-
-export function getList(ref, path) {
-  console.log(ref);
+export function getAsOptionsForSelect(path) {
   return new Promise(function(resolve) {
-    database
-      .ref(`${ref}/${path}`)
-      .once("value")
-      .then(function(snapshot) {
-        let options = [];
-        let products = snapshot.val();
-
-        let keys = Object.keys(products);
-        for (let i = 0; i < keys.length; i++) {
-          options.push(products[keys[i]]);
-        }
-
-        resolve(
-          options
-            .sort(function(a, b) {
-              let nA = a.name.toLowerCase();
-              let nB = b.name.toLowerCase();
-              if (
-                nA < nB //sort string ascending
-              )
-                return -1;
-              if (nA > nB) return 1;
-              return 0;
-            })
-            .map((e) => {
-              return { value: e.name, text: e.name };
-            })
-        );
+    ref.child(path).once("value", function(snap) {
+      let options = [];
+      let objects = [];
+      snap.forEach((csnap) => {
+        objects.push(csnap.val());
       });
+      options = objects
+        .map((e) => {
+          return { value: e.name, text: e.name };
+        })
+        .sort(function(a, b) {
+          let nA = a.text.toLowerCase();
+          let nB = b.text.toLowerCase();
+          if (
+            nA < nB //ascending
+          )
+            return -1;
+          if (nA > nB) return 1;
+          return 0;
+        });
+
+      resolve(options);
+    });
   });
 }
 
-export function getClientsLastOrder(ref, client) {
+export function getClientsLastOrder(client) {
   return new Promise(function(resolve) {
-    database
-      .ref(`${ref}/orders`)
+    ref
+      .child(`orders`)
       .orderByChild("client")
       .equalTo(client)
       .limitToLast(1)
-      .once("value")
-      .then(function(snapshot) {
+      .once("value", function(snapshot) {
         resolve(Object.values(snapshot.val())[0]);
       });
   });
+}
+
+export function save(path, payload) {
+  console.log("before save():");
+  console.log(path);
+  return new Promise(() => {
+    ref
+      .child(path)
+      .push(payload, function(error) {
+        if (error) {
+          alert("Data could not be saved." + error);
+        } else {
+          alert("Data saved successfully.");
+        }
+      })
+      .then(() => {
+        console.log("after save():");
+        console.log("-------------");
+      });
+  });
+}
+
+export function updateSingleProp(path, oid, property, newValue, component) {
+  ref
+    .child(path)
+    .child(oid)
+    .update({ [property]: newValue }, function(error) {
+      if (error) {
+        alert(error);
+      } else {
+        component.$alert("success");
+      }
+    });
 }
