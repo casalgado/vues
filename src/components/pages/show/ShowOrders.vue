@@ -91,6 +91,9 @@ export default {
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
         );
+        this.table.formattedObjects.forEach((e) => {
+          e.displayPaid = true;
+        });
       });
     },
   },

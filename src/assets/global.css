@@ -80,10 +80,6 @@ input {
   color: var(--color-secondary-lighter) !important;
 }
 
-.allwaysUnpaid {
-  color: var(--color-neutral) !important;
-}
-
 @media only screen and (max-width: 668px) {
   .orderClient {
     max-width: 110px;

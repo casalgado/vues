@@ -100,7 +100,7 @@ export default {
             if (!finalList.includes(o.client)) {
               finalList.push(o.client);
             }
-            database.ref("esalimento/clientList").update({
+            database.ref("esalimento/optionsForMenus/clients").update({
               [o.id]: {
                 name: o.client,
               },
