@@ -7,27 +7,17 @@ For Forms:
 - in DynamicFields, change field order based on 'priority'
 - in DynamicFields, autofill in based on past 'expense items'? and allow creation of new 'product'
 
-dashboard:
-- two tables: produccion del dia + para entregar hoy
-
 firebase
 - add security rules
 - add proper users interface
 
 table
-- fix totals when selected (view backup)
-- add accounting library to display $ amounts
 
 expenses
-- add nested products like in orders
 
 clients
-- add id's as key's instead of names?
-- add order history
 
 orders
-- refactor getMostUsed() //method is too slow
-- when import, make sure orders are consolidating properly
 
 users
 - https://blog.logrocket.com/vue-firebase-authentication/

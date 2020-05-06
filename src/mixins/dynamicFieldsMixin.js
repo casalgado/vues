@@ -1,4 +1,4 @@
-import { save, update, getAllWhere } from "@/firebase";
+import { save, update, getOneWhere } from "@/firebase";
 import moment from "moment";
 
 export const dynamicFieldsMixin = {
@@ -15,7 +15,6 @@ export const dynamicFieldsMixin = {
       });
     },
     updateField(payload) {
-      console.log(payload.name);
       this.form.products[payload.id].name = payload.name;
       this.form.products[payload.id].unitPrice = payload.unitPrice;
       this.form.products[payload.id].quantity = payload.quantity;
@@ -51,15 +50,29 @@ export const dynamicFieldsMixin = {
           if (this.object.empty) {
             save(`${this.path}`, form).then((id) => {
               if (this.path == "orders") {
-                console.log(id);
                 // add client to optionsForMenus list
                 update("optionsForMenus/clients", {
                   [id]: { name: form.client },
                 });
                 // update client order history
-                getAllWhere("clients", "name", form.client).then((objs) => {
+                getOneWhere("clients", "name", form.client).then((objs) => {
                   let ck = objs[0].id;
                   update("clients/" + ck + "/history", {
+                    [id]: {
+                      date: form.date,
+                      products: form.products,
+                    },
+                  });
+                });
+              } else if (this.path == "expenses") {
+                // add provider to optionsForMenus list
+                update("optionsForMenus/providers", {
+                  [id]: { name: form.provider },
+                });
+                // update provider order history
+                getOneWhere("providers", "name", form.provider).then((objs) => {
+                  let ck = objs[0].id;
+                  update("providers/" + ck + "/history", {
                     [id]: {
                       date: form.date,
                       products: form.products,

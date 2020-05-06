@@ -93,6 +93,28 @@ export function getAll(path) {
   });
 }
 
+export function getOneWhere(path, prop, value) {
+  return new Promise((resolve) => {
+    console.time("getAllWhere");
+    ref
+      .child(path)
+      .orderByChild(prop)
+      .equalTo(value)
+      .limitToFirst(1)
+      .on("value", (snap) => {
+        let objects = [];
+        snap.forEach((csnap) => {
+          let key = csnap.key;
+          let data = csnap.val();
+          data.id = key;
+          objects.push(data);
+        });
+        console.timeEnd("getAllWhere");
+        resolve(objects);
+      });
+  });
+}
+
 export function getAllWhere(path, prop, value) {
   return new Promise((resolve) => {
     console.time("getAllWhere");
