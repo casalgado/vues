@@ -167,10 +167,6 @@ export default {
     }
   },
   mounted() {
-    getMostUsed(`orders`, "client", 20).then((options) => {
-      options.unshift({ value: "", text: "cliente" });
-      this.options.client = options;
-    });
     getAsOptionsForSelect("products").then((options) => {
       options.unshift({ value: "", text: "producto" });
       this.options.product = options;
@@ -179,6 +175,10 @@ export default {
     this.form.delivered = moment()
       .add(1, "day")
       .format("YYYY-MM-DD");
+    getMostUsed(`orders`, "client", 20).then((options) => {
+      options.unshift({ value: "", text: "cliente" });
+      this.options.client = options;
+    });
   },
 };
 </script>
