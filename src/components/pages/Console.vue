@@ -15,6 +15,9 @@
     <button @click="clientHistory()" class="btn btn-info">
       add client order history
     </button>
+    <button @click="providerHistory()" class="btn btn-info">
+      add provider expense history
+    </button>
     <button @click="clientList()" class="btn btn-info">
       add client list
     </button>
@@ -78,6 +81,50 @@ export default {
               });
               orders[okeys[0]].products.forEach((e) => {
                 console.log(`${e.quantity} ${e.name}`);
+              });
+            });
+        });
+    },
+    providerHistory: function() {
+      database
+        .ref("esalimento")
+        .child("expenses")
+        .once("value")
+        .then(function(snapshot) {
+          let expenses = snapshot.val();
+          return expenses;
+        })
+        .then((expenses) => {
+          let okeys = Object.keys(expenses);
+          database
+            .ref("esalimento")
+            .child("providers")
+            .once("value")
+            .then(function(snapshot) {
+              let providers = snapshot.val();
+              return providers;
+            })
+            .then((providers) => {
+              let ckeys = Object.keys(providers);
+              ckeys.forEach((ck) => {
+                okeys.forEach((ok) => {
+                  if (providers[ck].name == expenses[ok].provider) {
+                    console.log({
+                      [ok]: {
+                        date: expenses[ok].date,
+                        products: expenses[ok].products,
+                      },
+                    });
+                    database
+                      .ref("esalimento/providers/" + ck + "/history")
+                      .update({
+                        [ok]: {
+                          date: expenses[ok].date,
+                          products: expenses[ok].products,
+                        },
+                      });
+                  }
+                });
               });
             });
         });
