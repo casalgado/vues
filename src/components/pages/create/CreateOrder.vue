@@ -165,10 +165,9 @@ export default {
         getById("orders", this.oid).then((object) => {
           console.log(object);
           this.form.client = object.client;
-          this.form.date = moment().format("YYYY-MM-DD");
-          this.form.delivered = moment()
-            .add(1, "day")
-            .format("YYYY-MM-DD");
+          this.form.date = object.date.split("T")[0];
+          this.form.delivered = object.date.split("T")[0];
+          this.form.paid = object.paid;
           let products = object.products;
           this.form.products.pop();
           for (let i = 0; i < products.length; i++) {
