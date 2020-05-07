@@ -110,6 +110,9 @@ export const dynamicFieldsMixin = {
               // this.$router.push({ path: "/" });
             });
           }
+        } else {
+          console.log("out");
+          evt.preventDefault();
         }
       }
     },

@@ -149,41 +149,40 @@ export default {
     },
   },
   mounted() {
-    if (this.oid !== "") {
-      console.log("Create Order");
-      console.log(this.oid);
-      getById("orders", this.oid).then((object) => {
-        console.log(object);
-        this.form.client = object.client;
-        this.form.date = object.date.split("T")[0];
-        this.form.delivered = object.date.split("T")[0];
-        let products = object.products;
-        this.form.products.pop();
-        for (let i = 0; i < products.length; i++) {
-          this.form.products.push({
-            id: i,
-            active: true,
-            name: products[i].name,
-            unitPrice: products[i].unitPrice,
-            quantity: products[i].quantity,
-            total: products[i].total,
-          });
-        }
-      });
-    }
-  },
-  created() {
-    getAsOptionsForSelect("products").then((options) => {
-      options.unshift({ value: "", text: "producto" });
-      this.options.product = options;
-    });
-    this.form.date = moment().format("YYYY-MM-DD");
-    this.form.delivered = moment()
-      .add(1, "day")
-      .format("YYYY-MM-DD");
-    getMostUsedClients(20).then((options) => {
-      options.unshift({ value: "", text: "cliente" });
-      this.options.client = options;
+    Promise.all([
+      getAsOptionsForSelect("products").then((options) => {
+        options.unshift({ value: "", text: "producto" });
+        this.options.product = options;
+      }),
+      getMostUsedClients(20).then((options) => {
+        options.unshift({ value: "", text: "cliente" });
+        this.options.client = options;
+      }),
+    ]).then(() => {
+      if (this.oid !== "") {
+        console.log("Create Order");
+        console.log(this.oid);
+        getById("orders", this.oid).then((object) => {
+          console.log(object);
+          this.form.client = object.client;
+          this.form.date = moment().format("YYYY-MM-DD");
+          this.form.delivered = moment()
+            .add(1, "day")
+            .format("YYYY-MM-DD");
+          let products = object.products;
+          this.form.products.pop();
+          for (let i = 0; i < products.length; i++) {
+            this.form.products.push({
+              id: i,
+              active: true,
+              name: products[i].name,
+              unitPrice: products[i].unitPrice,
+              quantity: products[i].quantity,
+              total: products[i].total,
+            });
+          }
+        });
+      }
     });
   },
 };
