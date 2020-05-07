@@ -47,7 +47,7 @@ export const dynamicFieldsMixin = {
           form.date = moment(form.date).format();
           form.delivered = moment(form.delivered).format();
 
-          if (this.object.empty) {
+          if (this.oid === "") {
             save(`${this.path}`, form).then((id) => {
               if (this.path == "orders") {
                 // add client to optionsForMenus list
@@ -83,11 +83,32 @@ export const dynamicFieldsMixin = {
               // this.$router.push({ path: "/" });
             });
           } else {
-            save(`${this.ref}/${this.path}/${this.object.id}`, form).then(
-              () => {
-                // this.$router.push({ path: "/" });
+            update(`${this.path}/${this.oid}`, form, this.oid).then((id) => {
+              if (this.path == "orders") {
+                // update client order history
+                getOneWhere("clients", "name", form.client).then((objs) => {
+                  let ck = objs[0].id;
+                  update("clients/" + ck + "/history", {
+                    [id]: {
+                      date: form.date,
+                      products: form.products,
+                    },
+                  });
+                });
+              } else if (this.path == "expenses") {
+                // update provider order history
+                getOneWhere("providers", "name", form.provider).then((objs) => {
+                  let ck = objs[0].id;
+                  update("providers/" + ck + "/history", {
+                    [id]: {
+                      date: form.date,
+                      products: form.products,
+                    },
+                  });
+                });
               }
-            );
+              // this.$router.push({ path: "/" });
+            });
           }
         }
       }

@@ -8,20 +8,12 @@ export default {
     oid: String,
     destination: String,
   },
-  data() {
-    return {
-      object: {},
-    };
-  },
-  computed: {},
   methods: {
     edit: function() {
-      console.log(this.destination);
-      console.log(this.oid);
-      // this.$router.push({
-      //   name: "EditOrder",
-      //   params: { object: this.object },
-      // });
+      this.$router.push({
+        name: "EditOrder",
+        params: { oid: this.oid },
+      });
     },
   },
   mounted() {},

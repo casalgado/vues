@@ -303,9 +303,9 @@ export function save(path, payload) {
   });
 }
 
-export function update(path, payload) {
+export function update(path, payload, key) {
   console.time("update");
-  return new Promise(() => {
+  return new Promise((resolve) => {
     ref.child(path).update(payload, function(error) {
       if (error) {
         alert("Data could not be saved." + error);
@@ -313,8 +313,7 @@ export function update(path, payload) {
         alert("Data saved successfully.");
       }
     });
-  }).then(() => {
-    console.timeEnd("update");
+    resolve(key);
   });
 }
 

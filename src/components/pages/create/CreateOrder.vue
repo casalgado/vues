@@ -53,6 +53,7 @@ import {
   getClientsLastOrder,
   getMostUsedClients,
   getAsOptionsForSelect,
+  getById,
 } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
@@ -61,9 +62,9 @@ export default {
   mixins: [dynamicFieldsMixin, validationMixin],
   components: { InputSelect, InputBasic, InputDynamic },
   props: {
-    object: {
-      type: Object,
-      default: () => ({ empty: true }),
+    oid: {
+      type: String,
+      default: () => "",
     },
   },
   data() {
@@ -147,26 +148,31 @@ export default {
         .format("YYYY-MM-DD");
     },
   },
-  created() {
-    if (!this.object.empty) {
-      this.form.client = this.object.client;
-      this.form.date = this.object.date.split("T")[0];
-      this.form.delivered = this.object.date.split("T")[0];
-      let products = this.object.products;
-      this.form.products.pop();
-      for (let i = 0; i < products.length; i++) {
-        this.form.products.push({
-          id: i,
-          active: true,
-          name: products[i].name,
-          unitPrice: products[i].unitPrice,
-          quantity: products[i].quantity,
-          total: products[i].total,
-        });
-      }
+  mounted() {
+    if (this.oid !== "") {
+      console.log("Create Order");
+      console.log(this.oid);
+      getById("orders", this.oid).then((object) => {
+        console.log(object);
+        this.form.client = object.client;
+        this.form.date = object.date.split("T")[0];
+        this.form.delivered = object.date.split("T")[0];
+        let products = object.products;
+        this.form.products.pop();
+        for (let i = 0; i < products.length; i++) {
+          this.form.products.push({
+            id: i,
+            active: true,
+            name: products[i].name,
+            unitPrice: products[i].unitPrice,
+            quantity: products[i].quantity,
+            total: products[i].total,
+          });
+        }
+      });
     }
   },
-  mounted() {
+  created() {
     getAsOptionsForSelect("products").then((options) => {
       options.unshift({ value: "", text: "producto" });
       this.options.product = options;
