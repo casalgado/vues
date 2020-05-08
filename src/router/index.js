@@ -46,22 +46,27 @@ const routes = [
         props: { pagination: "day" },
         component: () => import("../components/pages/show/ShowExpenses.vue"),
       },
-
       {
-        path: "crear/pedido/",
+        path: "/crear/pedido/",
         name: "CreateOrder",
         component: () => import("@/components/pages/create/CreateOrder.vue"),
       },
       {
-        path: "/editar/pedido/:id",
+        path: "/editar/pedido/:oid",
         name: "EditOrder",
         component: () => import("@/components/pages/create/CreateOrder.vue"),
         props: true,
       },
       {
-        path: "crear/gasto/",
+        path: "/crear/gasto/",
         name: "CreateExpense",
         component: () => import("@/components/pages/create/CreateExpense.vue"),
+      },
+      {
+        path: "/editar/gasto/:oid",
+        name: "EditExpense",
+        component: () => import("@/components/pages/create/CreateExpense.vue"),
+        props: true,
       },
       {
         path: "crear/producto/",

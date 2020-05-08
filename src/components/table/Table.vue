@@ -36,6 +36,9 @@ export default {
       selected: [],
     };
   },
+  beforeDestroy() {
+    this.$store.commit("setSelected", []);
+  },
   methods: {
     onRowSelected(items) {
       this.selected = items;

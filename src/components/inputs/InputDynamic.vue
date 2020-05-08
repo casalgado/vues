@@ -104,6 +104,7 @@ export default {
     },
   },
   created() {
+    console.log(this.populate);
     this.input.name = this.populate.name;
     this.input.unitPrice = this.populate.unitPrice;
     this.input.quantity = this.populate.quantity;

@@ -1,16 +1,16 @@
 <template>
   <b-form
+    v-if="show"
     id="form"
     @submit="
       submit($event);
       saveClient();
     "
     @reset="reset"
-    v-if="show"
-    novalidate
   >
     <b-button @click="addProduct" variant="info">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
+
     <InputSelect
       v-model="form.client"
       :options="this.options.client"
@@ -24,9 +24,9 @@
       <transition name="fade">
         <InputDynamic
           v-if="field.active"
+          :id="field.id"
           :property="'products'"
           :options="options.product"
-          :id="field.id"
           :priority="'unitPrice'"
           :populate="field"
           @remove-field="removeField"
@@ -110,6 +110,45 @@ export default {
       return this.form.date;
     },
   },
+  mounted() {
+    Promise.all([
+      getAsOptionsForSelect("products").then((options) => {
+        options.unshift({ value: "", text: "producto" });
+        this.options.product = options;
+      }),
+      getMostUsedClients(20).then((options) => {
+        options.unshift({ value: "", text: "cliente" });
+        this.options.client = options;
+      }),
+    ]).then(() => {
+      if (this.oid !== "") {
+        this.form.products.pop();
+        getById("orders", this.oid).then((object) => {
+          console.log(object);
+          this.form.client = object.client;
+          this.form.date = object.date.split("T")[0];
+          this.form.delivered = object.date.split("T")[0];
+          this.form.paid = object.paid;
+          let products = object.products;
+          for (let i = 0; i < products.length; i++) {
+            this.form.products.push({
+              id: i,
+              active: true,
+              name: products[i].name,
+              unitPrice: products[i].unitPrice,
+              quantity: products[i].quantity,
+              total: products[i].total,
+            });
+          }
+        });
+      } else {
+        this.form.date = moment().format("YYYY-MM-DD");
+        this.form.delivered = moment()
+          .add(1, "day")
+          .format("YYYY-MM-DD");
+      }
+    });
+  },
   methods: {
     saveClient() {
       this.$v.$touch();
@@ -147,42 +186,6 @@ export default {
         .add(1, "day")
         .format("YYYY-MM-DD");
     },
-  },
-  mounted() {
-    Promise.all([
-      getAsOptionsForSelect("products").then((options) => {
-        options.unshift({ value: "", text: "producto" });
-        this.options.product = options;
-      }),
-      getMostUsedClients(20).then((options) => {
-        options.unshift({ value: "", text: "cliente" });
-        this.options.client = options;
-      }),
-    ]).then(() => {
-      if (this.oid !== "") {
-        console.log("Create Order");
-        console.log(this.oid);
-        getById("orders", this.oid).then((object) => {
-          console.log(object);
-          this.form.client = object.client;
-          this.form.date = object.date.split("T")[0];
-          this.form.delivered = object.date.split("T")[0];
-          this.form.paid = object.paid;
-          let products = object.products;
-          this.form.products.pop();
-          for (let i = 0; i < products.length; i++) {
-            this.form.products.push({
-              id: i,
-              active: true,
-              name: products[i].name,
-              unitPrice: products[i].unitPrice,
-              quantity: products[i].quantity,
-              total: products[i].total,
-            });
-          }
-        });
-      }
-    });
   },
 };
 </script>

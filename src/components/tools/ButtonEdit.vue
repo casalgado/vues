@@ -11,7 +11,7 @@ export default {
   methods: {
     edit: function() {
       this.$router.push({
-        name: "EditOrder",
+        name: this.destination,
         params: { oid: this.oid },
       });
     },

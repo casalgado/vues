@@ -1,37 +1,37 @@
 <template>
   <b-form
+    v-if="show"
     id="form"
     @submit="
       submit($event);
-      createRecord();
+      saveProvider();
     "
     @reset="reset"
-    v-if="show"
   >
-    <b-button @click="addProduct" variant="info">+ producto</b-button>
+    <b-button variant="info" @click="addProduct">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
 
     <InputSelect
       v-model="form.provider"
-      :options="this.options.provider"
+      :options="options.provider"
       :label="'proveedor'"
     />
 
     <InputSelect
       v-model="form.category"
-      :options="this.options.category"
+      :options="options.category"
       :allowText="false"
       :label="'categoria'"
     />
 
     <InputBasic v-model="form.date" :type="'date'" :label="'fecha'" />
 
-    <div v-for="field in this.form.products" :key="field.id">
+    <div v-for="field in form.products" :key="field.id">
       <transition name="fade">
         <InputDynamic
           v-if="field.active"
-          :property="'products'"
           :id="field.id"
+          :property="'products'"
           :priority="'total'"
           :populate="field"
           :onlyText="true"
@@ -54,7 +54,7 @@ import { required, minLength } from "vuelidate/lib/validators";
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
-import { save, getMostUsed, getAsOptionsForSelect } from "@/firebase";
+import { save, getMostUsed, getAsOptionsForSelect, getById } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
@@ -62,9 +62,9 @@ export default {
   mixins: [dynamicFieldsMixin, validationMixin],
   components: { InputSelect, InputBasic, InputDynamic },
   props: {
-    object: {
-      type: Object,
-      default: () => ({ empty: true }),
+    oid: {
+      type: String,
+      default: () => "",
     },
   },
   data() {
@@ -112,44 +112,47 @@ export default {
       return this.form.date;
     },
   },
+  mounted() {
+    Promise.all([
+      getMostUsed(`expenses`, "provider", 20).then((options) => {
+        options.unshift({ value: "", text: "proveedor" });
+        this.options.provider = options;
+      }),
+      getAsOptionsForSelect("expenseCategories").then((options) => {
+        options.unshift({ value: "", text: "categoria" });
+        this.options.category = options;
+      }),
+    ]).then(() => {
+      if (this.oid !== "") {
+        this.form.products.pop();
+        getById("expenses", this.oid).then((object) => {
+          console.log(object);
+          this.form.provider = object.provider;
+          this.form.category = object.category;
+          this.form.date = object.date.split("T")[0];
+          let products = object.products;
+          for (let i = 0; i < products.length; i++) {
+            this.form.products.push({
+              id: i,
+              active: true,
+              name: products[i].name,
+              unitPrice: products[i].unitPrice,
+              quantity: products[i].quantity,
+              total: products[i].total,
+            });
+          }
+        });
+      } else {
+        this.form.date = moment().format("YYYY-MM-DD");
+      }
+    });
+  },
   methods: {
-    createRecord() {
+    saveProvider() {
       if (!this.options.provider.includes(this.form.provider)) {
         save(`/providers`, { name: this.form.provider });
       }
     },
-  },
-
-  watch: {},
-  created() {
-    if (!this.object.empty) {
-      this.form.provider = this.object.provider;
-      this.form.date = this.object.date.split("T")[0];
-      this.form.category = this.object.category;
-      let products = this.object.products;
-      this.form.products.pop();
-      for (let i = 0; i < products.length; i++) {
-        this.form.products.push({
-          id: i,
-          active: true,
-          name: products[i].name,
-          unitPrice: products[i].unitPrice,
-          quantity: products[i].quantity,
-          total: products[i].total,
-        });
-      }
-    }
-  },
-  mounted() {
-    getMostUsed(`expenses`, "provider", 20).then((options) => {
-      options.unshift({ value: "", text: "proveedor" });
-      this.options.provider = options;
-    });
-    getAsOptionsForSelect("expenseCategories").then((options) => {
-      options.unshift({ value: "", text: "categoria" });
-      this.options.category = options;
-    });
-    this.form.date = moment().format("YYYY-MM-DD");
   },
 };
 </script>
