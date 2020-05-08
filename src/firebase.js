@@ -1,11 +1,13 @@
 import { initializeApp } from "firebase";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
 import moment from "moment";
 import store from "./store";
 // @refactor
 // where should the momentjs code go?
 
-moment.locale("es", {
+moment.updateLocale("es", {
   week: {
     dow: 0,
     doy: moment.localeData("es").firstDayOfYear(),
@@ -48,7 +50,8 @@ export function getUser() {
 
 export function getByDateRange(path, propname, date, period) {
   return new Promise((resolve) => {
-    console.time("getByDateRange");
+    console.log("1");
+    console.time("getByDateRange:");
     ref
       .child(path)
       .orderByChild(propname)
@@ -70,7 +73,7 @@ export function getByDateRange(path, propname, date, period) {
           data.id = key;
           objects.push(data);
         });
-        console.timeEnd("getByDateRange");
+        console.time("getByDateRange:");
         resolve(objects);
       });
   });
