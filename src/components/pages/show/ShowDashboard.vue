@@ -13,12 +13,23 @@
           <Table :table="tableDeliver" :sidebar="false" />
         </b-col>
       </b-row>
+      <b-card id="toolbox" v-if="this.selected.length > 0">
+        <ButtonEdit
+          v-if="this.selected.length == 1"
+          :oid="this.oid"
+          :key="this.oid"
+          destination="EditOrder"
+        />
+        <ClientSnippet :oid="this.oid" :key="this.oid + 'i'" />
+      </b-card>
     </b-container>
   </div>
 </template>
 <script>
 import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
+import ButtonEdit from "../../tools/ButtonEdit";
+import ClientSnippet from "../../tools/ClientSnippet";
 import Pagination from "../../table/Pagination";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
@@ -29,6 +40,8 @@ export default {
   components: {
     Table,
     Pagination,
+    ButtonEdit,
+    ClientSnippet,
   },
   data() {
     return {
@@ -76,9 +89,11 @@ export default {
         objects: [],
         selectMode: "single",
       },
+      oid: "",
+      path: "orders",
     };
   },
-  computed: mapState(["date", "period"]),
+  computed: mapState(["date", "period", "selected"]),
   methods: {
     getObjects: function() {
       getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
@@ -107,6 +122,11 @@ export default {
     },
     period() {
       this.getObjects();
+    },
+    selected() {
+      if (this.selected[0]) {
+        this.oid = this.selected[0].id;
+      }
     },
   },
 };

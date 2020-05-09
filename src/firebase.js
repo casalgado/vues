@@ -98,7 +98,7 @@ export function getAll(path) {
 
 export function getOneWhere(path, prop, value) {
   return new Promise((resolve) => {
-    console.time("getAllWhere");
+    console.time("getOneWhere");
     ref
       .child(path)
       .orderByChild(prop)
@@ -112,7 +112,7 @@ export function getOneWhere(path, prop, value) {
           data.id = key;
           objects.push(data);
         });
-        console.timeEnd("getAllWhere");
+        console.timeEnd("getOneWhere");
         resolve(objects);
       });
   });

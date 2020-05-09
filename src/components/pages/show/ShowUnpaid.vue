@@ -7,6 +7,11 @@
     <b-card id="toolbox" v-if="this.selected.length > 0">
       <TableTotals :objects="this.selected" />
       <ButtonPaid :ids="this.selectedIds" />
+      <ButtonEdit
+        v-if="this.selected.length == 1"
+        :oid="this.oids[0]"
+        destination="EditOrder"
+      />
     </b-card>
   </div>
 </template>
@@ -14,6 +19,7 @@
 import { ordersMixin } from "@/mixins/ordersMixin";
 import { toolboxMixin } from "@/mixins/toolboxMixin";
 import ButtonPaid from "../../tools/ButtonPaid";
+import ButtonEdit from "../../tools/ButtonEdit";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
@@ -27,6 +33,7 @@ export default {
     TableTotals,
     Pagination,
     ButtonPaid,
+    ButtonEdit,
   },
   mixins: [ordersMixin, toolboxMixin],
   data() {
@@ -68,9 +75,11 @@ export default {
         selectMode: "multi",
         pagination: "",
       },
+      oids: [],
+      path: "orders",
     };
   },
-  computed: mapState(["ref", "date", "period"]),
+  computed: mapState(["ref", "date", "period", "selected"]),
   methods: {
     getObjects: function() {
       getAllWhere(`orders`, "paid", "").then((e) => {
@@ -90,6 +99,13 @@ export default {
     },
     period() {
       this.getObjects();
+    },
+    selected() {
+      if (this.selected[0]) {
+        this.oids = this.selected.map((e) => {
+          return e.id;
+        });
+      }
     },
   },
 };

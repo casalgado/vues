@@ -4,6 +4,15 @@
     <Pagination period="day" />
     <Table :table="table" />
     <TableTotals :objects="this.table.objects" />
+    <b-card id="toolbox" v-if="this.selected.length > 0">
+      <TableTotals :objects="this.selected" />
+      <ButtonEdit
+        v-if="this.selected.length == 1"
+        :oid="this.oid"
+        :key="this.oid"
+        destination="EditOrder"
+      />
+    </b-card>
     <!-- change printorders to 'invoice' -->
     <!-- <PrintOrders :objects="table.objects" /> -->
   </div>
@@ -12,6 +21,7 @@
 import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
 import TableTotals from "../../table/TableTotals";
+import ButtonEdit from "../../tools/ButtonEdit";
 import Pagination from "../../table/Pagination";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
@@ -23,6 +33,7 @@ export default {
     Table,
     Pagination,
     TableTotals,
+    ButtonEdit,
   },
   data() {
     return {
@@ -50,12 +61,14 @@ export default {
         ],
         formattedObjects: [],
         objects: [],
-        selectMode: "multi",
+        selectMode: "single",
         pagination: "day",
       },
+      oid: "",
+      path: "orders",
     };
   },
-  computed: mapState(["date", "period"]),
+  computed: mapState(["date", "period", "selected"]),
   methods: {
     getObjects: function() {
       getByDateRange(`orders`, "paid", this.date, this.period).then((e) => {
@@ -75,6 +88,11 @@ export default {
     },
     period() {
       this.getObjects();
+    },
+    selected() {
+      if (this.selected[0]) {
+        this.oid = this.selected[0].id;
+      }
     },
   },
 };
