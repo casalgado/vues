@@ -1,5 +1,10 @@
 <template>
-  <b-button :variant="this.paid" @click="togglePaid">
+  <b-button
+    v-if="this.paid == 'success' || this.paid == 'danger'"
+    :variant="this.paid"
+    @click="togglePaid"
+    class="toolbox-button"
+  >
     <div v-if="this.paid == 'success'">paid</div>
     <div v-else>unpaid</div>
   </b-button>

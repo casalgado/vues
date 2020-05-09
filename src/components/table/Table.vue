@@ -36,7 +36,7 @@ export default {
       selected: [],
     };
   },
-  beforeDestroy() {
+  beforeCreate() {
     this.$store.commit("setSelected", []);
   },
   methods: {

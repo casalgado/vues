@@ -309,6 +309,9 @@ export function save(path, payload) {
 export function update(path, payload, key) {
   console.time("update");
   return new Promise((resolve) => {
+    console.log(path);
+    console.log(payload);
+    console.log(key);
     ref.child(path).update(payload, function(error) {
       if (error) {
         alert("Data could not be saved." + error);
@@ -331,4 +334,21 @@ export function updateSingleProp(path, oid, property, newValue, component) {
         component.$alert("success");
       }
     });
+}
+
+export function remove(path, oid) {
+  console.time("remove");
+  return new Promise((resolve) => {
+    getById(path, oid).then((snap) => {
+      snap.id = oid;
+      snap.path = path;
+      save("deleteHistory", snap).then(() => {
+        ref
+          .child(path)
+          .child(oid)
+          .remove();
+      });
+    });
+    resolve(oid);
+  });
 }

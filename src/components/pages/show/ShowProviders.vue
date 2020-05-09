@@ -5,47 +5,33 @@
       <ButtonEdit
         v-if="this.selected.length == 1"
         :oid="this.oid"
-        destination="EditClient"
+        destination="EditProvider"
       />
-      <ButtonDelete
-        v-if="this.selected.length == 1"
-        :oid="this.oid"
-        :path="this.path"
-      />
-      <ClientHistorySummary :dbref="this.ref" :cid="this.oid" :key="this.oid" />
     </b-card>
   </div>
 </template>
 <script>
 import Table from "../../table/Table";
 import ButtonEdit from "../../tools/ButtonEdit";
-import ClientHistorySummary from "../../tools/ClientHistorySummary";
 import { getAll } from "@/firebase";
 import { mapState } from "vuex";
-import moment from "moment";
 
 export default {
-  name: "ShowClients",
+  name: "ShowProviders",
   components: {
     Table,
-    ClientHistorySummary,
     ButtonEdit,
   },
   data() {
     return {
       table: {
-        title: "Clientes",
+        title: "Proveedores",
         fields: [
           {
             key: "name",
             label: "Nombre",
             sortable: true,
             tdClass: "justifyLeft",
-          },
-          {
-            key: "birthday",
-            label: "Cumple",
-            sortable: true,
           },
           {
             key: "phone",
@@ -62,8 +48,8 @@ export default {
         objects: [],
         selectMode: "single",
         pagination: "",
+        oid: "",
       },
-      oid: "",
     };
   },
   computed: {
@@ -71,7 +57,7 @@ export default {
   },
   methods: {
     getObjects: function() {
-      getAll(`clients`).then((e) => {
+      getAll(`providers`).then((e) => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
@@ -80,9 +66,6 @@ export default {
     },
     format: function(objects) {
       let items = objects.map((e) => {
-        if (e.birthday !== "") {
-          e.birthday = moment(e.birthday).format("MMM DD");
-        }
         return e;
       });
       return items;
@@ -99,9 +82,7 @@ export default {
       this.getObjects();
     },
     selected() {
-      if (this.selected[0]) {
-        this.oid = this.selected[0].id;
-      }
+      this.oid = this.selected[0].id;
     },
   },
 };

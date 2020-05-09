@@ -26,6 +26,11 @@ const routes = [
         component: () => import("../components/pages/show/ShowClients.vue"),
       },
       {
+        path: "productos/",
+        name: "ShowProducts",
+        component: () => import("../components/pages/show/ShowProducts.vue"),
+      },
+      {
         path: "porcobrar/",
         name: "ShowUnpaid",
         component: () => import("../components/pages/show/ShowUnpaid.vue"),
@@ -74,6 +79,12 @@ const routes = [
         component: () => import("@/components/pages/create/CreateProduct.vue"),
       },
       {
+        path: "editar/producto/:oid",
+        name: "EditProduct",
+        component: () => import("@/components/pages/create/CreateProduct.vue"),
+        props: true,
+      },
+      {
         path: "crear/cliente/",
         name: "CreateClient",
         component: () => import("@/components/pages/create/CreateClient.vue"),
@@ -84,6 +95,17 @@ const routes = [
         component: () => import("@/components/pages/create/CreateClient.vue"),
         props: true,
       },
+      // {
+      //   path: "crear/proveedor/",
+      //   name: "CreateProvider",
+      //   component: () => import("@/components/pages/create/CreateProvider.vue"),
+      // },
+      // {
+      //   path: "editar/proveedor/:oid",
+      //   name: "EditProvider",
+      //   component: () => import("@/components/pages/create/CreateProvider.vue"),
+      //   props: true,
+      // },
       {
         path: "console/",
         name: "console",

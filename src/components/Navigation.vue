@@ -68,6 +68,13 @@
           ></router-link
         >
       </b-dropdown-item>
+      <b-dropdown-item>
+        <router-link :to="{ name: 'ShowProducts' }"
+          ><b-button variant="dark" class="nav-btn"
+            >Productos</b-button
+          ></router-link
+        >
+      </b-dropdown-item>
 
       <b-dropdown-item>
         <router-link :to="{ name: 'ShowCashIn' }"

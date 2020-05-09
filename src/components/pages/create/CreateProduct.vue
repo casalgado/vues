@@ -18,12 +18,18 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
-import { save, getAsOptionsForSelect } from "@/firebase";
+import { save, getAsOptionsForSelect, getById, update } from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "CreateProduct",
   mixins: [validationMixin],
   components: { InputBasic, InputSelect },
+  props: {
+    oid: {
+      type: String,
+      default: () => "",
+    },
+  },
   data() {
     return {
       form: {
@@ -36,6 +42,7 @@ export default {
         categories: [],
       },
       show: true,
+      path: "products",
     };
   },
   validations: {
@@ -57,12 +64,13 @@ export default {
         this.submitStatus = "ERROR";
       } else {
         if (confirm("continuar?")) {
-          if (evt) {
+          if (this.oid === "") {
             evt.preventDefault();
+            save(this.path, this.form);
+          } else {
+            evt.preventDefault();
+            update(`${this.path}/${this.oid}`, this.form);
           }
-          save(`/products`, this.form).then(() => {
-            this.reset();
-          });
         }
       }
     },
@@ -72,17 +80,32 @@ export default {
       }
       this.name = "";
       this.price = "";
+      this.cost = "";
+      this.category = "";
       this.show = false;
       this.$nextTick(() => {
         this.show = true;
       });
     },
   },
-  mounted() {
-    getAsOptionsForSelect("productCategories").then((options) => {
-      console.log(options);
-      options.unshift({ value: "", text: "categoria" });
-      this.options.categories = options;
+  beforeCreate() {
+    Promise.all([
+      getAsOptionsForSelect("productCategories").then((options) => {
+        console.log(options);
+        options.unshift({ value: "", text: "categoria" });
+        this.options.categories = options;
+      }),
+    ]).then(() => {
+      if (this.oid !== "") {
+        getById(this.path, this.oid).then((object) => {
+          object.price = object.price || "";
+          object.cost = object.cost || "";
+          this.form.name = object.name;
+          this.form.price = object.price.toString();
+          this.form.cost = object.cost.toString();
+          this.form.category = object.category;
+        });
+      }
     });
   },
 };

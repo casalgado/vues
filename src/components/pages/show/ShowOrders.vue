@@ -5,12 +5,18 @@
     <Table :table="table" />
     <TableTotals :objects="this.table.objects" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
+      {{ this.oids }}
       <TableTotals :objects="this.selected" />
-      <ButtonPaid :ids="this.selectedIds" />
+      <ButtonPaid :ids="this.oids" />
       <ButtonEdit
         v-if="this.selected.length == 1"
-        :oid="this.selectedIds[0]"
+        :oid="this.oids[0]"
         destination="EditOrder"
+      />
+      <ButtonDelete
+        v-if="this.selected.length == 1"
+        :oid="this.oids[0]"
+        :path="this.path"
       />
     </b-card>
 
@@ -26,9 +32,9 @@
 <script>
 // import PrintOrders from "../../print/PrintOrders";
 import { ordersMixin } from "@/mixins/ordersMixin";
-import { toolboxMixin } from "@/mixins/toolboxMixin";
 import ButtonPaid from "../../tools/ButtonPaid";
 import ButtonEdit from "../../tools/ButtonEdit";
+import ButtonDelete from "../../tools/ButtonDelete";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
@@ -45,8 +51,9 @@ export default {
     ButtonPaid,
     OrdersSummary,
     ButtonEdit,
+    ButtonDelete,
   },
-  mixins: [ordersMixin, toolboxMixin],
+  mixins: [ordersMixin],
   data() {
     return {
       table: {
@@ -86,10 +93,12 @@ export default {
         selectMode: "multi",
         pagination: "week",
       },
+      oids: [],
+      path: "orders",
     };
   },
   computed: {
-    ...mapState(["date", "period"]),
+    ...mapState(["date", "period", "selected"]),
   },
   methods: {
     getObjects: function() {
@@ -113,6 +122,13 @@ export default {
     },
     period() {
       this.getObjects();
+    },
+    selected() {
+      if (this.selected[0]) {
+        this.oids = this.selected.map((e) => {
+          return e.id;
+        });
+      }
     },
   },
 };

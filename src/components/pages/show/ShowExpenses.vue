@@ -8,17 +8,22 @@
       <TableTotals :objects="this.selected" />
       <ButtonEdit
         v-if="this.selected.length == 1"
-        :oid="this.selectedIds[0]"
+        :oid="this.oid"
         destination="EditExpense"
+      />
+      <ButtonDelete
+        v-if="this.selected.length == 1"
+        :oid="this.oid"
+        :path="this.path"
       />
     </b-card>
   </div>
 </template>
 <script>
-import { toolboxMixin } from "@/mixins/toolboxMixin";
 import { ordersMixin } from "@/mixins/ordersMixin";
 import Table from "../../table/Table";
 import ButtonEdit from "../../tools/ButtonEdit";
+import ButtonDelete from "../../tools/ButtonDelete";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
 import { getByDateRange } from "@/firebase";
@@ -26,12 +31,13 @@ import { mapState } from "vuex";
 
 export default {
   name: "ShowExpenses",
-  mixins: [toolboxMixin, ordersMixin],
+  mixins: [ordersMixin],
   components: {
     Table,
     Pagination,
     TableTotals,
     ButtonEdit,
+    ButtonDelete,
   },
   props: { pagination: String },
   data() {
@@ -65,9 +71,11 @@ export default {
         selectMode: "single",
         pagination: "week",
       },
+      oid: "",
+      path: "expenses",
     };
   },
-  computed: { ...mapState(["date", "period"]) },
+  computed: { ...mapState(["date", "period", "selected"]) },
   methods: {
     getObjects: function() {
       getByDateRange(`expenses`, "date", this.date, this.period).then((e) => {
@@ -108,6 +116,11 @@ export default {
     },
     period() {
       this.getObjects();
+    },
+    selected() {
+      if (this.selected[0]) {
+        this.oid = this.selected[0].id;
+      }
     },
   },
 };

@@ -1,5 +1,7 @@
 <template>
-  <b-button @click="edit" variant="primary">edit</b-button>
+  <b-button @click="edit" variant="primary" class="toolbox-button"
+    >editar</b-button
+  >
 </template>
 <script>
 export default {

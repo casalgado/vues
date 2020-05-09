@@ -66,16 +66,18 @@ export default {
         console.log("invalid");
         this.submitStatus = "ERROR";
       } else {
-        if (this.oid === "") {
-          evt.preventDefault();
-          save(this.path, this.form).then(() => {
-            update("optionsForMenus/clients", {
-              [this.oid]: { name: this.form.name },
+        if (confirm("continuar?")) {
+          if (this.oid === "") {
+            evt.preventDefault();
+            save(this.path, this.form).then(() => {
+              update("optionsForMenus/clients", {
+                [this.oid]: { name: this.form.name },
+              });
             });
-          });
-        } else {
-          evt.preventDefault();
-          update(`${this.path}/${this.oid}`, this.form);
+          } else {
+            evt.preventDefault();
+            update(`${this.path}/${this.oid}`, this.form);
+          }
         }
       }
     },

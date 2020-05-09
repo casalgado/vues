@@ -43,11 +43,6 @@ export default {
       }
     });
   },
-  watch: {
-    selectedIds() {
-      console.log("this");
-    },
-  },
 };
 </script>
 <style scoped>
