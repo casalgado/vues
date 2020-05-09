@@ -2,7 +2,7 @@
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
     <b-button type="submit" variant="primary">Submit</b-button>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
-    <InputBasic v-model="form.phone" :type="'text'" :label="'telefono'" />
+    <InputBasic v-model="form.phone" :type="'number'" :label="'telefono'" />
     <InputBasic v-model="form.address" :type="'text'" :label="'direccion'" />
     <InputBasic v-model="form.birthday" :type="'date'" :label="'cumpleaños'" />
     <InputSelect
@@ -19,12 +19,18 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
-import { save, getAsOptionsForSelect } from "@/firebase";
+import { save, update, getAsOptionsForSelect, getById } from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "CreateClient",
   mixins: [validationMixin],
   components: { InputBasic, InputSelect },
+  props: {
+    oid: {
+      type: String,
+      default: () => "",
+    },
+  },
   data() {
     return {
       form: {
@@ -32,7 +38,7 @@ export default {
         phone: "",
         address: "",
         birthday: "",
-        details: "",
+        details: "-",
         comment: "",
         category: "",
       },
@@ -40,6 +46,7 @@ export default {
         categories: [],
       },
       show: true,
+      path: "clients",
     };
   },
   validations: {
@@ -57,36 +64,59 @@ export default {
     submit(evt) {
       this.$v.$touch();
       if (this.$v.$invalid) {
+        console.log("invalid");
         this.submitStatus = "ERROR";
       } else {
         if (evt) {
           evt.preventDefault();
         }
-        save(`clients`, this.form).then(() => {
-          this.reset();
-        });
+        if (this.oid === "") {
+          save(this.path, this.form).then(() => {
+            update("optionsForMenus/clients", {
+              [this.oid]: { name: this.form.name },
+            });
+          });
+        } else {
+          update(`${this.path}/${this.oid}`, this.form);
+        }
       }
     },
     reset(evt) {
       if (evt) {
         evt.preventDefault();
       }
-      this.name = "";
-      this.phone = "";
-      this.address = "";
-      this.birthday = "";
-      this.comment = "";
-      this.category = "";
+      this.form.name = "";
+      this.form.phone = "";
+      this.form.address = "";
+      this.form.birthday = "";
+      this.form.details = "";
+      this.form.comment = "";
+      this.form.category = "";
       this.show = false;
       this.$nextTick(() => {
         this.show = true;
       });
     },
   },
-  mounted() {
-    getAsOptionsForSelect("clientCategories").then((options) => {
-      options.unshift({ value: "", text: "origen" });
-      this.options.categories = options;
+  beforeCreate() {
+    Promise.all([
+      getAsOptionsForSelect("clientCategories").then((options) => {
+        options.unshift({ value: "", text: "origen" });
+        this.options.categories = options;
+      }),
+    ]).then(() => {
+      if (this.oid !== "") {
+        getById("clients", this.oid).then((object) => {
+          console.log(object);
+          this.form.name = object.name;
+          this.form.phone = object.phone;
+          this.form.address = object.address;
+          this.form.birthday = object.birthday;
+          this.form.details = object.details;
+          this.form.comment = object.comment;
+          this.form.category = object.category;
+        });
+      }
     });
   },
 };

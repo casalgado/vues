@@ -112,7 +112,7 @@ export default {
       return this.form.date;
     },
   },
-  mounted() {
+  beforeCreate() {
     Promise.all([
       getMostUsed(`expenses`, "provider", 20).then((options) => {
         options.unshift({ value: "", text: "proveedor" });

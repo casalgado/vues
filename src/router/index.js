@@ -79,6 +79,12 @@ const routes = [
         component: () => import("@/components/pages/create/CreateClient.vue"),
       },
       {
+        path: "editar/cliente/:oid",
+        name: "EditClient",
+        component: () => import("@/components/pages/create/CreateClient.vue"),
+        props: true,
+      },
+      {
         path: "console/",
         name: "console",
         component: () => import("@/components/pages/Console.vue"),

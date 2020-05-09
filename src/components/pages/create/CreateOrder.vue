@@ -110,7 +110,7 @@ export default {
       return this.form.date;
     },
   },
-  mounted() {
+  beforeCreate() {
     Promise.all([
       getAsOptionsForSelect("products").then((options) => {
         options.unshift({ value: "", text: "producto" });
