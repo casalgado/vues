@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h6 id="title">{{ table.title }}</h6>
+    <Pagination :period="table.pagination" />
     <Table :table="table" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
       <ButtonEdit
@@ -12,16 +14,21 @@
         :oid="this.oid"
         :path="this.path"
       />
+
+      <b-button @click="getAllClients" variant="dark" class="toolbox-button">
+        todos
+      </b-button>
       <ClientHistorySummary :dbref="this.ref" :cid="this.oid" :key="this.oid" />
     </b-card>
   </div>
 </template>
 <script>
 import Table from "../../table/Table";
+import Pagination from "../../table/Pagination";
 import ButtonEdit from "../../tools/ButtonEdit";
 import ButtonDelete from "../../tools/ButtonDelete";
 import ClientHistorySummary from "../../tools/ClientHistorySummary";
-import { getAll } from "@/firebase";
+import { getAll, getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 
@@ -32,6 +39,7 @@ export default {
     ClientHistorySummary,
     ButtonEdit,
     ButtonDelete,
+    Pagination,
   },
   data() {
     return {
@@ -69,7 +77,7 @@ export default {
         formattedObjects: [],
         objects: [],
         selectMode: "single",
-        pagination: "",
+        pagination: "week",
       },
       oid: "",
       path: "clients",
@@ -80,7 +88,15 @@ export default {
   },
   methods: {
     getObjects: function() {
-      getAll(`clients`).then((e) => {
+      getByDateRange(`clients`, "since", this.date, this.period).then((e) => {
+        this.table.objects = JSON.parse(JSON.stringify(e));
+        this.table.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
+      });
+    },
+    getAllClients: function() {
+      getAll("clients").then((e) => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
