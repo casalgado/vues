@@ -65,6 +65,7 @@ export default {
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
+        evt.preventDefault();
       } else {
         if (confirm("continuar?")) {
           if (this.oid === "") {

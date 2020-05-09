@@ -29,6 +29,7 @@ export const dynamicFieldsMixin = {
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
+        evt.preventDefault();
       } else {
         if (confirm("continuar?")) {
           evt.preventDefault();

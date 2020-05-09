@@ -1,8 +1,9 @@
 <template>
-  <b-container fluid id="table-container" class>
+  <b-container fluid id="table-container" v-click-outside="clearSelected">
     <b-row>
       <b-col id="main" class="pr-0 pl-0">
         <b-table
+          ref="mainTable"
           selectable
           striped
           borderless
@@ -49,6 +50,9 @@ export default {
       } else {
         return "";
       }
+    },
+    clearSelected() {
+      this.$refs.mainTable.clearSelected();
     },
   },
   computed: {},

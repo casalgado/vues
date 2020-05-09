@@ -11,6 +11,7 @@
       :allowText="false"
     />
     <p v-if="$v.form.name.$error"><kbd>Debe incluir nombre</kbd></p>
+    <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
   </b-form>
 </template>
 <script>
@@ -51,6 +52,9 @@ export default {
         required,
         minLength: minLength(2),
       },
+      category: {
+        required,
+      },
     },
   },
   computed: {
@@ -62,6 +66,7 @@ export default {
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
+        evt.preventDefault();
       } else {
         if (confirm("continuar?")) {
           if (this.oid === "") {

@@ -105,8 +105,8 @@ export default {
   },
   computed: {
     ...mapState(["ref"]),
-    client() {
-      return this.form.client;
+    provider() {
+      return this.form.provider;
     },
     date() {
       return this.form.date;
@@ -152,6 +152,27 @@ export default {
       if (!this.options.provider.includes(this.form.provider)) {
         save(`/providers`, { name: this.form.provider });
       }
+    },
+  },
+  watch: {
+    provider: function(val) {
+      console.log(val);
+      // if (this.options.provider.includes(this.form.provider)) {
+      //   this.form.products = [];
+      //   getClientsLastOrder(val).then((e) => {
+      //     let products = e.products;
+      //     for (let i = 0; i < products.length; i++) {
+      //       this.form.products.push({
+      //         id: i,
+      //         active: true,
+      //         name: products[i].name,
+      //         unitPrice: products[i].unitPrice,
+      //         quantity: products[i].quantity,
+      //         total: products[i].total,
+      //       });
+      //     }
+      //   });
+      // }
     },
   },
 };
