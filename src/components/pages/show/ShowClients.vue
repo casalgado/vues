@@ -19,6 +19,7 @@
 <script>
 import Table from "../../table/Table";
 import ButtonEdit from "../../tools/ButtonEdit";
+import ButtonDelete from "../../tools/ButtonDelete";
 import ClientHistorySummary from "../../tools/ClientHistorySummary";
 import { getAll } from "@/firebase";
 import { mapState } from "vuex";
@@ -30,12 +31,19 @@ export default {
     Table,
     ClientHistorySummary,
     ButtonEdit,
+    ButtonDelete,
   },
   data() {
     return {
       table: {
         title: "Clientes",
         fields: [
+          {
+            key: "since",
+            label: "Desde",
+            sortable: true,
+            tdClass: "justifyLeft",
+          },
           {
             key: "name",
             label: "Nombre",
@@ -64,6 +72,7 @@ export default {
         pagination: "",
       },
       oid: "",
+      path: "clients",
     };
   },
   computed: {
@@ -80,6 +89,7 @@ export default {
     },
     format: function(objects) {
       let items = objects.map((e) => {
+        e.since = moment(e.since).format("YYYY/MM/DD");
         if (e.birthday !== "") {
           e.birthday = moment(e.birthday).format("MMM DD");
         }

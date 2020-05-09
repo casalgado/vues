@@ -2,7 +2,7 @@
   <div id="chs">
     <table>
       <tr v-for="(item, index) in this.history" :key="index">
-        <td id="tdn">{{ item[0] }}</td>
+        <td id="tdd">{{ item[0] }}</td>
         <td id="tdv">{{ item[1] }}</td>
       </tr>
     </table>
@@ -32,7 +32,7 @@ export default {
           ordersTotal++;
           e.history[k].products.forEach((p) => {
             this.history.push([
-              `${moment(e.history[k].date).format("MM/DD")}`,
+              `${moment(e.history[k].date).format("MMM DD YYYY")}`,
               `${p.quantity} ${p.name}`,
             ]);
           });
@@ -63,9 +63,9 @@ export default {
   border-radius: 5px;
 }
 
-#tdn {
+#tdd {
   text-align: left;
-  width: 77px;
+  width: 100px;
 }
 
 #tdv {

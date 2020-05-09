@@ -77,7 +77,7 @@ export default {
 
 #date {
   grid-column: span 3;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
 }
 

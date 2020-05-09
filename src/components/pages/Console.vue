@@ -66,9 +66,19 @@ export default {
             .then((clients) => {
               let ckeys = Object.keys(clients);
               ckeys.forEach((ck) => {
+                let clientSince = "2021";
                 okeys.forEach((ok) => {
-                  if (clients[ck].name == orders[ok].client) {
+                  if (!orders[ok].date) {
                     console.log(orders[ok]);
+                  }
+                  if (clients[ck].name == orders[ok].client) {
+                    if (clientSince > orders[ok].date) {
+                      clientSince = orders[ok].date;
+                      database.ref("esalimento/clients/" + ck).update({
+                        since: clientSince,
+                      });
+                    }
+                    console.log(ck);
                     database
                       .ref("esalimento/clients/" + ck + "/history")
                       .update({
@@ -262,7 +272,9 @@ export default {
           );
           let clientCategories = ["instagram", "recomendacion"];
           clientCategories.forEach((e) => {
-            database.ref(`esalimento/clientCategories`).push({ name: e });
+            database
+              .ref(`esalimento/optionsForMenus/clientCategories`)
+              .push({ name: e });
           });
           finalList.forEach((e) => {
             console.log(e);
@@ -317,7 +329,7 @@ export default {
             if (!categories.includes(category)) {
               categories.push(category);
               database
-                .ref(`esalimento/expenseCategories`)
+                .ref(`esalimento/optionsForMenus/expenseCategories`)
                 .push({ name: category });
             }
           }
@@ -335,11 +347,13 @@ export default {
         .then((objs) => {
           let orders = [];
           let objects = [];
+
           Object.keys(objs).forEach((e) => {
-            if (objs[e].date !== "") {
+            if (objs[e].produced) {
               objects.push(objs[e]);
             }
           });
+
           objects = this.sanitizeClients(objects);
           let sorted = objects.sort((a, b) =>
             a.client > b.client ? 1 : b.client > a.client ? -1 : 0
@@ -389,10 +403,7 @@ export default {
               orders.push(new_order);
             }
           }
-          orders.forEach((e) => {
-            console.log(e);
-            /** */ database.ref(`esalimento/orders`).push(e);
-          });
+
           console.time(
             orders
               .map((o) => {
@@ -446,8 +457,8 @@ export default {
                 "stand de ventas",
               ];
               if (!remove.includes(product)) {
-                console.log(unitPrice);
-                console.log(category);
+                console.time(unitPrice);
+                console.time(category);
                 /** */ database.ref(`esalimento/products`).push({
                   name: product,
                   price: unitPrice,
@@ -456,10 +467,16 @@ export default {
               }
             }
           }
+          console.time(productCategories);
+          /** */
+          orders.forEach((e) => {
+            console.log(e);
+            database.ref(`esalimento/orders`).push(e);
+          });
           productCategories.forEach((e) => {
             console.log(e);
-            /** */ database
-              .ref(`esalimento/productCategories`)
+            database
+              .ref(`esalimento/optionsForMenus/productCategories`)
               .push({ name: e });
           });
         });
