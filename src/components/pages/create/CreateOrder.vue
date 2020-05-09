@@ -142,9 +142,12 @@ export default {
           }
         });
       } else {
-        this.form.date = moment().format("YYYY-MM-DD");
-        this.form.delivered = moment()
+        this.form.date = moment()
+          .format("YYYY-MM-DD")
           .add(1, "day")
+          .format("YYYY-MM-DD");
+        this.form.delivered = moment()
+          .add(2, "day")
           .format("YYYY-MM-DD");
       }
     });

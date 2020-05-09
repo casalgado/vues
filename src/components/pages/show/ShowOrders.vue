@@ -5,7 +5,6 @@
     <Table :table="table" />
     <TableTotals :objects="this.table.objects" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
-      {{ this.oids }}
       <TableTotals :objects="this.selected" />
       <ButtonPaid :ids="this.oids" />
       <ButtonEdit

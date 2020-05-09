@@ -513,6 +513,9 @@ export default {
       "pan de integral pequeño" == string
         ? (string = "pan integral pequeño")
         : null;
+      "pan de ajonjoli peq" == string
+        ? (string = "pan de ajonjoli pequeño")
+        : null;
       "pan integral y avena grande" == string
         ? (string = "pan integral")
         : null;
