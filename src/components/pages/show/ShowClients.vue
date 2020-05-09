@@ -1,18 +1,18 @@
 <template>
   <div>
+    {{ this.cid }}
     <Table :table="table" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
       <ButtonEdit
         v-if="this.selected.length == 1"
-        :oid="this.selectedIds[0]"
+        :oid="this.cid"
         destination="EditClient"
       />
-      <ClientHistorySummary :dbref="this.ref" :cid="this.selectedIds[0]" />
+      <ClientHistorySummary :dbref="this.ref" :cid="this.cid" :key="this.cid" />
     </b-card>
   </div>
 </template>
 <script>
-import { toolboxMixin } from "@/mixins/toolboxMixin";
 import Table from "../../table/Table";
 import ButtonEdit from "../../tools/ButtonEdit";
 import ClientHistorySummary from "../../tools/ClientHistorySummary";
@@ -27,7 +27,6 @@ export default {
     ClientHistorySummary,
     ButtonEdit,
   },
-  mixins: [toolboxMixin],
   data() {
     return {
       table: {
@@ -59,11 +58,12 @@ export default {
         objects: [],
         selectMode: "single",
         pagination: "",
+        cid: "",
       },
     };
   },
   computed: {
-    ...mapState(["ref", "date", "period"]),
+    ...mapState(["ref", "date", "period", "selected"]),
   },
   methods: {
     getObjects: function() {
@@ -93,6 +93,9 @@ export default {
     },
     period() {
       this.getObjects();
+    },
+    selected() {
+      this.cid = this.selected[0].id;
     },
   },
 };

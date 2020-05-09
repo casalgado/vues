@@ -175,6 +175,7 @@ export default {
             objects.push(objs[e]);
           });
           objects.forEach((o) => {
+            console.log(o);
             database.ref("esalimento/optionsForMenus/providers").update({
               [o.id]: {
                 name: o.provider,
@@ -293,7 +294,7 @@ export default {
             console.log(obj);
             if (obj.products[0].name && obj.products[0].quantity) {
               console.log("t");
-              // database.ref(`esalimento/expenses`).push(obj);
+              database.ref(`esalimento/expenses`).push(obj);
             }
           }
           let providers = [];
@@ -302,7 +303,7 @@ export default {
             let provider = obj.provider;
             if (!providers.includes(provider)) {
               providers.push(provider);
-              // database.ref(`esalimento/providers`).push({ name: provider });
+              database.ref(`esalimento/providers`).push({ name: provider });
             }
           }
           let categories = [];
@@ -311,9 +312,9 @@ export default {
             let category = obj.category;
             if (!categories.includes(category)) {
               categories.push(category);
-              // database
-              //   .ref(`esalimento/expenseCategories`)
-              //   .push({ name: category });
+              database
+                .ref(`esalimento/expenseCategories`)
+                .push({ name: category });
             }
           }
         });

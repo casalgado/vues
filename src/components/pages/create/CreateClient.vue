@@ -38,7 +38,6 @@ export default {
         phone: "",
         address: "",
         birthday: "",
-        details: "-",
         comment: "",
         category: "",
       },
@@ -67,16 +66,15 @@ export default {
         console.log("invalid");
         this.submitStatus = "ERROR";
       } else {
-        if (evt) {
-          evt.preventDefault();
-        }
         if (this.oid === "") {
+          evt.preventDefault();
           save(this.path, this.form).then(() => {
             update("optionsForMenus/clients", {
               [this.oid]: { name: this.form.name },
             });
           });
         } else {
+          evt.preventDefault();
           update(`${this.path}/${this.oid}`, this.form);
         }
       }
@@ -86,10 +84,9 @@ export default {
         evt.preventDefault();
       }
       this.form.name = "";
-      this.form.phone = "";
+      this.form.phone = 0;
       this.form.address = "";
       this.form.birthday = "";
-      this.form.details = "";
       this.form.comment = "";
       this.form.category = "";
       this.show = false;
@@ -109,11 +106,10 @@ export default {
         getById("clients", this.oid).then((object) => {
           console.log(object);
           this.form.name = object.name;
-          this.form.phone = object.phone;
+          this.form.phone = object.phone.toString();
           this.form.address = object.address;
           this.form.birthday = object.birthday;
-          this.form.details = object.details;
-          this.form.comment = object.comment;
+          this.form.comment = object.comment || "";
           this.form.category = object.category;
         });
       }

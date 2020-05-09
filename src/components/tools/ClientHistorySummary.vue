@@ -1,10 +1,12 @@
 <template>
-  <table>
-    <tr v-for="(item, index) in this.history" :key="index">
-      <td id="tdn">{{ item[0] }}</td>
-      <td id="tdv">{{ item[1] }}</td>
-    </tr>
-  </table>
+  <div id="chs">
+    <table>
+      <tr v-for="(item, index) in this.history" :key="index">
+        <td id="tdn">{{ item[0] }}</td>
+        <td id="tdv">{{ item[1] }}</td>
+      </tr>
+    </table>
+  </div>
 </template>
 <script>
 import { getById } from "@/firebase";
@@ -18,6 +20,7 @@ export default {
   data() {
     return {
       history: [],
+      clientId: "",
     };
   },
   mounted() {
@@ -40,11 +43,34 @@ export default {
       }
     });
   },
+  watch: {
+    selectedIds() {
+      console.log("this");
+    },
+  },
 };
 </script>
 <style scoped>
+#chs {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+#chs::-webkit-scrollbar {
+  background: var(--color-secondary) !important;
+  border-radius: 5px;
+}
+
+#chs::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-top: 2px solid var(--color-secondary);
+  border-bottom: 2px solid var(--color-secondary);
+  border-radius: 5px;
+}
+
 #tdn {
   text-align: left;
+  width: 77px;
 }
 
 #tdv {

@@ -78,7 +78,6 @@ export default {
         this.table.formattedObjects.forEach((o) => {
           o.products = this.removeOneFromQuantites(o.products);
         });
-        console.log(this.table.formattedObjects);
       });
     },
     removeOneFromQuantites: function(string) {
