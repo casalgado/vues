@@ -113,6 +113,12 @@ input {
   bottom: 10%;
 }
 
+.toolbox-button {
+  width: 70px;
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
 @media only screen and (min-width: 668px) {
   #toolbox {
     left: 50%;

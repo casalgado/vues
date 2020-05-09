@@ -3,6 +3,7 @@
     <h6 id="title">{{ table.title }}</h6>
     <Pagination period="day" />
     <Table :table="table" />
+    <TableTotals :objects="this.table.objects" />
     <!-- change printorders to 'invoice' -->
     <!-- <PrintOrders :objects="table.objects" /> -->
   </div>
@@ -10,6 +11,7 @@
 <script>
 import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
+import TableTotals from "../../table/TableTotals";
 import Pagination from "../../table/Pagination";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
@@ -20,6 +22,7 @@ export default {
   components: {
     Table,
     Pagination,
+    TableTotals,
   },
   data() {
     return {
