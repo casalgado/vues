@@ -55,17 +55,33 @@ export const dynamicFieldsMixin = {
             form.products = products;
             form.date = moment(form.date).format();
             form.delivered = moment(form.delivered).format();
-
+            if (form.client) {
+              form.client = form.client.toLowerCase();
+            }
+            if (form.provider) {
+              form.provider = form.provider.toLowerCase();
+            }
             if (this.oid === "") {
               save(`${this.path}`, form, this).then((id) => {
                 if (this.path == "orders") {
                   // save new client
-                  if (!this.options.client.includes(this.form.client)) {
+                  if (!this.options.client.includes(form.client)) {
                     save(
                       `clients`,
-                      { name: this.form.client, birthday: "" },
+                      {
+                        name: form.client.toLowerCase(),
+                        birthday: "",
+                        since: moment().format(),
+                      },
                       this
-                    );
+                    ).then((cid) => {
+                      update("clients/" + cid + "/history", {
+                        [id]: {
+                          date: form.date,
+                          products: form.products,
+                        },
+                      });
+                    });
                   }
                   // add client to optionsForMenus list
                   update("optionsForMenus/clients", {
@@ -73,16 +89,19 @@ export const dynamicFieldsMixin = {
                   });
                   // update client order history
                   getOneWhere("clients", "name", form.client).then((obj) => {
-                    let ck = obj.id;
-                    update("clients/" + ck + "/history", {
-                      [id]: {
-                        date: form.date,
-                        products: form.products,
-                      },
-                    });
+                    if (obj) {
+                      let ck = obj.id;
+                      update("clients/" + ck + "/history", {
+                        [id]: {
+                          date: form.date,
+                          products: form.products,
+                        },
+                      });
+                    }
                   });
                   this.$router.push({ name: "ShowOrders" });
                 } else if (this.path == "expenses") {
+                  form.provider = form.provider.toLowerCase();
                   // add provider to optionsForMenus list
                   update("optionsForMenus/providers", {
                     [id]: { name: form.provider },

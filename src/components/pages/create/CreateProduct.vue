@@ -62,11 +62,11 @@ export default {
   },
   methods: {
     submit(evt) {
+      evt.preventDefault();
       this.$v.$touch();
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
-        evt.preventDefault();
       } else {
         this.$fire({
           text: "¿continuar?",
@@ -75,13 +75,12 @@ export default {
           if (alertStatus.dismiss) {
             console.log("dismiss");
           } else {
+            this.form.name = this.form.name.toLowerCase();
             if (this.oid === "") {
-              evt.preventDefault();
               save(this.path, this.form, this).then(() => {
                 this.$router.go(-1);
               });
             } else {
-              evt.preventDefault();
               update(`${this.path}/${this.oid}`, this.form).then(() => {
                 this.$router.go(-1);
               });

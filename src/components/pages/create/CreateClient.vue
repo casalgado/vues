@@ -62,22 +62,21 @@ export default {
   },
   methods: {
     submit(evt) {
+      evt.preventDefault();
       this.$v.$touch();
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
-        evt.preventDefault();
       } else {
         this.$fire({
           text: "¿continuar?",
           showCancelButton: true,
         }).then((alertStatus) => {
-          evt.preventDefault();
           if (alertStatus.dismiss) {
             console.log("dismiss");
           } else {
+            this.form.name = this.form.name.toLowerCase();
             if (this.oid === "") {
-              this.form.name = this.form.name.toLowerCase();
               this.form.since = moment().format();
               save(this.path, this.form, this).then((id) => {
                 update("optionsForMenus/clients", {

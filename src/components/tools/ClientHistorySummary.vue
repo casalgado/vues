@@ -28,6 +28,7 @@ export default {
       if (e.history) {
         let keys = Object.keys(e.history);
         let ordersTotal = 0;
+        console.log(e.history);
         keys.forEach((k) => {
           ordersTotal++;
           e.history[k].products.forEach((p) => {

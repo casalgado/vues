@@ -364,7 +364,6 @@ export function save(path, payload, component) {
 export function update(path, payload, key, component) {
   console.time("update");
   return new Promise((resolve) => {
-    payload.lastModified = moment().format();
     console.log(path);
     console.log(payload);
     console.log(key);
