@@ -55,6 +55,8 @@ if (environment === "production") {
   ref = database.ref("development-esalimento");
 }
 
+export { ref };
+
 export function getUser() {
   return firebase.auth().currentUser;
 }

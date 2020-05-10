@@ -1,6 +1,6 @@
 <template>
   <div fluid id="nav-container">
-    <p class="dev">development</p>
+    <p v-if="development" class="dev">development db:{{ this.ref }}</p>
     <b-dropdown
       dropup
       no-caret
@@ -111,10 +111,28 @@
   </div>
 </template>
 <script>
+import { ref } from "@/firebase";
 export default {
   name: "Navigation",
   data: function() {
     return {};
+  },
+  computed: {
+    development: function() {
+      const environment = process.env.NODE_ENV;
+      if (environment === "development") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    ref: function() {
+      let array = ref.toString().split("/");
+      return array[array.length - 1];
+    },
+  },
+  mounted() {
+    console.log(`working database: ${this.ref}`);
   },
 };
 </script>
