@@ -54,7 +54,7 @@ export const dynamicFieldsMixin = {
             form.total = total;
             form.products = products;
             form.date = moment(form.date).format();
-            form.delivered = moment(form.delivered).format();
+            form.deliver = moment(form.deliver).format();
             if (form.client) {
               form.client = form.client.toLowerCase();
             }
@@ -186,7 +186,7 @@ export const dynamicFieldsMixin = {
       this.form = {
         client: "",
         date: "",
-        delivered: "",
+        deliver: "",
         paid: "",
         products: [
           {

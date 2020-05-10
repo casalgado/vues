@@ -9,7 +9,7 @@
     />
 
     <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
-    <InputBasic v-model="form.delivered" :type="'date'" :label="'entregar'" />
+    <InputBasic v-model="form.deliver" :type="'date'" :label="'entregar'" />
     <InputBasic
       v-if="this.oid !== ''"
       v-model="form.paid"
@@ -68,7 +68,7 @@ export default {
       form: {
         client: "",
         date: "",
-        delivered: "",
+        deliver: "",
         paid: "",
         products: [
           {
@@ -124,7 +124,7 @@ export default {
           console.log(object);
           this.form.client = object.client;
           this.form.date = object.date.split("T")[0];
-          this.form.delivered = object.date.split("T")[0];
+          this.form.deliver = object.date.split("T")[0];
           this.form.paid = object.paid.split("T")[0];
           let products = object.products;
           for (let i = 0; i < products.length; i++) {
@@ -142,7 +142,7 @@ export default {
         this.form.date = moment()
           .add(1, "day")
           .format("YYYY-MM-DD");
-        this.form.delivered = moment()
+        this.form.deliver = moment()
           .add(2, "day")
           .format("YYYY-MM-DD");
       }
@@ -169,7 +169,7 @@ export default {
       }
     },
     date: function(val) {
-      this.form.delivered = moment(val)
+      this.form.deliver = moment(val)
         .add(1, "day")
         .format("YYYY-MM-DD");
     },
