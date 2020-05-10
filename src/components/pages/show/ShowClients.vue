@@ -21,6 +21,9 @@
       </b-button>
       <ClientHistorySummary :dbref="this.ref" :cid="this.oid" :key="this.oid" />
     </b-card>
+    <b-button @click="getAllClients" variant="dark" class="toolbox-button">
+      todos
+    </b-button>
   </div>
 </template>
 <script>
