@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container fluid>
+    <b-container v-if="this.user" fluid>
       <b-row>
         <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
           <h6 id="title">{{ tableProduce.title }}</h6>
@@ -23,11 +23,13 @@
         <ClientSnippet :oid="this.oid" :key="this.oid + 'i'" />
       </b-card>
     </b-container>
+    <Landing v-else />
   </div>
 </template>
 <script>
 import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
+import Landing from "../../Landing";
 import ButtonEdit from "../../tools/ButtonEdit";
 import ClientSnippet from "../../tools/ClientSnippet";
 import Pagination from "../../table/Pagination";
@@ -42,6 +44,7 @@ export default {
     Pagination,
     ButtonEdit,
     ClientSnippet,
+    Landing,
   },
   data() {
     return {
@@ -93,7 +96,12 @@ export default {
       path: "orders",
     };
   },
-  computed: mapState(["date", "period", "selected"]),
+  computed: {
+    user: function() {
+      return this.uid;
+    },
+    ...mapState(["uid", "date", "period", "selected"]),
+  },
   methods: {
     getObjects: function() {
       getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
