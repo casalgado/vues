@@ -21,19 +21,27 @@ export default {
             getById("deleteHistory", oid).then((o) => {
               console.log(o);
               getOneWhere("clients", "name", o.client).then((c) => {
-                update(`clients/${c.id}/history`, { [oid]: null });
-                update("optionsForMenus/clients", {
-                  [oid]: null,
-                });
+                if (c) {
+                  update(`clients/${c.id}/history`, { [oid]: null });
+                  update("optionsForMenus/clients", {
+                    [oid]: null,
+                  });
+                } else {
+                  alert("client no longer in database");
+                }
               });
             });
           } else if (this.path === "expenses") {
             getById("deleteHistory", oid).then((o) => {
               getOneWhere("providers", "name", o.provider).then((c) => {
-                update(`providers/${c.id}/history`, { [oid]: null });
-                update("optionsForMenus/providers", {
-                  [oid]: null,
-                });
+                if (c) {
+                  update(`providers/${c.id}/history`, { [oid]: null });
+                  update("optionsForMenus/providers", {
+                    [oid]: null,
+                  });
+                } else {
+                  alert("provider no longer in database");
+                }
               });
             });
           } else if (this.path === "clients") {
