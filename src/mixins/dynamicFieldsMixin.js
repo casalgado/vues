@@ -55,11 +55,18 @@ export const dynamicFieldsMixin = {
             form.products = products;
             form.date = moment(form.date).format();
             form.delivered = moment(form.delivered).format();
-            form.paid = moment(form.paid).format();
 
             if (this.oid === "") {
               save(`${this.path}`, form, this).then((id) => {
                 if (this.path == "orders") {
+                  // save new client
+                  if (!this.options.client.includes(this.form.client)) {
+                    save(
+                      `clients`,
+                      { name: this.form.client, birthday: "" },
+                      this
+                    );
+                  }
                   // add client to optionsForMenus list
                   update("optionsForMenus/clients", {
                     [id]: { name: form.client },
@@ -116,6 +123,7 @@ export const dynamicFieldsMixin = {
                 // this.$router.push({ path: "/" });
               });
             } else {
+              form.paid = moment(form.paid).format();
               update(`${this.path}/${this.oid}`, form, this.oid).then((id) => {
                 if (this.path == "orders") {
                   // update client order history

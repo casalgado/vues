@@ -1,13 +1,5 @@
 <template>
-  <b-form
-    v-if="show"
-    id="form"
-    @submit="
-      submit($event);
-      saveClient();
-    "
-    @reset="reset"
-  >
+  <b-form v-if="show" id="form" @submit="submit($event)" @reset="reset">
     <b-button @click="addProduct" variant="info">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
     <InputSelect
@@ -54,7 +46,6 @@ import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
 import {
-  save,
   getClientsLastOrder,
   getMostUsedClients,
   getAsOptionsForSelect,
@@ -157,19 +148,7 @@ export default {
       }
     });
   },
-  methods: {
-    saveClient() {
-      this.$v.$touch();
-      if (this.$v.$invalid) {
-        console.log("invalid");
-        this.submitStatus = "ERROR";
-      } else {
-        if (!this.options.client.includes(this.form.client)) {
-          save(`clients`, { name: this.form.client, birthday: "" }, this);
-        }
-      }
-    },
-  },
+  methods: {},
   watch: {
     client: function(val) {
       if (this.oid === "" && this.options.client.includes(this.form.client)) {
