@@ -56,6 +56,7 @@
   </div>
 </template>
 <script>
+import { getOneWhere } from "@/firebase";
 export default {
   name: "InputDynamic",
   props: {
@@ -80,6 +81,11 @@ export default {
       payload: {},
     };
   },
+  computed: {
+    name: function() {
+      return this.input.name;
+    },
+  },
   methods: {
     onChange(field) {
       let unitPrice = this.input.unitPrice;
@@ -101,6 +107,13 @@ export default {
     remove() {
       console.log(this.id);
       this.$emit("remove-field", { id: this.id });
+    },
+  },
+  watch: {
+    name() {
+      getOneWhere("products", "name", this.name).then((obj) => {
+        this.input.unitPrice = obj.price;
+      });
     },
   },
   created() {

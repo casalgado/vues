@@ -113,7 +113,7 @@ export function getOneWhere(path, prop, value) {
           objects.push(data);
         });
         console.timeEnd("getOneWhere");
-        resolve(objects);
+        resolve(objects[0]);
       });
   });
 }
@@ -285,6 +285,21 @@ export function getClientsLastOrder(client) {
       .limitToLast(1)
       .once("value", function(snapshot) {
         console.timeEnd("getClientsLastOrder");
+        resolve(Object.values(snapshot.val())[0]);
+      });
+  });
+}
+
+export function getProvidersLastExpense(provider) {
+  return new Promise(function(resolve) {
+    console.time("getProvidersLastExpense");
+    ref
+      .child(`expenses`)
+      .orderByChild("provider")
+      .equalTo(provider)
+      .limitToLast(1)
+      .once("value", function(snapshot) {
+        console.timeEnd("getProvidersLastExpense");
         resolve(Object.values(snapshot.val())[0]);
       });
   });

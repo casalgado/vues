@@ -502,6 +502,9 @@ export default {
         if (o.client == "andrés vergara") {
           o.client = "andres vergara";
         }
+        if (o.client == "jose cediel") {
+          o.client = "juan cediel";
+        }
         if (o.client == "andrés perez") {
           o.client = "andres perez";
         }

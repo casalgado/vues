@@ -32,12 +32,12 @@ export default {
           ordersTotal++;
           e.history[k].products.forEach((p) => {
             this.history.push([
-              `${moment(e.history[k].date).format("MMM DD YYYY")}`,
+              `${moment(e.history[k].date).format("YYYY/MM/DD")}`,
               `${p.quantity} ${p.name}`,
             ]);
           });
         });
-        this.history.unshift([ordersTotal, "pedidos"]);
+        this.history.sort().unshift([ordersTotal, "pedidos"]);
       } else {
         this.history.unshift([0, "pedidos"]);
       }

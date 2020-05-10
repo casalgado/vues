@@ -56,8 +56,8 @@ export const dynamicFieldsMixin = {
                   [id]: { name: form.client },
                 });
                 // update client order history
-                getOneWhere("clients", "name", form.client).then((objs) => {
-                  let ck = objs[0].id;
+                getOneWhere("clients", "name", form.client).then((obj) => {
+                  let ck = obj.id;
                   update("clients/" + ck + "/history", {
                     [id]: {
                       date: form.date,
@@ -71,8 +71,8 @@ export const dynamicFieldsMixin = {
                   [id]: { name: form.provider },
                 });
                 // update provider order history
-                getOneWhere("providers", "name", form.provider).then((objs) => {
-                  let ck = objs[0].id;
+                getOneWhere("providers", "name", form.provider).then((obj) => {
+                  let ck = obj.id;
                   update("providers/" + ck + "/history", {
                     [id]: {
                       date: form.date,
@@ -87,8 +87,8 @@ export const dynamicFieldsMixin = {
             update(`${this.path}/${this.oid}`, form, this.oid).then((id) => {
               if (this.path == "orders") {
                 // update client order history
-                getOneWhere("clients", "name", form.client).then((objs) => {
-                  let ck = objs[0].id;
+                getOneWhere("clients", "name", form.client).then((obj) => {
+                  let ck = obj.id;
                   update("clients/" + ck + "/history", {
                     [id]: {
                       date: form.date,
@@ -98,8 +98,8 @@ export const dynamicFieldsMixin = {
                 });
               } else if (this.path == "expenses") {
                 // update provider order history
-                getOneWhere("providers", "name", form.provider).then((objs) => {
-                  let ck = objs[0].id;
+                getOneWhere("providers", "name", form.provider).then((obj) => {
+                  let ck = obj.id;
                   update("providers/" + ck + "/history", {
                     [id]: {
                       date: form.date,

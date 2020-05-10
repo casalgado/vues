@@ -54,7 +54,13 @@ import { required, minLength } from "vuelidate/lib/validators";
 import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
-import { save, getMostUsed, getAsOptionsForSelect, getById } from "@/firebase";
+import {
+  save,
+  getMostUsed,
+  getAsOptionsForSelect,
+  getById,
+  getProvidersLastExpense,
+} from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
@@ -157,22 +163,23 @@ export default {
   watch: {
     provider: function(val) {
       console.log(val);
-      // if (this.options.provider.includes(this.form.provider)) {
-      //   this.form.products = [];
-      //   getClientsLastOrder(val).then((e) => {
-      //     let products = e.products;
-      //     for (let i = 0; i < products.length; i++) {
-      //       this.form.products.push({
-      //         id: i,
-      //         active: true,
-      //         name: products[i].name,
-      //         unitPrice: products[i].unitPrice,
-      //         quantity: products[i].quantity,
-      //         total: products[i].total,
-      //       });
-      //     }
-      //   });
-      // }
+      if (this.options.provider.includes(this.form.provider)) {
+        this.form.products = [];
+        getProvidersLastExpense(val).then((e) => {
+          let products = e.products;
+          this.form.category = e.category;
+          for (let i = 0; i < products.length; i++) {
+            this.form.products.push({
+              id: i,
+              active: true,
+              name: products[i].name,
+              unitPrice: products[i].unitPrice,
+              quantity: products[i].quantity,
+              total: products[i].total,
+            });
+          }
+        });
+      }
     },
   },
 };
