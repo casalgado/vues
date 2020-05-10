@@ -13,6 +13,7 @@ moment.updateLocale("es", {
     doy: moment.localeData("es").firstDayOfYear(),
   },
 });
+
 moment.locale("es");
 
 const app = initializeApp({
@@ -151,6 +152,27 @@ export function getAllWhere(path, prop, value) {
   });
 }
 
+export function getAllOrdersWhereProduct(product) {
+  return new Promise((resolve) => {
+    console.time("getAOWP");
+    ref.child("orders").on("value", (snap) => {
+      let objects = [];
+      snap.forEach((csnap) => {
+        let key = csnap.key;
+        let data = csnap.val();
+        data.id = key;
+        data.products.forEach((p) => {
+          if (p.name == product) {
+            objects.push(data);
+          }
+        });
+      });
+      console.timeEnd("getAOWP");
+      resolve(objects);
+    });
+  });
+}
+
 export function getById(path, id) {
   return new Promise(function(resolve) {
     console.time("getById");
@@ -163,6 +185,7 @@ export function getById(path, id) {
       });
   });
 }
+
 export function getMostUsedClients(size) {
   return new Promise(function(resolve) {
     console.time("getMostUsedClients");
@@ -320,6 +343,7 @@ export function getProvidersLastExpense(provider) {
 export function save(path, payload, component) {
   console.time("save");
   return new Promise((resolve) => {
+    payload.lastModified = moment().format();
     var id = ref.child(path).push(payload, function(error) {
       if (error) {
         alert("Data could not be saved." + error);
@@ -340,6 +364,7 @@ export function save(path, payload, component) {
 export function update(path, payload, key, component) {
   console.time("update");
   return new Promise((resolve) => {
+    payload.lastModified = moment().format();
     console.log(path);
     console.log(payload);
     console.log(key);
@@ -377,7 +402,7 @@ export function remove(path, oid) {
     getById(path, oid).then((snap) => {
       snap.id = oid;
       snap.path = path;
-      update("deleteHistory/" + snap.id, snap)
+      update(`deleteHistory/${snap.id}`, snap, snap.id)
         .then(() => {
           ref
             .child(path)
@@ -385,6 +410,8 @@ export function remove(path, oid) {
             .remove();
         })
         .then(() => {
+          console.timeEnd("remove");
+          alert("data removed successfully");
           resolve(oid);
         });
     });

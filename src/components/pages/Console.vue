@@ -490,6 +490,9 @@ export default {
         .once("value")
         .then((snap) => {
           return database.ref("development-esalimento").set(snap.val());
+        })
+        .then(() => {
+          console.log("done");
         });
     },
     sanitizeClients: function(array) {

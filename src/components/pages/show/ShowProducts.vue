@@ -22,6 +22,7 @@ import ButtonEdit from "../../tools/ButtonEdit";
 import ButtonDelete from "../../tools/ButtonDelete";
 import { getAll } from "@/firebase";
 import { mapState } from "vuex";
+import numeral from "numeral";
 
 export default {
   name: "ShowProducts",
@@ -81,6 +82,7 @@ export default {
     },
     format: function(objects) {
       let items = objects.map((e) => {
+        e.price = numeral(e.price).format("0,0");
         return e;
       });
       return items;

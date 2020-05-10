@@ -1,7 +1,7 @@
 <template>
-  <b-button @click="remove" variant="danger" class="toolbox-button"
-    >borrar</b-button
-  >
+  <b-button @click="remove" variant="danger" class="toolbox-button">
+    borrar
+  </b-button>
 </template>
 <script>
 import { remove, getOneWhere, getById, update } from "@/firebase";
