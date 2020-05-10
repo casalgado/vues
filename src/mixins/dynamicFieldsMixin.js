@@ -31,10 +31,12 @@ export const dynamicFieldsMixin = {
         this.submitStatus = "ERROR";
         evt.preventDefault();
       } else {
+        console.log("1");
         this.$fire({
           text: "¿continuar?",
           showCancelButton: true,
         }).then((alertStatus) => {
+          console.log("2");
           evt.preventDefault();
           if (alertStatus.dismiss) {
             console.log("dismiss");
