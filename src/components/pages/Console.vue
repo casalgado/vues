@@ -570,6 +570,9 @@ export default {
       "pan de masa madre medio" == string
         ? (string = "pan de masa madre")
         : null;
+      "pan de masa madre pequeno" == string
+        ? (string = "pan de masa madre pequeño")
+        : null;
       "pan de masa madre uva pequeño" == string
         ? (string = "pan de uva pequeño")
         : null;

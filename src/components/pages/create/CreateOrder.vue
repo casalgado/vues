@@ -10,7 +10,6 @@
   >
     <b-button @click="addProduct" variant="info">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
-
     <InputSelect
       v-model="form.client"
       :options="this.options.client"
@@ -124,6 +123,7 @@ export default {
       if (this.oid !== "") {
         this.form.products.pop();
         getById("orders", this.oid).then((object) => {
+          console.log("beforeCreate");
           console.log(object);
           this.form.client = object.client;
           this.form.date = object.date.split("T")[0];
@@ -166,7 +166,7 @@ export default {
   },
   watch: {
     client: function(val) {
-      if (this.options.client.includes(this.form.client)) {
+      if (this.oid === "" && this.options.client.includes(this.form.client)) {
         this.form.products = [];
         getClientsLastOrder(val).then((e) => {
           let products = e.products;

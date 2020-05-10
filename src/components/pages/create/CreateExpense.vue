@@ -150,7 +150,10 @@ export default {
   watch: {
     provider: function(val) {
       console.log(val);
-      if (this.options.provider.includes(this.form.provider)) {
+      if (
+        this.oid === "" &&
+        this.options.provider.includes(this.form.provider)
+      ) {
         this.form.products = [];
         getProvidersLastExpense(val).then((e) => {
           let products = e.products;

@@ -36,6 +36,7 @@ export default {
     border-radius: var(--border-radius-small);
     padding-bottom: 100px;
     overflow: hidden;
+    min-height: 98vh;
   }
 
   #header {
