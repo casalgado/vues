@@ -7,8 +7,6 @@ import store from "./store";
 // @refactor
 // where should the momentjs code go?
 
-console.log("mode is " + process.env.NODE_ENV);
-
 moment.updateLocale("es", {
   week: {
     dow: 0,
@@ -43,8 +41,17 @@ firebase.auth().onAuthStateChanged((user) => {
 
 const database = app.database();
 export { database };
+const environment = process.env.NODE_ENV;
+export { environment };
 
-const ref = database.ref(store.state.ref);
+let ref;
+if (environment === "production") {
+  console.log("mode is production");
+  ref = database.ref(store.state.ref);
+} else if (environment === "development") {
+  console.log("mode is development");
+  ref = database.ref("development-esalimento");
+}
 
 export function getUser() {
   return firebase.auth().currentUser;
@@ -52,7 +59,6 @@ export function getUser() {
 
 export function getByDateRange(path, propname, date, period) {
   return new Promise((resolve) => {
-    console.log("1");
     console.time("getByDateRange:");
     ref
       .child(path)

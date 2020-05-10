@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="deleteDatabase()" class="btn btn-danger">
+    <!-- <button @click="deleteDatabase()" class="btn btn-danger">
       DELETE EVERYTHING
     </button>
     <button @click="importOrders()" class="btn btn-primary">
@@ -23,6 +23,9 @@
     </button>
     <button @click="providerList()" class="btn btn-info">
       add provider list
+    </button> -->
+    <button @click="updateDevDatabase()" class="btn btn-info">
+      update development database
     </button>
     <p>{{ this.sanitize("medio pan masa madre") }}</p>
   </div>
@@ -479,6 +482,14 @@ export default {
               .ref(`esalimento/optionsForMenus/productCategories`)
               .push({ name: e });
           });
+        });
+    },
+    updateDevDatabase: function() {
+      database
+        .ref("esalimento")
+        .once("value")
+        .then((snap) => {
+          return database.ref("development-esalimento").set(snap.val());
         });
     },
     sanitizeClients: function(array) {

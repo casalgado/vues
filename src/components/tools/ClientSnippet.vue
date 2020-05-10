@@ -24,7 +24,6 @@ export default {
   },
   mounted() {
     getById("orders", this.oid).then((order) => {
-      console.log(order);
       getOneWhere("clients", "name", order.client).then((client) => {
         if (client.birthday) {
           client.birthday = moment(client.birthday).format("MMMM DD");

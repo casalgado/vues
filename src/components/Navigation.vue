@@ -1,5 +1,6 @@
 <template>
   <div fluid id="nav-container">
+    <p class="dev">development</p>
     <b-dropdown
       dropup
       no-caret
@@ -121,6 +122,12 @@ export default {
 a {
   color: var(--color-neutral) !important;
   text-decoration: none !important;
+}
+
+.dev {
+  position: absolute;
+  left: 44%;
+  bottom: 50px;
 }
 
 @media only screen and (min-width: 768px) {
