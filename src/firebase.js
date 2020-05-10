@@ -47,7 +47,7 @@ export { environment };
 let ref;
 if (environment === "production") {
   console.log("mode is production");
-  if (store.state.ref !== "") {
+  if (store.state.ref) {
     ref = database.ref(store.state.ref);
   }
 } else if (environment === "development") {
