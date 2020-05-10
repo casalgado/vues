@@ -77,6 +77,7 @@ export default {
             console.log("dismiss");
           } else {
             if (this.oid === "") {
+              this.form.name = this.form.name.toLowerCase();
               this.form.since = moment().format();
               save(this.path, this.form, this).then((id) => {
                 update("optionsForMenus/clients", {

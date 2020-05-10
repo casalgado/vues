@@ -173,12 +173,6 @@ export function getAllOrdersWhereProduct(product) {
   });
 }
 
-getAll("orders").then((obj) => {
-  obj.forEach((o) => {
-    console.log(o.client);
-  });
-});
-
 export function getById(path, id) {
   return new Promise(function(resolve) {
     console.time("getById");

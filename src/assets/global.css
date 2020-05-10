@@ -237,8 +237,8 @@ body {
 /* alert classes */
 
 .swal2-show {
-  background-color: var(--color-primary);
-  color: var(--color-neutral);
+  background-color: var(--color-primary) !important;
+  color: var(--color-neutral) !important;
 }
 
 .swal2-content {

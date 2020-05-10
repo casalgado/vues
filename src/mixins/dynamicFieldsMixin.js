@@ -26,10 +26,11 @@ export const dynamicFieldsMixin = {
 
     submit(evt) {
       this.$v.$touch();
+      console.log("0");
+      evt.preventDefault();
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
-        evt.preventDefault();
       } else {
         console.log("1");
         this.$fire({
@@ -37,7 +38,6 @@ export const dynamicFieldsMixin = {
           showCancelButton: true,
         }).then((alertStatus) => {
           console.log("2");
-          evt.preventDefault();
           if (alertStatus.dismiss) {
             console.log("dismiss");
           } else {
