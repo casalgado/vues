@@ -13,7 +13,7 @@
     <div id="client_info">
       <ul>
         <li>Cliente:</li>
-        <li>{{invoice.client}}</li>
+        <li>{{ invoice.client }}</li>
         <li>Id:</li>
         <li>12.231.223</li>
         <li>Direccion:</li>
@@ -27,7 +27,7 @@
         <li>Factura de Venta</li>
         <li>.</li>
         <li>Fecha:</li>
-        <li>{{date}}</li>
+        <li>{{ date }}</li>
         <li>Numero:</li>
         <li>P-15-124</li>
       </ul>
@@ -42,18 +42,18 @@
           <th class="text-right">Vr Total</th>
         </tr>
         <tr v-for="row in invoice.rows" :key="row.index">
-          <td class="text-left">{{ row.name}}</td>
-          <td class="text-left">{{ row.product}}</td>
-          <td class="text-right">{{row.quantity}}</td>
-          <td class="text-right">{{row.unitPrice}}</td>
-          <td class="text-right">{{row.total}}</td>
+          <td class="text-left">{{ row.name }}</td>
+          <td class="text-left">{{ row.product }}</td>
+          <td class="text-right">{{ row.quantity }}</td>
+          <td class="text-right">{{ row.unitPrice }}</td>
+          <td class="text-right">{{ row.total }}</td>
         </tr>
       </table>
     </div>
     <div id="footer">Recibe ___________________________</div>
     <div id="totals">
       Total:
-      <span>{{invoice.total}}</span>
+      <span>{{ invoice.total }}</span>
     </div>
   </div>
 </template>
@@ -64,11 +64,11 @@ import moment from "moment";
 export default {
   name: "PrintOrders",
   props: {
-    objects: Array
+    objects: Array,
   },
   data() {
     return {
-      date: moment().format("DD-MM-YYYY")
+      date: moment().format("DD-MM-YYYY"),
     };
   },
   methods: {
@@ -76,7 +76,7 @@ export default {
       if (objects.length > 0) {
         let client = objects[0].client;
         return (
-          objects.map(e => e.client).filter(e => e == client).length ==
+          objects.map((e) => e.client).filter((e) => e == client).length ==
           objects.length
         );
       } else {
@@ -85,8 +85,8 @@ export default {
     },
     saveInput: function() {
       console.log(this.invoice);
-      save("invoices", this.invoice);
-    }
+      save("invoices", this.invoice, this);
+    },
   },
   computed: {
     selected() {
@@ -96,9 +96,9 @@ export default {
       if (this.objects.length > 0) {
         let rows = [];
         if (this.sameClient(this.selected)) {
-          let selected = this.selected.map(e => e.name);
+          let selected = this.selected.map((e) => e.name);
           for (let i = 0; i < selected.length; i++) {
-            let object = this.objects.find(e => e.name == selected[i]);
+            let object = this.objects.find((e) => e.name == selected[i]);
             let products = object.products;
             for (let j = 0; j < products.length; j++) {
               let index = rows.length;
@@ -108,7 +108,7 @@ export default {
                 product: products[j].name,
                 quantity: products[j].quantity,
                 unitPrice: products[j].unitPrice,
-                total: products[j].total
+                total: products[j].total,
               });
             }
           }
@@ -123,7 +123,7 @@ export default {
     total: function() {
       if (this.selected.length > 0) {
         return this.selected.reduce((a, b) => ({
-          total: parseInt(a.total) + parseInt(b.total)
+          total: parseInt(a.total) + parseInt(b.total),
         })).total;
       } else {
         return 0;
@@ -133,10 +133,10 @@ export default {
       return {
         client: "el caminante",
         rows: this.rows,
-        total: this.total
+        total: this.total,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

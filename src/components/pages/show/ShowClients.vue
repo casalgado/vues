@@ -11,6 +11,7 @@
       />
       <ButtonDelete
         v-if="this.selected.length == 1"
+        v-on:delete="getObjects()"
         :oid="this.oid"
         :path="this.path"
       />

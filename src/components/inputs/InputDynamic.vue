@@ -112,7 +112,9 @@ export default {
   watch: {
     name() {
       getOneWhere("products", "name", this.name).then((obj) => {
-        this.input.unitPrice = obj.price;
+        if (obj) {
+          this.input.unitPrice = obj.price;
+        }
       });
     },
   },

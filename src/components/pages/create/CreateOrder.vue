@@ -159,7 +159,7 @@ export default {
         this.submitStatus = "ERROR";
       } else {
         if (!this.options.client.includes(this.form.client)) {
-          save(`clients`, { name: this.form.client, birthday: "" });
+          save(`clients`, { name: this.form.client, birthday: "" }, this);
         }
       }
     },

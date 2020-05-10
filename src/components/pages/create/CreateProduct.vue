@@ -68,15 +68,26 @@ export default {
         this.submitStatus = "ERROR";
         evt.preventDefault();
       } else {
-        if (confirm("continuar?")) {
-          if (this.oid === "") {
-            evt.preventDefault();
-            save(this.path, this.form);
+        this.$fire({
+          text: "¿continuar?",
+          showCancelButton: true,
+        }).then((alertStatus) => {
+          if (alertStatus.dismiss) {
+            console.log("dismiss");
           } else {
-            evt.preventDefault();
-            update(`${this.path}/${this.oid}`, this.form);
+            if (this.oid === "") {
+              evt.preventDefault();
+              save(this.path, this.form, this).then(() => {
+                this.$router.go(-1);
+              });
+            } else {
+              evt.preventDefault();
+              update(`${this.path}/${this.oid}`, this.form).then(() => {
+                this.$router.go(-1);
+              });
+            }
           }
-        }
+        });
       }
     },
     reset(evt) {
@@ -95,11 +106,13 @@ export default {
   },
   beforeCreate() {
     Promise.all([
-      getAsOptionsForSelect("productCategories").then((options) => {
-        console.log(options);
-        options.unshift({ value: "", text: "categoria" });
-        this.options.categories = options;
-      }),
+      getAsOptionsForSelect("optionsForMenus/productCategories").then(
+        (options) => {
+          console.log(options);
+          options.unshift({ value: "", text: "categoria" });
+          this.options.categories = options;
+        }
+      ),
     ]).then(() => {
       if (this.oid !== "") {
         getById(this.path, this.oid).then((object) => {

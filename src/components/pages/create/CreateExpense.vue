@@ -1,13 +1,5 @@
 <template>
-  <b-form
-    v-if="show"
-    id="form"
-    @submit="
-      submit($event);
-      saveProvider();
-    "
-    @reset="reset"
-  >
+  <b-form v-if="show" id="form" @submit="submit($event)" @reset="reset">
     <b-button variant="info" @click="addProduct">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
 
@@ -55,7 +47,6 @@ import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
 import {
-  save,
   getMostUsed,
   getAsOptionsForSelect,
   getById,
@@ -124,10 +115,12 @@ export default {
         options.unshift({ value: "", text: "proveedor" });
         this.options.provider = options;
       }),
-      getAsOptionsForSelect("expenseCategories").then((options) => {
-        options.unshift({ value: "", text: "categoria" });
-        this.options.category = options;
-      }),
+      getAsOptionsForSelect("optionsForMenus/expenseCategories").then(
+        (options) => {
+          options.unshift({ value: "", text: "categoria" });
+          this.options.category = options;
+        }
+      ),
     ]).then(() => {
       if (this.oid !== "") {
         this.form.products.pop();
@@ -153,13 +146,7 @@ export default {
       }
     });
   },
-  methods: {
-    saveProvider() {
-      if (!this.options.provider.includes(this.form.provider)) {
-        save(`/providers`, { name: this.form.provider });
-      }
-    },
-  },
+  methods: {},
   watch: {
     provider: function(val) {
       console.log(val);

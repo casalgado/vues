@@ -235,8 +235,21 @@ body {
 }
 
 /* alert classes */
-#swal2-content {
+
+.swal2-show {
+  background-color: var(--color-primary);
   color: var(--color-neutral);
+}
+
+.swal2-content {
+  font-family: "Palanquin", sans-serif;
+  font-weight: 400;
+  color: var(--color-neutral);
+}
+
+button.swal2-confirm,
+button.swal2-cancel {
+  min-width: 120px;
 }
 
 .swal2-container.swal2-shown {

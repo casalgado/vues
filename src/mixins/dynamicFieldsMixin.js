@@ -31,90 +31,120 @@ export const dynamicFieldsMixin = {
         this.submitStatus = "ERROR";
         evt.preventDefault();
       } else {
-        if (confirm("continuar?")) {
+        this.$fire({
+          text: "¿continuar?",
+          showCancelButton: true,
+        }).then((alertStatus) => {
           evt.preventDefault();
-          let form = Object.assign({}, this.form);
-          let products = this.form.products.filter((e) => e.active == true);
-
-          let total = 0;
-          for (let i = 0; i < products.length; i++) {
-            delete products[i].id;
-            delete products[i].active;
-            total += products[i].total;
-            form.products.push(products[i]);
-          }
-          form.total = total;
-          form.products = products;
-          form.date = moment(form.date).format();
-          form.delivered = moment(form.delivered).format();
-
-          if (this.oid === "") {
-            save(`${this.path}`, form).then((id) => {
-              if (this.path == "orders") {
-                // add client to optionsForMenus list
-                update("optionsForMenus/clients", {
-                  [id]: { name: form.client },
-                });
-                // update client order history
-                getOneWhere("clients", "name", form.client).then((obj) => {
-                  let ck = obj.id;
-                  update("clients/" + ck + "/history", {
-                    [id]: {
-                      date: form.date,
-                      products: form.products,
-                    },
-                  });
-                });
-              } else if (this.path == "expenses") {
-                // add provider to optionsForMenus list
-                update("optionsForMenus/providers", {
-                  [id]: { name: form.provider },
-                });
-                // update provider order history
-                getOneWhere("providers", "name", form.provider).then((obj) => {
-                  let ck = obj.id;
-                  update("providers/" + ck + "/history", {
-                    [id]: {
-                      date: form.date,
-                      products: form.products,
-                    },
-                  });
-                });
-              }
-              // this.$router.push({ path: "/" });
-            });
+          if (alertStatus.dismiss) {
+            console.log("dismiss");
           } else {
-            update(`${this.path}/${this.oid}`, form, this.oid).then((id) => {
-              if (this.path == "orders") {
-                // update client order history
-                getOneWhere("clients", "name", form.client).then((obj) => {
-                  let ck = obj.id;
-                  update("clients/" + ck + "/history", {
-                    [id]: {
-                      date: form.date,
-                      products: form.products,
-                    },
+            let form = Object.assign({}, this.form);
+            let products = this.form.products.filter((e) => e.active == true);
+
+            let total = 0;
+            for (let i = 0; i < products.length; i++) {
+              delete products[i].id;
+              delete products[i].active;
+              total += products[i].total;
+              form.products.push(products[i]);
+            }
+            form.total = total;
+            form.products = products;
+            form.date = moment(form.date).format();
+            form.delivered = moment(form.delivered).format();
+
+            if (this.oid === "") {
+              save(`${this.path}`, form, this).then((id) => {
+                if (this.path == "orders") {
+                  // add client to optionsForMenus list
+                  update("optionsForMenus/clients", {
+                    [id]: { name: form.client },
                   });
-                });
-              } else if (this.path == "expenses") {
-                // update provider order history
-                getOneWhere("providers", "name", form.provider).then((obj) => {
-                  let ck = obj.id;
-                  update("providers/" + ck + "/history", {
-                    [id]: {
-                      date: form.date,
-                      products: form.products,
-                    },
+                  // update client order history
+                  getOneWhere("clients", "name", form.client).then((obj) => {
+                    let ck = obj.id;
+                    update("clients/" + ck + "/history", {
+                      [id]: {
+                        date: form.date,
+                        products: form.products,
+                      },
+                    });
                   });
-                });
-              }
-            });
+                  this.$router.push({ name: "ShowOrders" });
+                } else if (this.path == "expenses") {
+                  // add provider to optionsForMenus list
+                  update("optionsForMenus/providers", {
+                    [id]: { name: form.provider },
+                  });
+                  // update provider order history
+                  getOneWhere("providers", "name", form.provider).then(
+                    (obj) => {
+                      if (!obj) {
+                        console.log("new p");
+
+                        save(
+                          `/providers`,
+                          { name: this.form.provider },
+                          this
+                        ).then((ck) => {
+                          console.log(ck);
+                          update("providers/" + ck + "/history", {
+                            [id]: {
+                              date: form.date,
+                              products: form.products,
+                            },
+                          });
+                        });
+                      }
+                      console.log("old p");
+                      console.log(obj.id);
+                      let ck = obj.id;
+                      update("providers/" + ck + "/history", {
+                        [id]: {
+                          date: form.date,
+                          products: form.products,
+                        },
+                      });
+                    }
+                  );
+                  this.$router.push({ name: "ShowExpenses" });
+                }
+                // this.$router.push({ path: "/" });
+              });
+            } else {
+              update(`${this.path}/${this.oid}`, form, this.oid).then((id) => {
+                if (this.path == "orders") {
+                  // update client order history
+                  getOneWhere("clients", "name", form.client).then((obj) => {
+                    let ck = obj.id;
+                    update("clients/" + ck + "/history", {
+                      [id]: {
+                        date: form.date,
+                        products: form.products,
+                      },
+                    });
+                  });
+                  this.$router.push({ name: "ShowOrders" });
+                } else if (this.path == "expenses") {
+                  // update provider order history
+                  getOneWhere("providers", "name", form.provider).then(
+                    (obj) => {
+                      let ck = obj.id;
+                      update("providers/" + ck + "/history", {
+                        [id]: {
+                          date: form.date,
+                          products: form.products,
+                        },
+                      });
+                    }
+                  );
+                  this.$router.push({ name: "ShowExpenses" });
+                }
+              });
+            }
           }
-          // this.$router.push({ path: "/" });
-        } else {
-          console.log("out");
-          evt.preventDefault();
-        }
+        });
       }
     },
     reset(evt) {

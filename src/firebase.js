@@ -7,6 +7,8 @@ import store from "./store";
 // @refactor
 // where should the momentjs code go?
 
+console.log("mode is " + process.env.NODE_ENV);
+
 moment.updateLocale("es", {
   week: {
     dow: 0,
@@ -305,14 +307,18 @@ export function getProvidersLastExpense(provider) {
   });
 }
 
-export function save(path, payload) {
+export function save(path, payload, component) {
   console.time("save");
   return new Promise((resolve) => {
     var id = ref.child(path).push(payload, function(error) {
       if (error) {
         alert("Data could not be saved." + error);
       } else {
-        alert("Data saved successfully.");
+        if (component) {
+          component.$alert("Data saved successfully.");
+        } else {
+          alert("Data saved successfully.");
+        }
       }
     }).key;
     console.log(id);
@@ -321,7 +327,7 @@ export function save(path, payload) {
   });
 }
 
-export function update(path, payload, key) {
+export function update(path, payload, key, component) {
   console.time("update");
   return new Promise((resolve) => {
     console.log(path);
@@ -331,7 +337,11 @@ export function update(path, payload, key) {
       if (error) {
         alert("Data could not be saved." + error);
       } else {
-        alert("Data saved successfully.");
+        if (component) {
+          component.$alert("Data saved successfully.");
+        } else {
+          console.log("Data saved successfully.");
+        }
       }
     });
     resolve(key);
@@ -357,13 +367,16 @@ export function remove(path, oid) {
     getById(path, oid).then((snap) => {
       snap.id = oid;
       snap.path = path;
-      save("deleteHistory", snap).then(() => {
-        ref
-          .child(path)
-          .child(oid)
-          .remove();
-      });
+      update("deleteHistory/" + snap.id, snap)
+        .then(() => {
+          ref
+            .child(path)
+            .child(oid)
+            .remove();
+        })
+        .then(() => {
+          resolve(oid);
+        });
     });
-    resolve(oid);
   });
 }

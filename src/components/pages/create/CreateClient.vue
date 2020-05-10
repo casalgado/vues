@@ -21,6 +21,7 @@ import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
 import { save, update, getAsOptionsForSelect, getById } from "@/firebase";
 import { mapState } from "vuex";
+import moment from "moment";
 export default {
   name: "CreateClient",
   mixins: [validationMixin],
@@ -67,19 +68,29 @@ export default {
         this.submitStatus = "ERROR";
         evt.preventDefault();
       } else {
-        if (confirm("continuar?")) {
-          if (this.oid === "") {
-            evt.preventDefault();
-            save(this.path, this.form).then(() => {
-              update("optionsForMenus/clients", {
-                [this.oid]: { name: this.form.name },
-              });
-            });
+        this.$fire({
+          text: "¿continuar?",
+          showCancelButton: true,
+        }).then((alertStatus) => {
+          evt.preventDefault();
+          if (alertStatus.dismiss) {
+            console.log("dismiss");
           } else {
-            evt.preventDefault();
-            update(`${this.path}/${this.oid}`, this.form);
+            if (this.oid === "") {
+              this.form.since = moment().format();
+              save(this.path, this.form, this).then((id) => {
+                update("optionsForMenus/clients", {
+                  [id]: { name: this.form.name },
+                });
+                this.$router.push({ name: "ShowClients" });
+              });
+            } else {
+              update(`${this.path}/${this.oid}`, this.form).then(() => {
+                this.$router.push({ name: "ShowClients" });
+              });
+            }
           }
-        }
+        });
       }
     },
     reset(evt) {
@@ -100,14 +111,15 @@ export default {
   },
   beforeCreate() {
     Promise.all([
-      getAsOptionsForSelect("clientCategories").then((options) => {
-        options.unshift({ value: "", text: "origen" });
-        this.options.categories = options;
-      }),
+      getAsOptionsForSelect("optionsForMenus/clientCategories").then(
+        (options) => {
+          options.unshift({ value: "", text: "origen" });
+          this.options.categories = options;
+        }
+      ),
     ]).then(() => {
       if (this.oid !== "") {
         getById("clients", this.oid).then((object) => {
-          console.log(object);
           this.form.name = object.name;
           this.form.phone = object.phone.toString();
           this.form.address = object.address;
