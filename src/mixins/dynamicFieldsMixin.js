@@ -48,7 +48,7 @@ export const dynamicFieldsMixin = {
             for (let i = 0; i < products.length; i++) {
               delete products[i].id;
               delete products[i].active;
-              total += products[i].total;
+              total += parseInt(products[i].total);
               form.products.push(products[i]);
             }
             form.total = total;
@@ -142,7 +142,9 @@ export const dynamicFieldsMixin = {
                 // this.$router.push({ path: "/" });
               });
             } else {
-              form.paid = moment(form.paid).format();
+              if (form.paid !== "") {
+                form.paid = moment(form.paid).format();
+              }
               update(`${this.path}/${this.oid}`, form, this.oid).then((id) => {
                 if (this.path == "orders") {
                   // update client order history
