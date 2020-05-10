@@ -18,6 +18,12 @@
 
     <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
     <InputBasic v-model="form.delivered" :type="'date'" :label="'entregar'" />
+    <InputBasic
+      v-if="this.oid !== ''"
+      v-model="form.paid"
+      :type="'date'"
+      :label="'paid'"
+    />
 
     <div v-for="field in this.form.products" :key="field.id">
       <transition name="fade">
@@ -128,7 +134,7 @@ export default {
           this.form.client = object.client;
           this.form.date = object.date.split("T")[0];
           this.form.delivered = object.date.split("T")[0];
-          this.form.paid = object.paid;
+          this.form.paid = object.paid.split("T")[0];
           let products = object.products;
           for (let i = 0; i < products.length; i++) {
             this.form.products.push({
