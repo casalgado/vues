@@ -55,6 +55,7 @@ export const dynamicFieldsMixin = {
             form.products = products;
             form.date = moment(form.date).format();
             form.delivered = moment(form.delivered).format();
+            form.paid = moment(form.paid).format();
 
             if (this.oid === "") {
               save(`${this.path}`, form, this).then((id) => {

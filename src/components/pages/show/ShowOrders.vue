@@ -5,6 +5,7 @@
     <Table :table="table" />
     <TableTotals :objects="this.table.objects" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
+      <p v-if="this.development">{{ this.oids }}</p>
       <TableTotals :objects="this.selected" />
       <ButtonPaid :ids="this.oids" />
       <ButtonEdit
@@ -98,6 +99,14 @@ export default {
     };
   },
   computed: {
+    development: function() {
+      const environment = process.env.NODE_ENV;
+      if (environment === "development") {
+        return true;
+      } else {
+        return false;
+      }
+    },
     ...mapState(["date", "period", "selected"]),
   },
   methods: {

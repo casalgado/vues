@@ -100,6 +100,14 @@ export default {
       } else if (field == "quantity" && this.priority == "unitPrice") {
         this.input.total = Math.floor(unitPrice * quantity);
       }
+      if (field == "name") {
+        getOneWhere("products", "name", this.name).then((obj) => {
+          if (obj) {
+            this.input.unitPrice = obj.price;
+            this.input.total = Math.floor(obj.price * quantity);
+          }
+        });
+      }
       this.input.id = this.id;
       this.input.active = true;
       this.$emit("update-field", this.input);
@@ -110,13 +118,7 @@ export default {
     },
   },
   watch: {
-    name() {
-      getOneWhere("products", "name", this.name).then((obj) => {
-        if (obj) {
-          this.input.unitPrice = obj.price;
-        }
-      });
-    },
+    name() {},
   },
   created() {
     console.log("populate");

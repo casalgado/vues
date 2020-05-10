@@ -4,6 +4,7 @@
     <Pagination :period="table.pagination" />
     <Table :table="table" />
     <b-card id="toolbox" v-if="this.selected.length > 0">
+      <p v-if="this.development">{{ this.oid }}</p>
       <ButtonEdit
         v-if="this.selected.length == 1"
         :oid="this.oid"
@@ -88,6 +89,14 @@ export default {
     };
   },
   computed: {
+    development: function() {
+      const environment = process.env.NODE_ENV;
+      if (environment === "development") {
+        return true;
+      } else {
+        return false;
+      }
+    },
     ...mapState(["ref", "date", "period", "selected"]),
   },
   methods: {
