@@ -37,7 +37,7 @@ import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 
 export default {
-  name: "showOrders",
+  name: "ShowDashboard",
   mixins: [ordersMixin],
   components: {
     Table,

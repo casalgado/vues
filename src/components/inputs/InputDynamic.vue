@@ -105,6 +105,7 @@ export default {
           if (obj) {
             this.input.unitPrice = obj.price;
             this.input.total = Math.floor(obj.price * quantity);
+            this.$emit("update-field", this.input);
           }
         });
       }

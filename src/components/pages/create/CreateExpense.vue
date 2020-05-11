@@ -1,5 +1,5 @@
 <template>
-  <b-form v-if="show" id="form" @submit="submit($event)" @reset="reset">
+  <b-form v-if="show" id="form" @submit="submit($event)">
     <h5 id="form-title">crear gasto</h5>
     <InputSelect
       v-model="form.provider"
@@ -146,7 +146,33 @@ export default {
       }
     });
   },
-  methods: {},
+  methods: {
+    reset(evt) {
+      if (evt) {
+        evt.preventDefault();
+      }
+      this.form = {
+        provider: "",
+        category: "",
+        date: "",
+        products: [
+          {
+            id: 0,
+            active: true,
+            name: "",
+            unitPrice: 1,
+            quantity: 1,
+            total: 1,
+          },
+        ],
+      };
+      // Trick to reset/clear native browser form validation state
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+  },
   watch: {
     provider: function(val) {
       console.log(val);

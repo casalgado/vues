@@ -3,19 +3,19 @@
     <h6 id="title">{{ table.title }}</h6>
     <Pagination :period="table.pagination" />
     <Table :table="table" />
-    <TableTotals :objects="this.table.objects" />
-    <b-card id="toolbox" v-if="this.selected.length > 0">
-      <TableTotals :objects="this.selected" />
+    <TableTotals :objects="table.objects" />
+    <b-card v-if="selected.length > 0" id="toolbox">
+      <TableTotals :objects="selected" />
       <ButtonEdit
-        v-if="this.selected.length == 1"
-        :oid="this.oid"
+        v-if="selected.length == 1"
+        :oid="oid"
         destination="EditExpense"
       />
       <ButtonDelete
-        v-if="this.selected.length == 1"
-        v-on:delete="getObjects()"
-        :oid="this.oid"
-        :path="this.path"
+        v-if="selected.length == 1"
+        :oid="oid"
+        :path="path"
+        @:delete="getObjects()"
       />
     </b-card>
   </div>
@@ -32,7 +32,7 @@ import { mapState } from "vuex";
 
 export default {
   name: "ShowExpenses",
-  mixins: [ordersMixin],
+
   components: {
     Table,
     Pagination,
@@ -40,7 +40,15 @@ export default {
     ButtonEdit,
     ButtonDelete,
   },
-  props: { pagination: String },
+  mixins: [ordersMixin],
+  props: {
+    pagination: {
+      type: String,
+      default: () => {
+        return "week";
+      },
+    },
+  },
   data() {
     return {
       table: {
@@ -77,6 +85,28 @@ export default {
     };
   },
   computed: { ...mapState(["date", "period", "selected"]) },
+  watch: {
+    date() {
+      this.getObjects();
+    },
+    period() {
+      this.getObjects();
+    },
+    selected() {
+      if (this.selected[0]) {
+        this.oid = this.selected[0].id;
+      }
+    },
+  },
+  created() {
+    if (this.pagination) {
+      this.table.pagination = "day";
+      this.table.title = "Egresos";
+    }
+  },
+  mounted() {
+    this.getObjects();
+  },
   methods: {
     getObjects: function() {
       getByDateRange(`expenses`, "date", this.date, this.period).then((e) => {
@@ -100,28 +130,6 @@ export default {
           }
         })
         .join("<br />");
-    },
-  },
-  created() {
-    if (this.pagination) {
-      this.table.pagination = "day";
-      this.table.title = "Egresos";
-    }
-  },
-  mounted() {
-    this.getObjects();
-  },
-  watch: {
-    date() {
-      this.getObjects();
-    },
-    period() {
-      this.getObjects();
-    },
-    selected() {
-      if (this.selected[0]) {
-        this.oid = this.selected[0].id;
-      }
     },
   },
 };

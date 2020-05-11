@@ -99,7 +99,7 @@ export const dynamicFieldsMixin = {
                       });
                     }
                   });
-                  this.$router.push({ name: "ShowOrders" });
+                  this.reset();
                 } else if (this.path == "expenses") {
                   form.provider = form.provider.toLowerCase();
                   // add provider to optionsForMenus list
@@ -137,7 +137,7 @@ export const dynamicFieldsMixin = {
                       });
                     }
                   );
-                  this.$router.push({ name: "ShowExpenses" });
+                  this.reset();
                 }
                 // this.$router.push({ path: "/" });
               });
@@ -157,7 +157,7 @@ export const dynamicFieldsMixin = {
                       },
                     });
                   });
-                  this.$router.push({ name: "ShowOrders" });
+                  this.reset();
                 } else if (this.path == "expenses") {
                   // update provider order history
                   getOneWhere("providers", "name", form.provider).then(
@@ -171,39 +171,13 @@ export const dynamicFieldsMixin = {
                       });
                     }
                   );
-                  this.$router.push({ name: "ShowExpenses" });
+                  this.reset();
                 }
               });
             }
           }
         });
       }
-    },
-    reset(evt) {
-      if (evt) {
-        evt.preventDefault();
-      }
-      this.form = {
-        client: "",
-        date: "",
-        deliver: "",
-        paid: "",
-        products: [
-          {
-            id: 0,
-            active: true,
-            name: "",
-            unitPrice: 1,
-            quantity: 1,
-            total: 1,
-          },
-        ],
-      };
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
     },
   },
 };

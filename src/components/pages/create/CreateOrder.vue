@@ -1,5 +1,5 @@
 <template>
-  <b-form v-if="show" id="form" @submit="submit($event)" @reset="reset">
+  <b-form v-if="show" id="form" @submit="submit($event)">
     <h5 id="form-title">crear pedido</h5>
     <InputSelect
       v-model="form.client"
@@ -148,7 +148,34 @@ export default {
       }
     });
   },
-  methods: {},
+  methods: {
+    reset(evt) {
+      if (evt) {
+        evt.preventDefault();
+      }
+      this.form = {
+        client: "",
+        date: "",
+        deliver: "",
+        paid: "",
+        products: [
+          {
+            id: 0,
+            active: true,
+            name: "",
+            unitPrice: 1,
+            quantity: 1,
+            total: 1,
+          },
+        ],
+      };
+      // Trick to reset/clear native browser form validation state
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+  },
   watch: {
     client: function(val) {
       if (this.oid === "" && this.options.client.includes(this.form.client)) {
