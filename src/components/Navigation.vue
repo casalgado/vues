@@ -1,6 +1,6 @@
 <template>
   <div fluid id="nav-container">
-    <p v-if="development" class="dev">db:{{ this.ref }}</p>
+    <p v-if="development" class="dev">db: {{ this.db }}</p>
     <b-dropdown
       dropup
       no-caret
@@ -111,11 +111,18 @@
   </div>
 </template>
 <script>
-import { ref } from "@/firebase";
+import { mapState } from "vuex";
 export default {
   name: "Navigation",
   data: function() {
-    return {};
+    return {
+      db: "",
+    };
+  },
+  methods: {
+    setRef() {
+      this.db = "development";
+    },
   },
   computed: {
     development: function() {
@@ -126,13 +133,12 @@ export default {
         return false;
       }
     },
-    ref: function() {
-      let array = ref.toString().split("/");
-      return array[array.length - 1];
-    },
+    ...mapState(["ref"]),
   },
-  mounted() {
-    console.log(`working database: ${this.ref}`);
+  watch: {
+    ref() {
+      this.setRef();
+    },
   },
 };
 </script>

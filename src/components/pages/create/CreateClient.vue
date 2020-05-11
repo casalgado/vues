@@ -1,6 +1,6 @@
 <template>
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
-    <b-button type="submit" variant="primary">Submit</b-button>
+    <h5 id="form-title">crear cliente</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.phone" :type="'number'" :label="'telefono'" />
     <InputBasic v-model="form.address" :type="'text'" :label="'direccion'" />
@@ -11,6 +11,7 @@
       :label="'categoria'"
       :allowText="false"
     />
+    <b-button type="submit" variant="primary">Submit</b-button>
     <p v-if="$v.form.name.$error"><kbd>Debe incluir nombre</kbd></p>
   </b-form>
 </template>

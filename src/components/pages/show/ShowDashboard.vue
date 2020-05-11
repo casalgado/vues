@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container v-if="this.user" fluid>
+    <b-container fluid>
       <b-row>
         <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
           <h6 id="title">{{ tableProduce.title }}</h6>
@@ -23,7 +23,7 @@
         <ClientSnippet :oid="this.oid" :key="this.oid + 'i'" />
       </b-card>
     </b-container>
-    <Landing v-else />
+    <Landing v-if="!this.user" />
   </div>
 </template>
 <script>
@@ -98,9 +98,9 @@ export default {
   },
   computed: {
     user: function() {
-      return this.uid;
+      return true;
     },
-    ...mapState(["uid", "date", "period", "selected"]),
+    ...mapState(["uid", "ref", "date", "period", "selected"]),
   },
   methods: {
     getObjects: function() {
@@ -129,6 +129,9 @@ export default {
       this.getObjects();
     },
     period() {
+      this.getObjects();
+    },
+    ref() {
       this.getObjects();
     },
     selected() {

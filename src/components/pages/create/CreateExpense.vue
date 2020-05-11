@@ -1,8 +1,6 @@
 <template>
   <b-form v-if="show" id="form" @submit="submit($event)" @reset="reset">
-    <b-button variant="info" @click="addProduct">+ producto</b-button>
-    <b-button type="submit" variant="primary">Submit</b-button>
-
+    <h5 id="form-title">crear gasto</h5>
     <InputSelect
       v-model="form.provider"
       :options="options.provider"
@@ -32,6 +30,8 @@
         />
       </transition>
     </div>
+    <b-button variant="info" @click="addProduct">+ producto</b-button>
+    <b-button type="submit" variant="primary">Submit</b-button>
     <p v-if="$v.form.provider.$error"><kbd>Debe incluir proveedor</kbd></p>
     <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
     <!-- <b-card class="mt-3">

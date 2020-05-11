@@ -1,6 +1,6 @@
 <template>
   <b-form id="form" @submit="submit" @reset="reset" v-if="show">
-    <b-button type="submit" variant="primary">Submit</b-button>
+    <h5 id="form-title">crear producto</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.price" :type="'text'" :label="'p venta'" />
     <InputBasic v-model="form.cost" :type="'text'" :label="'p costo'" />
@@ -10,6 +10,7 @@
       :label="'categoria'"
       :allowText="false"
     />
+    <b-button type="submit" variant="primary">Submit</b-button>
     <p v-if="$v.form.name.$error"><kbd>Debe incluir nombre</kbd></p>
     <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
   </b-form>

@@ -1,7 +1,6 @@
 <template>
   <b-form v-if="show" id="form" @submit="submit($event)" @reset="reset">
-    <b-button @click="addProduct" variant="info">+ producto</b-button>
-    <b-button type="submit" variant="primary">Submit</b-button>
+    <h5 id="form-title">crear pedido</h5>
     <InputSelect
       v-model="form.client"
       :options="this.options.client"
@@ -30,9 +29,10 @@
           @update-field="updateField"
         />
       </transition>
-      <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
     </div>
-
+    <b-button @click="addProduct" variant="info">+ producto</b-button>
+    <b-button type="submit" variant="primary">Submit</b-button>
+    <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
     <!-- <b-card class="mt-3">
       <pre class="m-0">{{ this.form }}</pre>
     </b-card> -->

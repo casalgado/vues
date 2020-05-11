@@ -2,6 +2,7 @@ import { initializeApp } from "firebase";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
+import "firebase/functions";
 import moment from "moment";
 import store from "./store";
 // @refactor
@@ -26,6 +27,13 @@ const app = initializeApp({
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
 });
 
+const database = app.database();
+const environment = process.env.NODE_ENV;
+export { database };
+export { environment };
+
+let ref = database.ref();
+
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     database
@@ -34,28 +42,24 @@ firebase.auth().onAuthStateChanged((user) => {
       .then(function(snapshot) {
         user.ref = snapshot.val().ref;
         store.dispatch("fetchUser", user);
+        if (environment === "production") {
+          console.log("mode is production");
+          ref = database.ref("development-esalimento");
+        } else if (environment === "development") {
+          console.log("mode is development");
+          ref = database.ref("development-esalimento");
+        }
+        let array = ref.toString().split("/");
+
+        store.commit("setRef");
+        console.log(array[array.length - 1]);
       });
   } else {
     store.dispatch("fetchUser", user);
   }
 });
-
-const database = app.database();
-export { database };
-const environment = process.env.NODE_ENV;
-export { environment };
-
-let ref;
-if (environment === "production") {
-  console.log("mode is production");
-  if (store.state.ref) {
-    ref = database.ref(store.state.ref);
-  }
-} else if (environment === "development") {
-  console.log("mode is development");
-  ref = database.ref("development-esalimento");
-}
-
+console.log("ref");
+console.log(ref);
 export { ref };
 
 export function getUser() {

@@ -46,6 +46,16 @@ input {
   font-weight: 500;
 }
 
+/* form styles */
+
+#form {
+  padding-top: 12px;
+}
+
+#form-title {
+  padding-bottom: 12px;
+}
+
 /* table styles */
 
 .b-table {
