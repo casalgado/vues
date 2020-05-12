@@ -36,6 +36,7 @@ let ref = database.ref();
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
+    console.log("r.");
     database
       .ref(`users/${user.uid}`)
       .once("value")
@@ -44,9 +45,11 @@ firebase.auth().onAuthStateChanged((user) => {
         if (environment === "production") {
           console.log("mode is production");
           store.dispatch("fetchUser", user);
+          ref = database.ref(user.ref);
         } else if (environment === "development") {
           console.log("mode is development");
           user.ref = "development-esalimento";
+          ref = database.ref("development-esalimento");
           store.dispatch("fetchUser", user);
         }
       });
