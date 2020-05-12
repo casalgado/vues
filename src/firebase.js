@@ -177,6 +177,10 @@ export function getAllOrdersWhereProduct(product) {
   });
 }
 
+getAllOrdersWhereProduct("pan integral").then((objs) => {
+  console.log(objs);
+});
+
 export function getById(path, id) {
   return new Promise(function(resolve) {
     console.time("getById");

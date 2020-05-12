@@ -3,26 +3,26 @@
     <h6 id="title">{{ table.title }}</h6>
     <Pagination :period="table.pagination" />
     <Table :table="table" />
-    <b-card id="toolbox" v-if="this.selected.length > 0">
-      <p v-if="this.development">{{ this.oid }}</p>
+    <b-card v-if="selected.length > 0" id="toolbox">
+      <p v-if="development">{{ oid }}</p>
       <ButtonEdit
-        v-if="this.selected.length == 1"
-        :oid="this.oid"
+        v-if="selected.length == 1"
+        :oid="oid"
         destination="EditClient"
       />
       <ButtonDelete
-        v-if="this.selected.length == 1"
-        v-on:delete="getObjects()"
-        :oid="this.oid"
-        :path="this.path"
+        v-if="selected.length == 1"
+        :oid="oid"
+        :path="path"
+        @:delete="getObjects()"
       />
 
-      <b-button @click="getAllClients" variant="dark" class="toolbox-button">
+      <b-button variant="dark" class="toolbox-button" @click="getAllClients">
         todos
       </b-button>
-      <ClientHistorySummary :dbref="this.ref" :cid="this.oid" :key="this.oid" />
+      <ClientHistorySummary :key="oid" :dbref="ref" :cid="oid" />
     </b-card>
-    <b-button @click="getAllClients" variant="dark" class="toolbox-button">
+    <b-button variant="dark" class="toolbox-button" @click="getAllClients">
       todos
     </b-button>
   </div>
@@ -64,18 +64,24 @@ export default {
             tdClass: "justifyLeft",
           },
           {
+            key: "phone",
+            label: "Tel",
+            sortable: true,
+          },
+          {
+            key: "lastOrder",
+            label: "Ult",
+            sortable: true,
+          },
+          {
             key: "birthday",
             label: "Cumple",
             sortable: true,
           },
-          {
-            key: "phone",
-            label: "Telefono",
-            sortable: true,
-          },
+
           {
             key: "address",
-            label: "Direccion",
+            label: "Dir",
             sortable: true,
           },
         ],
@@ -99,6 +105,22 @@ export default {
     },
     ...mapState(["ref", "date", "period", "selected"]),
   },
+  watch: {
+    date() {
+      this.getObjects();
+    },
+    period() {
+      this.getObjects();
+    },
+    selected() {
+      if (this.selected[0]) {
+        this.oid = this.selected[0].id;
+      }
+    },
+  },
+  mounted() {
+    this.getObjects();
+  },
   methods: {
     getObjects: function() {
       getByDateRange(`clients`, "since", this.date, this.period).then((e) => {
@@ -119,6 +141,7 @@ export default {
     format: function(objects) {
       let items = objects.map((e) => {
         e.since = moment(e.since).format("YYYY/MM/DD");
+        e.lastOrder = this.getLastOrder(e);
         if (e.birthday !== "") {
           e.birthday = moment(e.birthday).format("MMM DD");
         }
@@ -126,21 +149,14 @@ export default {
       });
       return items;
     },
-  },
-  mounted() {
-    this.getObjects();
-  },
-  watch: {
-    date() {
-      this.getObjects();
-    },
-    period() {
-      this.getObjects();
-    },
-    selected() {
-      if (this.selected[0]) {
-        this.oid = this.selected[0].id;
-      }
+    getLastOrder(o) {
+      const h = o.history;
+      let d = [];
+      Object.keys(h).forEach((k) => {
+        d.push(h[k]["date"]);
+      });
+      let ult = moment().diff(moment(d.sort()[d.length - 1]), "days");
+      return `${ult} d`;
     },
   },
 };
