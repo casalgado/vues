@@ -41,18 +41,14 @@ firebase.auth().onAuthStateChanged((user) => {
       .once("value")
       .then(function(snapshot) {
         user.ref = snapshot.val().ref;
-        store.dispatch("fetchUser", user);
         if (environment === "production") {
           console.log("mode is production");
-          ref = database.ref("development-esalimento");
+          store.dispatch("fetchUser", user);
         } else if (environment === "development") {
           console.log("mode is development");
-          ref = database.ref("development-esalimento");
+          user.ref = "development-esalimento";
+          store.dispatch("fetchUser", user);
         }
-        let array = ref.toString().split("/");
-
-        store.commit("setRef");
-        console.log(array[array.length - 1]);
       });
   } else {
     store.dispatch("fetchUser", user);
