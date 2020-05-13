@@ -16,6 +16,15 @@ orders
 tables
 - control tables with keyboard
 
+database
+- renames 
+pan de queso costeño => ... grande
+torta de pan con banano => torta de banano
+pan de uva integral grande => 32000
+pan de zaatar => ... grande
+revisar todos los integrales
+pan de uva integral => pan integral de uva
+
 users
 - https://blog.logrocket.com/vue-firebase-authentication/
 - https://www.youtube.com/watch?v=2ciHixbc4HE timestamp 4:05 mins

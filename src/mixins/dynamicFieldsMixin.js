@@ -1,4 +1,5 @@
 import { save, update, getOneWhere } from "@/firebase";
+import { cquotes } from "@/alertQuotes";
 import moment from "moment";
 
 export const dynamicFieldsMixin = {
@@ -32,9 +33,11 @@ export const dynamicFieldsMixin = {
         console.log("invalid");
         this.submitStatus = "ERROR";
       } else {
+        let quote = cquotes[Math.floor(Math.random() * cquotes.length)];
         console.log("1");
         this.$fire({
-          text: "¿continuar?",
+          title: `"${quote.quote}"`,
+          text: `- ${quote.unit}`,
           showCancelButton: true,
         }).then((alertStatus) => {
           console.log("2");

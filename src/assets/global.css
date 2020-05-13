@@ -252,8 +252,18 @@ body {
 }
 
 .swal2-content {
-  font-family: "Palanquin", sans-serif !important;
-  font-weight: 400 !important;
+  font-family: "Gill Sans", serif !important;
+  text-align: right;
+  padding-right: 20%;
+  font-weight: lighter;
+  color: var(--color-neutral) !important;
+}
+
+.swal2-title {
+  font-family: "Gill Sans", serif !important;
+  font-style: italic !important;
+  font-size: 20px;
+  font-weight: lighter;
   color: var(--color-neutral) !important;
 }
 
