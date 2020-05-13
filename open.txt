@@ -15,6 +15,7 @@ orders
 
 tables
 - control tables with keyboard
+- differentiate 'egresos' from 'gastos'
 
 database
 - renames 
@@ -25,7 +26,24 @@ pan de zaatar => ... grande
 revisar todos los integrales
 pan de uva integral => pan integral de uva
 
+- reorder product list
+masa madre
+  grandes
+  pequeños
+otros panes
+tortas
+otros
+
+styles 
+- add favicon logo
+- add logo header
+
+
 users
 - https://blog.logrocket.com/vue-firebase-authentication/
 - https://www.youtube.com/watch?v=2ciHixbc4HE timestamp 4:05 mins
 
+lol
+essence reaver
+runes hurricane
+infinity edge

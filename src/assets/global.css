@@ -253,17 +253,17 @@ body {
 
 .swal2-content {
   font-family: "Gill Sans", serif !important;
-  text-align: right;
-  padding-right: 20%;
-  font-weight: lighter;
+  text-align: right !important;
+  padding-right: 20% !important;
+  font-weight: lighter !important;
   color: var(--color-neutral) !important;
 }
 
 .swal2-title {
   font-family: "Gill Sans", serif !important;
   font-style: italic !important;
-  font-size: 20px;
-  font-weight: lighter;
+  font-size: 20px !important;
+  font-weight: lighter !important;
   color: var(--color-neutral) !important;
 }
 
