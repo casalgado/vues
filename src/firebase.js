@@ -44,10 +44,12 @@ firebase.auth().onAuthStateChanged((user) => {
         user.ref = snapshot.val().ref;
         if (environment === "production") {
           console.log("mode is production");
+          console.log(ref.toString());
           store.dispatch("fetchUser", user);
           ref = database.ref(user.ref);
         } else if (environment === "development") {
           console.log("mode is development");
+          console.log(ref.toString());
           user.ref = "development-esalimento";
           ref = database.ref("development-esalimento");
           store.dispatch("fetchUser", user);
@@ -67,6 +69,7 @@ export function getUser() {
 
 export function getByDateRange(path, propname, date, period) {
   return new Promise((resolve) => {
+    console.log(ref.toString());
     console.time("getByDateRange:");
     ref
       .child(path)
@@ -98,6 +101,7 @@ export function getByDateRange(path, propname, date, period) {
 export function getAll(path) {
   return new Promise((resolve) => {
     console.time("getAll");
+    console.log(ref.toString());
     ref.child(path).on("value", (snap) => {
       let objects = [];
       snap.forEach((csnap) => {
@@ -137,6 +141,7 @@ export function getOneWhere(path, prop, value) {
 export function getAllWhere(path, prop, value) {
   return new Promise((resolve) => {
     console.time("getAllWhere");
+    console.log(ref.toString());
     ref
       .child(path)
       .orderByChild(prop)
@@ -183,6 +188,7 @@ getAllOrdersWhereProduct("pan integral").then((objs) => {
 export function getById(path, id) {
   return new Promise(function(resolve) {
     console.time("getById");
+    console.log(ref.toString());
     ref
       .child(path)
       .child(id)
@@ -196,6 +202,7 @@ export function getById(path, id) {
 export function getMostUsedClients(size) {
   return new Promise(function(resolve) {
     console.time("getMostUsedClients");
+    console.log(ref.toString());
     ref
       .child("optionsForMenus")
       .child("clients")
@@ -247,6 +254,7 @@ export function getMostUsed(path, property, size) {
     console.time("getMostUsed 1");
     console.time("getMostUsed 2");
     console.time("getMostUsed 3");
+    console.log(ref.toString());
     let objects = [];
     let sorted_unique = [];
     let most_used = [];
@@ -291,6 +299,7 @@ export function getMostUsed(path, property, size) {
 export function getAsOptionsForSelect(path) {
   return new Promise(function(resolve) {
     console.time("getAsOptionsForSelect");
+    console.log(ref.toString());
     ref.child(path).once("value", function(snap) {
       let options = [];
       let objects = [];
@@ -320,6 +329,7 @@ export function getAsOptionsForSelect(path) {
 export function getClientsLastOrder(client) {
   return new Promise(function(resolve) {
     console.time("getClientsLastOrder");
+    console.log(ref.toString());
     ref
       .child(`orders`)
       .orderByChild("client")
@@ -335,6 +345,7 @@ export function getClientsLastOrder(client) {
 export function getProvidersLastExpense(provider) {
   return new Promise(function(resolve) {
     console.time("getProvidersLastExpense");
+    console.log(ref.toString());
     ref
       .child(`expenses`)
       .orderByChild("provider")
@@ -350,7 +361,8 @@ export function getProvidersLastExpense(provider) {
 export function save(path, payload, component) {
   console.time("save");
   return new Promise((resolve) => {
-    payload.lastModified = moment().format();
+    console.log(ref.toString());
+    payload.dateCreated = moment().format();
     var id = ref.child(path).push(payload, function(error) {
       if (error) {
         alert("Data could not be saved." + error);
@@ -371,9 +383,7 @@ export function save(path, payload, component) {
 export function update(path, payload, key, component) {
   console.time("update");
   return new Promise((resolve) => {
-    console.log(path);
-    console.log(payload);
-    console.log(key);
+    console.log(ref.toString());
     ref.child(path).update(payload, function(error) {
       if (error) {
         alert("Data could not be saved." + error);
@@ -385,6 +395,7 @@ export function update(path, payload, key, component) {
         }
       }
     });
+    console.timeEnd("update");
     resolve(key);
   });
 }

@@ -16,6 +16,7 @@ orders
 tables
 - control tables with keyboard
 - differentiate 'egresos' from 'gastos'
+- dissagregate products from clients to be able to sort by product
 
 database
 - renames 

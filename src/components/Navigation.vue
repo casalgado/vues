@@ -1,6 +1,6 @@
 <template>
   <div fluid id="nav-container">
-    <p v-if="development" class="dev">db: {{ this.db }}</p>
+    <p class="dev">db: {{ this.db }}</p>
     <b-dropdown
       dropup
       no-caret
@@ -137,7 +137,7 @@ export default {
   },
   watch: {
     ref() {
-      this.setRef();
+      this.db = this.ref;
     },
   },
 };
