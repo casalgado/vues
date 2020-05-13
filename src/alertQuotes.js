@@ -1820,9 +1820,54 @@ const all = [
     delete: "",
   },
   {
-    unit: "- SC2 Trivia",
+    unit: "SC2 Trivia",
     create:
       "If you click a sc2 SCV enough times he’ll tell you about his cousin Lester that once saw a zergling. This is a reference to a cinematic from the first starcraft game.",
+    delete: "",
+  },
+  {
+    unit: "Tyrion Lannister",
+    create:
+      "“I have a tender spot in my heart for cripples and bastards and broken things.”",
+    delete: "“Every time we deal with an enemy, we create two more.”",
+  },
+  {
+    unit: "Tyrion Lannister",
+    create:
+      "About Joffrey: “It’s hard to put a leash on a dog once you’ve put a crown on its head.”",
+    delete: "",
+  },
+  {
+    unit: "Tyrion Lannister",
+    create:
+      "“It’s easy to confuse ‘what is’ with ‘what ought to be,’ especially when ‘what is’ has worked out in your favor.”",
+    delete: "",
+  },
+  {
+    unit: "Tony Stark",
+    create: "Sometimes you gotta run before you can walk.",
+    delete:
+      "It’s not about how much we lost, it’s about how much we have left.",
+  },
+  {
+    unit: "Tony Stark",
+    create: "Contrary to popular belief, I know exactly what I’m doing.",
+    delete: "",
+  },
+  {
+    unit: "Deadpool",
+    create:
+      "Oh, hello there! I bet you're wondering, why the red suit? Well, that's so bad guys can't see me bleed! (spots mercenaries) Let's hope these guys are wearing their brown pants...",
+    delete: "“So dark. Are you sure you’re not from the DC universe?”",
+  },
+  {
+    unit: "House Targaryen",
+    create: "Fire and Blood",
+    delete: "",
+  },
+  {
+    unit: "Daenerys",
+    create: "Dracarys.",
     delete: "",
   },
 ];
