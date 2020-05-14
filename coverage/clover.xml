@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1589463701772" clover="3.2.0">
+  <project timestamp="1589463701773" name="All files">
+    <metrics statements="10" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="2" elements="17" coveredelements="4" complexity="0" loc="10" ncloc="10" packages="1" files="1" classes="1"/>
+    <file name="Landing.vue" path="/Users/carlossalgado/Web/vues/src/components/Landing.vue">
+      <metrics statements="10" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="2"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="26" count="1" type="stmt"/>
+      <line num="34" count="0" type="stmt"/>
+      <line num="38" count="0" type="stmt"/>
+      <line num="39" count="0" type="stmt"/>
+      <line num="40" count="0" type="stmt"/>
+      <line num="41" count="0" type="stmt"/>
+      <line num="44" count="0" type="stmt"/>
+      <line num="48" count="0" type="stmt"/>
+      <line num="51" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>

@@ -1,9 +1,14 @@
 <template>
   <div>
-    <img alt="Es Alimento logo" src="https://i.imgur.com/tETJGS8.jpg">
+    <img alt="Es Alimento logo" src="https://i.imgur.com/tETJGS8.jpg" />
     <div>
-      <input v-model="email" type="email" placeholder="email">
-      <input v-model="password" type="password" placeholder="password">
+      <input
+        v-model="email"
+        ref="emailField"
+        type="email"
+        placeholder="email"
+      />
+      <input v-model="password" type="password" placeholder="password" />
       <button @click="submit">submit</button>
       <button @click="show">show</button>
       <button @click="logout">logout</button>

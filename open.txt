@@ -39,6 +39,9 @@ styles
 - add favicon logo
 - add logo header
 
+testing
+- start testing small components
+
 
 users
 - https://blog.logrocket.com/vue-firebase-authentication/
