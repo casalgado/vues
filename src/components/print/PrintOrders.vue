@@ -1,7 +1,7 @@
 <template>
   <div id="page">
     <div id="logo">
-      <img alt="Es Alimento logo" src="https://i.imgur.com/oh4fort.png" />
+      <img alt="Es Alimento logo" src="https://i.imgur.com/oh4fort.png">
     </div>
     <div id="header">
       <ul>
@@ -71,23 +71,6 @@ export default {
       date: moment().format("DD-MM-YYYY"),
     };
   },
-  methods: {
-    sameClient: function(objects) {
-      if (objects.length > 0) {
-        let client = objects[0].client;
-        return (
-          objects.map((e) => e.client).filter((e) => e == client).length ==
-          objects.length
-        );
-      } else {
-        return false;
-      }
-    },
-    saveInput: function() {
-      console.log(this.invoice);
-      save("invoices", this.invoice, this);
-    },
-  },
   computed: {
     selected() {
       return this.$store.state.selected;
@@ -135,6 +118,23 @@ export default {
         rows: this.rows,
         total: this.total,
       };
+    },
+  },
+  methods: {
+    sameClient: function(objects) {
+      if (objects.length > 0) {
+        let client = objects[0].client;
+        return (
+          objects.map((e) => e.client).filter((e) => e == client).length ==
+          objects.length
+        );
+      } else {
+        return false;
+      }
+    },
+    saveInput: function() {
+      console.log(this.invoice);
+      save("invoices", this.invoice, this);
     },
   },
 };

@@ -30,7 +30,7 @@
         />
       </transition>
     </div>
-    <b-button @click="addProduct" variant="info">+ producto</b-button>
+    <b-button variant="info" @click="addProduct">+ producto</b-button>
     <b-button type="submit" variant="primary">Submit</b-button>
     <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
     <!-- <b-card class="mt-3">
@@ -55,8 +55,8 @@ import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "CreateOrder",
-  mixins: [dynamicFieldsMixin, validationMixin],
   components: { InputSelect, InputBasic, InputDynamic },
+  mixins: [dynamicFieldsMixin, validationMixin],
   props: {
     oid: {
       type: String,
@@ -104,6 +104,31 @@ export default {
     },
     date() {
       return this.form.date;
+    },
+  },
+  watch: {
+    client: function(val) {
+      if (this.oid === "" && this.options.client.includes(this.form.client)) {
+        this.form.products = [];
+        getClientsLastOrder(val).then((e) => {
+          let products = e.products;
+          for (let i = 0; i < products.length; i++) {
+            this.form.products.push({
+              id: i,
+              active: true,
+              name: products[i].name,
+              unitPrice: products[i].unitPrice,
+              quantity: products[i].quantity,
+              total: products[i].total,
+            });
+          }
+        });
+      }
+    },
+    date: function(val) {
+      this.form.deliver = moment(val)
+        .add(1, "day")
+        .format("YYYY-MM-DD");
     },
   },
   beforeCreate() {
@@ -174,31 +199,6 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    },
-  },
-  watch: {
-    client: function(val) {
-      if (this.oid === "" && this.options.client.includes(this.form.client)) {
-        this.form.products = [];
-        getClientsLastOrder(val).then((e) => {
-          let products = e.products;
-          for (let i = 0; i < products.length; i++) {
-            this.form.products.push({
-              id: i,
-              active: true,
-              name: products[i].name,
-              unitPrice: products[i].unitPrice,
-              quantity: products[i].quantity,
-              total: products[i].total,
-            });
-          }
-        });
-      }
-    },
-    date: function(val) {
-      this.form.deliver = moment(val)
-        .add(1, "day")
-        .format("YYYY-MM-DD");
     },
   },
 };

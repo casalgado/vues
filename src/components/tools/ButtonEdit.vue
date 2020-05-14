@@ -1,7 +1,5 @@
 <template>
-  <b-button @click="edit" variant="primary" class="toolbox-button"
-    >editar</b-button
-  >
+  <b-button variant="primary" class="toolbox-button" @click="edit">editar</b-button>
 </template>
 <script>
 export default {
@@ -10,6 +8,7 @@ export default {
     oid: String,
     destination: String,
   },
+  mounted() {},
   methods: {
     edit: function() {
       this.$router.push({
@@ -18,7 +17,6 @@ export default {
       });
     },
   },
-  mounted() {},
 };
 </script>
 <style scoped></style>

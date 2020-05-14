@@ -1,5 +1,5 @@
 <template>
-  <b-form id="form" @submit="submit" @reset="reset" v-if="show">
+  <b-form v-if="show" id="form" @submit="submit" @reset="reset">
     <h5 id="form-title">crear cliente</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.phone" :type="'number'" :label="'telefono'" />
@@ -9,7 +9,7 @@
       v-model="form.category"
       :options="this.options.categories"
       :label="'categoria'"
-      :allowText="false"
+      :allow-text="false"
     />
     <b-button type="submit" variant="primary">Submit</b-button>
     <p v-if="$v.form.name.$error"><kbd>Debe incluir nombre</kbd></p>
@@ -25,8 +25,8 @@ import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "CreateClient",
-  mixins: [validationMixin],
   components: { InputBasic, InputSelect },
+  mixins: [validationMixin],
   props: {
     oid: {
       type: String,
@@ -60,6 +60,27 @@ export default {
   },
   computed: {
     ...mapState(["ref"]),
+  },
+  beforeCreate() {
+    Promise.all([
+      getAsOptionsForSelect("optionsForMenus/clientCategories").then(
+        (options) => {
+          options.unshift({ value: "", text: "origen" });
+          this.options.categories = options;
+        }
+      ),
+    ]).then(() => {
+      if (this.oid !== "") {
+        getById("clients", this.oid).then((object) => {
+          this.form.name = object.name;
+          this.form.phone = object.phone.toString();
+          this.form.address = object.address;
+          this.form.birthday = object.birthday;
+          this.form.comment = object.comment || "";
+          this.form.category = object.category;
+        });
+      }
+    });
   },
   methods: {
     submit(evt) {
@@ -109,27 +130,6 @@ export default {
         this.show = true;
       });
     },
-  },
-  beforeCreate() {
-    Promise.all([
-      getAsOptionsForSelect("optionsForMenus/clientCategories").then(
-        (options) => {
-          options.unshift({ value: "", text: "origen" });
-          this.options.categories = options;
-        }
-      ),
-    ]).then(() => {
-      if (this.oid !== "") {
-        getById("clients", this.oid).then((object) => {
-          this.form.name = object.name;
-          this.form.phone = object.phone.toString();
-          this.form.address = object.address;
-          this.form.birthday = object.birthday;
-          this.form.comment = object.comment || "";
-          this.form.category = object.category;
-        });
-      }
-    });
   },
 };
 </script>

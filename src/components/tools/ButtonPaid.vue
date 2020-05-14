@@ -2,8 +2,8 @@
   <b-button
     v-if="this.paid == 'success' || this.paid == 'danger'"
     :variant="this.paid"
-    @click="togglePaid"
     class="toolbox-button"
+    @click="togglePaid"
   >
     <div v-if="this.paid == 'success'">paid</div>
     <div v-else>unpaid</div>
@@ -46,6 +46,14 @@ export default {
     },
     ...mapState(["ref"]),
   },
+  watch: {
+    selected() {
+      this.getOrders();
+    },
+  },
+  mounted() {
+    this.getOrders();
+  },
   methods: {
     togglePaid: function() {
       if (this.paid == "danger" || this.paid == "dark") {
@@ -70,14 +78,6 @@ export default {
         });
       });
     },
-  },
-  watch: {
-    selected() {
-      this.getOrders();
-    },
-  },
-  mounted() {
-    this.getOrders();
   },
 };
 </script>

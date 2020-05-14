@@ -3,28 +3,27 @@
     <b-button
       v-if="this.allowText"
       id="toggle-button"
-      @click="toggleSelect"
       variant="info"
-      >+</b-button
-    >
-    <label :for="value" v-if="!this.allowText">{{ this.label }}</label>
+      @click="toggleSelect"
+    >+</b-button>
+    <label v-if="!this.allowText" :for="value">{{ this.label }}</label>
     <b-form-select
       v-if="select"
       :value="value"
-      @input="$emit('input', $event)"
       :options="options"
       class="custom-input"
       size="sm"
-    ></b-form-select>
+      @input="$emit('input', $event)"
+    />
     <b-form-input
       v-else
       :value="value"
-      @input="$emit('input', $event)"
       class="custom-input"
       type="text"
       size="sm"
       placeholder="..."
-    ></b-form-input>
+      @input="$emit('input', $event)"
+    />
   </div>
 </template>
 <script>

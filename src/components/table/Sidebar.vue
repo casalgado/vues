@@ -2,17 +2,17 @@
   <div id="sidebar">
     <div id="sidebar-content">
       <p>
-        <br />Selected:
-        <br />
+        <br>Selected:
+        <br>
         {{ selected.length }}
-        <br />Objects:
-        <br />
+        <br>Objects:
+        <br>
         {{ objects.length }}
-        <br />Total:
-        <br />
+        <br>Total:
+        <br>
         {{ totals }}
-        <br />Reporte:
-        <br />
+        <br>Reporte:
+        <br>
       </p>
       <table id="reportContainer">
         <tr>
@@ -58,13 +58,13 @@ import numeral from "numeral";
 export default {
   name: "Sidebar",
   components: { ButtonPaid, ButtonEdit },
+  props: {
+    objects: Array,
+  },
   data() {
     return {
       products: [],
     };
-  },
-  props: {
-    objects: Array,
   },
   methods: {
     exportTable: function() {

@@ -4,7 +4,7 @@
     <Pagination :period="table.pagination" />
     <Table :table="table" />
     <TableTotals :objects="this.table.objects" />
-    <b-card id="toolbox" v-if="this.selected.length > 0">
+    <b-card v-if="this.selected.length > 0" id="toolbox">
       <p v-if="this.development">{{ this.oids }}</p>
       <TableTotals :objects="this.selected" />
       <ButtonPaid :ids="this.oids" />
@@ -15,9 +15,9 @@
       />
       <ButtonDelete
         v-if="this.selected.length == 1"
-        v-on:delete="getObjects()"
         :oid="this.oids[0]"
         :path="this.path"
+        @delete="getObjects()"
       />
     </b-card>
 
@@ -44,7 +44,7 @@ import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 
 export default {
-  name: "showOrders",
+  name: "ShowOrders",
   components: {
     Table,
     TableTotals,
@@ -109,22 +109,6 @@ export default {
     },
     ...mapState(["date", "period", "selected"]),
   },
-  methods: {
-    getObjects: function() {
-      getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
-        this.table.objects = JSON.parse(JSON.stringify(e));
-        this.table.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e))
-        );
-        this.table.formattedObjects.forEach((e) => {
-          e.displayPaid = true;
-        });
-      });
-    },
-  },
-  mounted() {
-    this.getObjects();
-  },
   watch: {
     date() {
       this.getObjects();
@@ -138,6 +122,22 @@ export default {
           return e.id;
         });
       }
+    },
+  },
+  mounted() {
+    this.getObjects();
+  },
+  methods: {
+    getObjects: function() {
+      getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
+        this.table.objects = JSON.parse(JSON.stringify(e));
+        this.table.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
+        this.table.formattedObjects.forEach((e) => {
+          e.displayPaid = true;
+        });
+      });
     },
   },
 };

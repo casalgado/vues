@@ -3,56 +3,56 @@
     <b-button id="remove-button" variant="danger" @click="remove()">x</b-button>
 
     <b-form-select
+      v-if="!this.onlyText"
       id="product-select"
-      class="custom-input"
-      @change="onChange('name')"
       v-model="input.name"
+      class="custom-input"
       :options="options"
       size="sm"
-      v-if="!this.onlyText"
-    ></b-form-select>
+      @change="onChange('name')"
+    />
     <b-form-input
       id="product-select"
-      class="custom-input"
-      @change="onChange('name')"
+      v-else
       v-model="input.name"
+      class="custom-input"
       placeholder="..."
       type="text"
       size="sm"
-      v-else
-    ></b-form-input>
+      @change="onChange('name')"
+    />
 
     <b-form-group
       class="f-group price-group"
       label="$ Unitario"
       size="sm"
-    ></b-form-group>
+    />
     <b-form-input
-      class="custom-input price-input"
-      @change="onChange('unitPrice')"
       v-model="input.unitPrice"
+      class="custom-input price-input"
       type="number"
       step=".01"
       size="sm"
-    ></b-form-input>
+      @change="onChange('unitPrice')"
+    />
 
-    <b-form-group class="f-group price-group" label="Cantidad"></b-form-group>
+    <b-form-group class="f-group price-group" label="Cantidad" />
     <b-form-input
-      class="custom-input price-input"
-      @change="onChange('quantity')"
       v-model="input.quantity"
-      type="number"
-      size="sm"
-    ></b-form-input>
-
-    <b-form-group class="f-group price-group" label="$ Total"></b-form-group>
-    <b-form-input
       class="custom-input price-input"
-      @change="onChange('total')"
-      v-model="input.total"
       type="number"
       size="sm"
-    ></b-form-input>
+      @change="onChange('quantity')"
+    />
+
+    <b-form-group class="f-group price-group" label="$ Total" />
+    <b-form-input
+      v-model="input.total"
+      class="custom-input price-input"
+      type="number"
+      size="sm"
+      @change="onChange('total')"
+    />
   </div>
 </template>
 <script>
@@ -86,6 +86,17 @@ export default {
       return this.input.name;
     },
   },
+  watch: {
+    name() {},
+  },
+  created() {
+    console.log("populate");
+    console.log(this.populate);
+    this.input.name = this.populate.name;
+    this.input.unitPrice = this.populate.unitPrice;
+    this.input.quantity = this.populate.quantity;
+    this.input.total = this.populate.total;
+  },
   methods: {
     onChange(field) {
       let unitPrice = this.input.unitPrice;
@@ -117,17 +128,6 @@ export default {
       console.log(this.id);
       this.$emit("remove-field", { id: this.id });
     },
-  },
-  watch: {
-    name() {},
-  },
-  created() {
-    console.log("populate");
-    console.log(this.populate);
-    this.input.name = this.populate.name;
-    this.input.unitPrice = this.populate.unitPrice;
-    this.input.quantity = this.populate.quantity;
-    this.input.total = this.populate.total;
   },
 };
 </script>

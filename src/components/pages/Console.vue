@@ -24,7 +24,7 @@
     <button @click="providerList()" class="btn btn-info">
       add provider list
     </button> -->
-    <button @click="updateDevDatabase()" class="btn btn-info">
+    <button class="btn btn-info" @click="updateDevDatabase()">
       update development database
     </button>
     <p>{{ this.sanitize("medio pan masa madre") }}</p>

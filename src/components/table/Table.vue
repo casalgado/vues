@@ -1,23 +1,23 @@
 <template>
-  <b-container fluid id="table-container" v-click-outside="clearSelected">
+  <b-container id="table-container" v-click-outside="clearSelected" fluid>
     <b-row>
       <b-col id="main" class="pr-0 pl-0">
         <b-table
+          id="table"
           ref="mainTable"
           selectable
           striped
           borderless
-          id="table"
           class=""
           :items="table.formattedObjects || table.objects"
           :fields="table.fields"
           :select-mode="selectMode"
           selected-variant="active"
-          @row-selected="onRowSelected"
           :tbody-tr-class="rowClass"
+          @row-selected="onRowSelected"
         >
           <template v-slot:cell(products)="data">
-            <span v-html="data.value"></span>
+            <span v-html="data.value" />
           </template>
         </b-table>
       </b-col>
@@ -37,6 +37,12 @@ export default {
       selected: [],
     };
   },
+  computed: {},
+  watch: {
+    selected() {
+      this.$store.commit("setSelected", this.selected);
+    },
+  },
   beforeCreate() {
     this.$store.commit("setSelected", []);
   },
@@ -53,12 +59,6 @@ export default {
     },
     clearSelected() {
       this.$refs.mainTable.clearSelected();
-    },
-  },
-  computed: {},
-  watch: {
-    selected() {
-      this.$store.commit("setSelected", this.selected);
     },
   },
 };

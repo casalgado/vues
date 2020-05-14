@@ -29,6 +29,8 @@ const app = initializeApp({
 
 const database = app.database();
 const environment = process.env.NODE_ENV;
+console.log("e");
+console.log(environment);
 export { database };
 export { environment };
 

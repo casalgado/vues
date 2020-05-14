@@ -1,7 +1,7 @@
 <template>
   <div>
     <Table :table="table" />
-    <b-card id="toolbox" v-if="this.selected.length > 0">
+    <b-card v-if="this.selected.length > 0" id="toolbox">
       <ButtonEdit
         v-if="this.selected.length == 1"
         :oid="this.oid"
@@ -55,6 +55,20 @@ export default {
   computed: {
     ...mapState(["ref", "date", "period", "selected"]),
   },
+  watch: {
+    date() {
+      this.getObjects();
+    },
+    period() {
+      this.getObjects();
+    },
+    selected() {
+      this.oid = this.selected[0].id;
+    },
+  },
+  mounted() {
+    this.getObjects();
+  },
   methods: {
     getObjects: function() {
       getAll(`providers`).then((e) => {
@@ -69,20 +83,6 @@ export default {
         return e;
       });
       return items;
-    },
-  },
-  mounted() {
-    this.getObjects();
-  },
-  watch: {
-    date() {
-      this.getObjects();
-    },
-    period() {
-      this.getObjects();
-    },
-    selected() {
-      this.oid = this.selected[0].id;
     },
   },
 };

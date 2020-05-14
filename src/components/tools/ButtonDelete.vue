@@ -1,5 +1,5 @@
 <template>
-  <b-button @click="remove" variant="danger" class="toolbox-button">
+  <b-button variant="danger" class="toolbox-button" @click="remove">
     borrar
   </b-button>
 </template>
@@ -13,6 +13,7 @@ export default {
     oid: String,
     path: String,
   },
+  mounted() {},
   methods: {
     remove: function() {
       let quote = dquotes[Math.floor(Math.random() * dquotes.length)];
@@ -64,7 +65,6 @@ export default {
       });
     },
   },
-  mounted() {},
 };
 </script>
 <style scoped></style>

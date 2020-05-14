@@ -1,9 +1,9 @@
 <template>
   <div>
-    <img alt="Es Alimento logo" src="https://i.imgur.com/tETJGS8.jpg" />
+    <img alt="Es Alimento logo" src="https://i.imgur.com/tETJGS8.jpg">
     <div>
-      <input type="email" v-model="email" placeholder="email" />
-      <input type="password" v-model="password" placeholder="password" />
+      <input v-model="email" type="email" placeholder="email">
+      <input v-model="password" type="password" placeholder="password">
       <button @click="submit">submit</button>
       <button @click="show">show</button>
       <button @click="logout">logout</button>
@@ -23,6 +23,7 @@ export default {
       password: "",
     };
   },
+  mounted() {},
   methods: {
     submit() {
       firebase
@@ -45,7 +46,6 @@ export default {
       firebase.auth().signOut();
     },
   },
-  mounted() {},
 };
 </script>
 <style scoped>

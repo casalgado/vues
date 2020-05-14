@@ -13,14 +13,14 @@
           <Table :table="tableDeliver" :sidebar="false" />
         </b-col>
       </b-row>
-      <b-card id="toolbox" v-if="this.selected.length > 0">
+      <b-card v-if="this.selected.length > 0" id="toolbox">
         <ButtonEdit
           v-if="this.selected.length == 1"
-          :oid="this.oid"
           :key="this.oid"
+          :oid="this.oid"
           destination="EditOrder"
         />
-        <ClientSnippet :oid="this.oid" :key="this.oid + 'i'" />
+        <ClientSnippet :key="this.oid + 'i'" :oid="this.oid" />
       </b-card>
     </b-container>
     <Landing v-if="!this.user" />
@@ -38,7 +38,6 @@ import { mapState } from "vuex";
 
 export default {
   name: "ShowDashboard",
-  mixins: [ordersMixin],
   components: {
     Table,
     Pagination,
@@ -46,6 +45,7 @@ export default {
     ClientSnippet,
     Landing,
   },
+  mixins: [ordersMixin],
   data() {
     return {
       tableProduce: {
@@ -102,6 +102,25 @@ export default {
     },
     ...mapState(["uid", "ref", "date", "period", "selected"]),
   },
+  watch: {
+    date() {
+      this.getObjects();
+    },
+    period() {
+      this.getObjects();
+    },
+    ref() {
+      this.getObjects();
+    },
+    selected() {
+      if (this.selected[0]) {
+        this.oid = this.selected[0].id;
+      }
+    },
+  },
+  mounted() {
+    this.getObjects();
+  },
   methods: {
     getObjects: function() {
       getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
@@ -120,25 +139,6 @@ export default {
   },
   beforeRouteUpdate() {
     this.getObjects();
-  },
-  mounted() {
-    this.getObjects();
-  },
-  watch: {
-    date() {
-      this.getObjects();
-    },
-    period() {
-      this.getObjects();
-    },
-    ref() {
-      this.getObjects();
-    },
-    selected() {
-      if (this.selected[0]) {
-        this.oid = this.selected[0].id;
-      }
-    },
   },
 };
 </script>

@@ -3,10 +3,10 @@
     <b-form-input
       class="custom-input"
       :value="value"
-      @input="$emit('input', $event)"
       :type="type"
       size="sm"
-    ></b-form-input>
+      @input="$emit('input', $event)"
+    />
   </b-form-group>
 </template>
 <script>

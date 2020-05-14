@@ -1,5 +1,5 @@
 <template>
-  <b-form id="form" @submit="submit" @reset="reset" v-if="show">
+  <b-form v-if="show" id="form" @submit="submit" @reset="reset">
     <h5 id="form-title">crear producto</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.price" :type="'text'" :label="'p venta'" />
@@ -8,7 +8,7 @@
       v-model="form.category"
       :options="this.options.categories"
       :label="'categoria'"
-      :allowText="false"
+      :allow-text="false"
     />
     <b-button type="submit" variant="primary">Submit</b-button>
     <p v-if="$v.form.name.$error"><kbd>Debe incluir nombre</kbd></p>
@@ -24,8 +24,8 @@ import { save, getAsOptionsForSelect, getById, update } from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "CreateProduct",
-  mixins: [validationMixin],
   components: { InputBasic, InputSelect },
+  mixins: [validationMixin],
   props: {
     oid: {
       type: String,
@@ -60,6 +60,28 @@ export default {
   },
   computed: {
     ...mapState(["ref"]),
+  },
+  beforeCreate() {
+    Promise.all([
+      getAsOptionsForSelect("optionsForMenus/productCategories").then(
+        (options) => {
+          console.log(options);
+          options.unshift({ value: "", text: "categoria" });
+          this.options.categories = options;
+        }
+      ),
+    ]).then(() => {
+      if (this.oid !== "") {
+        getById(this.path, this.oid).then((object) => {
+          object.price = object.price || "";
+          object.cost = object.cost || "";
+          this.form.name = object.name;
+          this.form.price = object.price.toString();
+          this.form.cost = object.cost.toString();
+          this.form.category = object.category;
+        });
+      }
+    });
   },
   methods: {
     submit(evt) {
@@ -103,28 +125,6 @@ export default {
         this.show = true;
       });
     },
-  },
-  beforeCreate() {
-    Promise.all([
-      getAsOptionsForSelect("optionsForMenus/productCategories").then(
-        (options) => {
-          console.log(options);
-          options.unshift({ value: "", text: "categoria" });
-          this.options.categories = options;
-        }
-      ),
-    ]).then(() => {
-      if (this.oid !== "") {
-        getById(this.path, this.oid).then((object) => {
-          object.price = object.price || "";
-          object.cost = object.cost || "";
-          this.form.name = object.name;
-          this.form.price = object.price.toString();
-          this.form.cost = object.cost.toString();
-          this.form.category = object.category;
-        });
-      }
-    });
   },
 };
 </script>

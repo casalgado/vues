@@ -4,7 +4,7 @@
     <Pagination :period="table.pagination" />
     <Table :table="table" />
     <TableTotals :objects="this.table.objects" />
-    <b-card id="toolbox" v-if="this.selected.length > 0">
+    <b-card v-if="this.selected.length > 0" id="toolbox">
       <TableTotals :objects="this.selected" />
       <ButtonPaid :ids="this.selectedIds" />
       <ButtonEdit
@@ -80,19 +80,6 @@ export default {
     };
   },
   computed: mapState(["ref", "date", "period", "selected"]),
-  methods: {
-    getObjects: function() {
-      getAllWhere(`orders`, "paid", "").then((e) => {
-        this.table.objects = JSON.parse(JSON.stringify(e));
-        this.table.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e))
-        );
-      });
-    },
-  },
-  mounted() {
-    this.getObjects();
-  },
   watch: {
     date() {
       this.getObjects();
@@ -106,6 +93,19 @@ export default {
           return e.id;
         });
       }
+    },
+  },
+  mounted() {
+    this.getObjects();
+  },
+  methods: {
+    getObjects: function() {
+      getAllWhere(`orders`, "paid", "").then((e) => {
+        this.table.objects = JSON.parse(JSON.stringify(e));
+        this.table.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
+      });
     },
   },
 };

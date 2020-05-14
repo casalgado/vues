@@ -4,12 +4,12 @@
     <Pagination period="day" />
     <Table :table="table" />
     <TableTotals :objects="this.table.objects" />
-    <b-card id="toolbox" v-if="this.selected.length > 0">
+    <b-card v-if="this.selected.length > 0" id="toolbox">
       <TableTotals :objects="this.selected" />
       <ButtonEdit
         v-if="this.selected.length == 1"
-        :oid="this.oid"
         :key="this.oid"
+        :oid="this.oid"
         destination="EditOrder"
       />
     </b-card>
@@ -28,13 +28,13 @@ import { mapState } from "vuex";
 
 export default {
   name: "ShowCashIn",
-  mixins: [ordersMixin],
   components: {
     Table,
     Pagination,
     TableTotals,
     ButtonEdit,
   },
+  mixins: [ordersMixin],
   data() {
     return {
       table: {
@@ -69,19 +69,6 @@ export default {
     };
   },
   computed: mapState(["date", "period", "selected"]),
-  methods: {
-    getObjects: function() {
-      getByDateRange(`orders`, "paid", this.date, this.period).then((e) => {
-        this.table.objects = JSON.parse(JSON.stringify(e));
-        this.table.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e))
-        );
-      });
-    },
-  },
-  mounted() {
-    this.getObjects();
-  },
   watch: {
     date() {
       this.getObjects();
@@ -93,6 +80,19 @@ export default {
       if (this.selected[0]) {
         this.oid = this.selected[0].id;
       }
+    },
+  },
+  mounted() {
+    this.getObjects();
+  },
+  methods: {
+    getObjects: function() {
+      getByDateRange(`orders`, "paid", this.date, this.period).then((e) => {
+        this.table.objects = JSON.parse(JSON.stringify(e));
+        this.table.formattedObjects = this.format(
+          JSON.parse(JSON.stringify(e))
+        );
+      });
     },
   },
 };

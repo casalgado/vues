@@ -10,7 +10,7 @@
     <InputSelect
       v-model="form.category"
       :options="options.category"
-      :allowText="false"
+      :allow-text="false"
       :label="'categoria'"
     />
 
@@ -24,7 +24,7 @@
           :property="'products'"
           :priority="'total'"
           :populate="field"
-          :onlyText="true"
+          :only-text="true"
           @remove-field="removeField"
           @update-field="updateField"
         />
@@ -56,8 +56,8 @@ import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "CreateExpense",
-  mixins: [dynamicFieldsMixin, validationMixin],
   components: { InputSelect, InputBasic, InputDynamic },
+  mixins: [dynamicFieldsMixin, validationMixin],
   props: {
     oid: {
       type: String,
@@ -107,6 +107,31 @@ export default {
     },
     date() {
       return this.form.date;
+    },
+  },
+  watch: {
+    provider: function(val) {
+      console.log(val);
+      if (
+        this.oid === "" &&
+        this.options.provider.includes(this.form.provider)
+      ) {
+        this.form.products = [];
+        getProvidersLastExpense(val).then((e) => {
+          let products = e.products;
+          this.form.category = e.category;
+          for (let i = 0; i < products.length; i++) {
+            this.form.products.push({
+              id: i,
+              active: true,
+              name: products[i].name,
+              unitPrice: products[i].unitPrice,
+              quantity: products[i].quantity,
+              total: products[i].total,
+            });
+          }
+        });
+      }
     },
   },
   beforeCreate() {
@@ -171,31 +196,6 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    },
-  },
-  watch: {
-    provider: function(val) {
-      console.log(val);
-      if (
-        this.oid === "" &&
-        this.options.provider.includes(this.form.provider)
-      ) {
-        this.form.products = [];
-        getProvidersLastExpense(val).then((e) => {
-          let products = e.products;
-          this.form.category = e.category;
-          for (let i = 0; i < products.length; i++) {
-            this.form.products.push({
-              id: i,
-              active: true,
-              name: products[i].name,
-              unitPrice: products[i].unitPrice,
-              quantity: products[i].quantity,
-              total: products[i].total,
-            });
-          }
-        });
-      }
     },
   },
 };
