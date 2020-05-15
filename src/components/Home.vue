@@ -1,7 +1,7 @@
 <template>
   <div id="home-container" class="shadow-2">
     <div id="main" class>
-      <router-view :key="$route.fullPath" />
+      <router-view :key="ckey" />
     </div>
     <div id="nav">
       <Navigation />
@@ -10,7 +10,6 @@
 </template>
 <script>
 import Navigation from "@/components/Navigation";
-import moment from "moment";
 import { mapState } from "vuex";
 export default {
   name: "Home",
@@ -19,12 +18,15 @@ export default {
   },
   data() {
     return {
-      items: [],
+      ckey: this.$route.fullPath,
     };
   },
-  computed: mapState(["uid"]),
-  mounted() {
-    this.$store.commit("setDate", { date: moment().format() });
+  computed: mapState(["ref", "uid"]),
+  watch: {
+    ref() {
+      this.ckey += 1;
+      console.log("r");
+    },
   },
 };
 </script>

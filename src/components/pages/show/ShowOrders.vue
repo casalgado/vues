@@ -107,7 +107,7 @@ export default {
         return false;
       }
     },
-    ...mapState(["date", "period", "selected"]),
+    ...mapState(["ref", "date", "period", "selected"]),
   },
   watch: {
     date() {
@@ -125,6 +125,7 @@ export default {
     },
   },
   mounted() {
+    console.log("mounted");
     this.getObjects();
   },
   methods: {

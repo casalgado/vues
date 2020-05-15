@@ -100,16 +100,13 @@ export default {
     user: function() {
       return true;
     },
-    ...mapState(["uid", "ref", "date", "period", "selected"]),
+    ...mapState(["uid", "date", "period", "selected"]),
   },
   watch: {
     date() {
       this.getObjects();
     },
     period() {
-      this.getObjects();
-    },
-    ref() {
       this.getObjects();
     },
     selected() {
