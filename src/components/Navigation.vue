@@ -155,7 +155,7 @@ a {
   width: 15px;
   height: 15px;
   border-radius: 99px;
-  background-color: rgb(172, 19, 19);
+  background-color: #bc1c1f;
 }
 
 @media only screen and (min-width: 768px) {
