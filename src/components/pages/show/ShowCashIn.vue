@@ -8,8 +8,7 @@
       <TableTotals :objects="this.selected" />
       <ButtonEdit
         v-if="this.selected.length == 1"
-        :key="this.oid"
-        :oid="this.oid"
+        :oid="this.oids[0]"
         destination="EditOrder"
       />
     </b-card>
@@ -61,10 +60,10 @@ export default {
         ],
         formattedObjects: [],
         objects: [],
-        selectMode: "single",
+        selectMode: "multi",
         pagination: "day",
       },
-      oid: "",
+      oids: [],
       path: "orders",
     };
   },
@@ -78,7 +77,9 @@ export default {
     },
     selected() {
       if (this.selected[0]) {
-        this.oid = this.selected[0].id;
+        this.oids = this.selected.map((e) => {
+          return e.id;
+        });
       }
     },
   },
