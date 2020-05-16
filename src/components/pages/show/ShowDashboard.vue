@@ -13,9 +13,9 @@
           <Table :table="tableDeliver" :sidebar="false" />
         </b-col>
       </b-row>
-      <b-card v-if="this.selected.length > 0" id="toolbox">
+      <b-card v-if="selected.length > 0" id="toolbox">
         <ButtonEdit
-          v-if="this.selected.length == 1"
+          v-if="selected.length == 1"
           :key="this.oid"
           :oid="this.oid"
           destination="EditOrder"

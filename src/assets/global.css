@@ -63,6 +63,7 @@ input {
   font-size: 15px;
   font-weight: 500;
   line-height: 1.5;
+  padding-bottom: 300px;
 }
 
 .b-table-row-selected {

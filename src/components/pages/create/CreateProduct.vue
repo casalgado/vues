@@ -101,11 +101,11 @@ export default {
             this.form.name = this.form.name.toLowerCase();
             if (this.oid === "") {
               save(this.path, this.form, this).then(() => {
-                this.$router.go(-1);
+                this.$router.go();
               });
             } else {
               update(`${this.path}/${this.oid}`, this.form).then(() => {
-                this.$router.go(-1);
+                this.$router.go();
               });
             }
           }

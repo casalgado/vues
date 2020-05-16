@@ -29,16 +29,14 @@ const app = initializeApp({
 
 const database = app.database();
 const environment = process.env.NODE_ENV;
-console.log("e");
 console.log(environment);
 export { database };
 export { environment };
 
-let ref = database.ref();
+let ref = database.ref("backup");
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    console.log("r.");
     database
       .ref(`users/${user.uid}`)
       .once("value")
@@ -62,7 +60,7 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 console.log("ref");
-console.log(ref);
+console.log(ref.toString());
 export { ref };
 
 export function getUser() {
