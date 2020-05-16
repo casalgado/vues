@@ -221,6 +221,11 @@ body {
 
 /* global form styles */
 
+#form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
 .custom-input {
   color: var(--color-neutral);
   background-color: var(--color-secondary-light);

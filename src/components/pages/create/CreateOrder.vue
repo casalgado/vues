@@ -30,9 +30,12 @@
         />
       </transition>
     </div>
-    <b-button variant="info" @click="addProduct">+ producto</b-button>
-    <b-button type="submit" variant="primary">Submit</b-button>
-    <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
+    <b-card id="toolbox">
+      <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
+      <b-button variant="info" @click="addProduct">+ producto</b-button>
+      <b-button type="submit" variant="primary">Submit</b-button>
+    </b-card>
+
     <!-- <b-card class="mt-3">
       <pre class="m-0">{{ this.form }}</pre>
     </b-card> -->
@@ -204,12 +207,12 @@ export default {
 };
 </script>
 <style scoped>
-#form {
-  max-width: 500px;
-}
-
 * {
   margin: 5px;
+}
+
+button {
+  width: 110px;
 }
 
 .f-group {

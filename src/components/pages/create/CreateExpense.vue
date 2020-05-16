@@ -30,10 +30,13 @@
         />
       </transition>
     </div>
-    <b-button variant="info" @click="addProduct">+ producto</b-button>
-    <b-button type="submit" variant="primary">Submit</b-button>
-    <p v-if="$v.form.provider.$error"><kbd>Debe incluir proveedor</kbd></p>
-    <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
+    <b-card id="toolbox">
+      <p v-if="$v.form.provider.$error"><kbd>Debe incluir proveedor</kbd></p>
+      <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
+      <b-button variant="info" @click="addProduct">+ producto</b-button>
+      <b-button type="submit" variant="primary">Submit</b-button>
+    </b-card>
+
     <!-- <b-card class="mt-3">
       <pre class="m-0">{{ this.form }}</pre>
     </b-card> -->

@@ -10,9 +10,11 @@
       :label="'categoria'"
       :allow-text="false"
     />
-    <b-button type="submit" variant="primary">Submit</b-button>
-    <p v-if="$v.form.name.$error"><kbd>Debe incluir nombre</kbd></p>
-    <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
+    <b-card id="toolbox">
+      <p v-if="$v.form.name.$error"><kbd>Debe incluir nombre</kbd></p>
+      <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
+      <b-button type="submit" variant="primary">Submit</b-button>
+    </b-card>
   </b-form>
 </template>
 <script>
