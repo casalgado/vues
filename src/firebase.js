@@ -29,11 +29,11 @@ const app = initializeApp({
 
 const database = app.database();
 const environment = process.env.NODE_ENV;
-console.log(environment);
+// console.log(environment);
 export { database };
 export { environment };
 
-let ref = database.ref("backup");
+let ref = database.ref("development-esalimento");
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
@@ -50,7 +50,7 @@ firebase.auth().onAuthStateChanged((user) => {
         } else if (environment === "development") {
           console.log("mode is development");
           console.log(ref.toString());
-          user.ref = "development-esalimento";
+          user.ref = "";
           ref = database.ref("development-esalimento");
           store.dispatch("fetchUser", user);
         }

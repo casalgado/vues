@@ -152,11 +152,15 @@ export default {
     getLastOrder(o) {
       const h = o.history;
       let d = [];
-      Object.keys(h).forEach((k) => {
-        d.push(h[k]["date"]);
-      });
-      let ult = moment().diff(moment(d.sort()[d.length - 1]), "days");
-      return `${ult} d`;
+      if (h) {
+        Object.keys(h).forEach((k) => {
+          d.push(h[k]["date"]);
+        });
+        let ult = moment().diff(moment(d.sort()[d.length - 1]), "days");
+        return `${ult} d`;
+      } else {
+        return "-";
+      }
     },
   },
 };

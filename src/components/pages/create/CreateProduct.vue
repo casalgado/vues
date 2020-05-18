@@ -94,7 +94,7 @@ export default {
         this.submitStatus = "ERROR";
       } else {
         this.$fire({
-          text: "¿continuar?",
+          title: "¿continuar?",
           showCancelButton: true,
         }).then((alertStatus) => {
           if (alertStatus.dismiss) {

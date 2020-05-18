@@ -2,6 +2,7 @@
   <b-form v-if="show" id="form" @submit="submit" @reset="reset">
     <h5 id="form-title">crear cliente</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
+    <InputBasic v-model="form.email" :type="'email'" :label="'mail'" />
     <InputBasic v-model="form.phone" :type="'number'" :label="'telefono'" />
     <InputBasic v-model="form.address" :type="'text'" :label="'direccion'" />
     <InputBasic v-model="form.birthday" :type="'date'" :label="'cumpleaños'" />
@@ -39,6 +40,7 @@ export default {
     return {
       form: {
         name: "",
+        email: "",
         phone: "",
         address: "",
         birthday: "",
@@ -75,6 +77,7 @@ export default {
       if (this.oid !== "") {
         getById("clients", this.oid).then((object) => {
           this.form.name = object.name;
+          this.form.email = object.email;
           this.form.phone = object.phone.toString();
           this.form.address = object.address;
           this.form.birthday = object.birthday;
@@ -93,7 +96,7 @@ export default {
         this.submitStatus = "ERROR";
       } else {
         this.$fire({
-          text: "¿continuar?",
+          title: "¿continuar?",
           showCancelButton: true,
         }).then((alertStatus) => {
           if (alertStatus.dismiss) {
@@ -122,6 +125,7 @@ export default {
         evt.preventDefault();
       }
       this.form.name = "";
+      this.form.email = "";
       this.form.phone = 0;
       this.form.address = "";
       this.form.birthday = "";
