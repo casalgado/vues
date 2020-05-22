@@ -1,5 +1,5 @@
 <template>
-  <b-button variant="danger" class="toolbox-button" @click="remove">
+  <b-button variant="danger" class="toolbox-button" @click="remove()">
     borrar
   </b-button>
 </template>
@@ -16,6 +16,7 @@ export default {
   mounted() {},
   methods: {
     remove: function() {
+      this.$emit("delete");
       let quote = dquotes[Math.floor(Math.random() * dquotes.length)];
       this.$fire({
         title: `"${quote.quote}"`,

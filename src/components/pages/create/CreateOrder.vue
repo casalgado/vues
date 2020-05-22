@@ -2,6 +2,7 @@
   <b-form v-if="show" id="form" @submit="submit($event)">
     <h5 id="form-title">crear pedido</h5>
     <InputSelect
+      v-if="this.oid == ''"
       v-model="form.client"
       :options="this.options.client"
       :label="'cliente'"
@@ -9,12 +10,7 @@
 
     <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
     <InputBasic v-model="form.deliver" :type="'date'" :label="'entregar'" />
-    <InputBasic
-      v-if="this.oid !== ''"
-      v-model="form.paid"
-      :type="'date'"
-      :label="'paid'"
-    />
+    <InputBasic v-model="form.paid" :type="'date'" :label="'paid'" />
 
     <div v-for="field in this.form.products" :key="field.id">
       <transition name="fade">
@@ -32,6 +28,8 @@
     </div>
     <b-card id="toolbox">
       <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
+      <p v-if="$v.form.date.$error"><kbd>Debe incluir fecha produccion</kbd></p>
+      <p v-if="$v.form.deliver.$error"><kbd>Debe incluir fecha entrega</kbd></p>
       <b-button variant="info" @click="addProduct">+ producto</b-button>
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-card>
@@ -97,6 +95,12 @@ export default {
       client: {
         required,
         minLength: minLength(4),
+      },
+      date: {
+        required,
+      },
+      deliver: {
+        required,
       },
     },
   },
@@ -183,8 +187,12 @@ export default {
       }
       this.form = {
         client: "",
-        date: "",
-        deliver: "",
+        date: moment()
+          .add(1, "day")
+          .format("YYYY-MM-DD"),
+        deliver: moment()
+          .add(2, "day")
+          .format("YYYY-MM-DD"),
         paid: "",
         products: [
           {

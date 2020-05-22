@@ -59,8 +59,8 @@ firebase.auth().onAuthStateChanged((user) => {
     store.dispatch("fetchUser", user);
   }
 });
-console.log("ref");
-console.log(ref.toString());
+// console.log("ref");
+// console.log(ref.toString());
 export { ref };
 
 export function getUser() {
