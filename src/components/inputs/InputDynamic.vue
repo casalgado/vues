@@ -22,11 +22,7 @@
       @change="onChange('name')"
     />
 
-    <b-form-group
-      class="f-group price-group"
-      label="$ Unitario"
-      size="sm"
-    />
+    <b-form-group class="f-group price-group" label="$ Unitario" size="sm" />
     <b-form-input
       v-model="input.unitPrice"
       class="custom-input price-input"
@@ -90,8 +86,6 @@ export default {
     name() {},
   },
   created() {
-    console.log("populate");
-    console.log(this.populate);
     this.input.name = this.populate.name;
     this.input.unitPrice = this.populate.unitPrice;
     this.input.quantity = this.populate.quantity;

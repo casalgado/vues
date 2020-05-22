@@ -75,10 +75,10 @@ export default {
           {
             id: 0,
             active: true,
-            name: "",
-            unitPrice: 1,
+            name: "domicilio",
+            unitPrice: 5000,
             quantity: 1,
-            total: 1,
+            total: 5000,
           },
         ],
       },
@@ -141,6 +141,7 @@ export default {
   beforeCreate() {
     Promise.all([
       getAsOptionsForSelect("products").then((options) => {
+        options = this.reorder(options);
         options.unshift({ value: "", text: "producto" });
         this.options.product = options;
       }),
@@ -198,10 +199,10 @@ export default {
           {
             id: 0,
             active: true,
-            name: "",
-            unitPrice: 1,
+            name: "domicilio",
+            unitPrice: 5000,
             quantity: 1,
-            total: 1,
+            total: 5000,
           },
         ],
       };
@@ -210,6 +211,69 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
+    },
+    reorder(products) {
+      let strings = products.map((e) => {
+        return e.text;
+      });
+      let sorted = [
+        "domicilio",
+        "pan de masa madre",
+        "pan integral",
+        "pan de banano y semillas de girasol",
+        "pan de semillas",
+        "pan de zaatar",
+      ];
+      let pgrandes = strings.filter((e) => {
+        return e.includes("grande");
+      });
+      let ppeque = strings.filter((e) => {
+        return e.includes("pequeño");
+      });
+      let tortas = strings.filter((e) => {
+        return e.includes("torta");
+      });
+      ppeque.shift();
+      ppeque.pop();
+      let potros = [
+        "pan brioche",
+        "pan de bono",
+        "pan de bono paquete",
+        "pan de hamburguesa",
+      ];
+      strings = strings
+        .filter((e) => {
+          return !sorted.includes(e);
+        })
+        .filter((e) => {
+          return !pgrandes.includes(e);
+        })
+        .filter((e) => {
+          return !ppeque.includes(e);
+        })
+        .filter((e) => {
+          return !tortas.includes(e);
+        })
+        .filter((e) => {
+          return e.split(" ")[0] !== "pan";
+        });
+      sorted = [
+        ...sorted,
+        ...pgrandes,
+        "pan de masa madre mediano",
+        "",
+        ...ppeque,
+        "",
+        ...potros,
+        "",
+        ...tortas,
+        "",
+        ...strings,
+      ];
+      products = sorted.map((e) => {
+        return { text: e, value: e };
+      });
+      return products;
     },
   },
 };
