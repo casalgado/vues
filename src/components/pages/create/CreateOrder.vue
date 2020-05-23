@@ -159,7 +159,7 @@ export default {
       }),
     ]).then(() => {
       if (this.oid !== "") {
-        this.form.products.pop();
+        this.form.products = [];
         getById("orders", this.oid).then((object) => {
           console.log("beforeCreate");
           console.log(object);
