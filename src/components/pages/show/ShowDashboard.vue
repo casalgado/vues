@@ -14,13 +14,14 @@
         </b-col>
       </b-row>
       <b-card v-if="selected.length > 0" id="toolbox">
+        <ButtonPaid :ids="this.oids" />
         <ButtonEdit
           v-if="selected.length == 1"
-          :key="this.oid"
-          :oid="this.oid"
+          :key="this.oids[0]"
+          :oid="this.oids[0]"
           destination="EditOrder"
         />
-        <ClientSnippet :key="this.oid + 'i'" :oid="this.oid" />
+        <ClientSnippet :key="this.oids[0] + 'i'" :oid="this.oids[0]" />
       </b-card>
     </b-container>
     <Landing v-if="!this.user" />
@@ -31,6 +32,7 @@ import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
 import Landing from "../../Landing";
 import ButtonEdit from "../../tools/ButtonEdit";
+import ButtonPaid from "../../tools/ButtonPaid";
 import ClientSnippet from "../../tools/ClientSnippet";
 import Pagination from "../../table/Pagination";
 import { getByDateRange } from "@/firebase";
@@ -44,6 +46,7 @@ export default {
     ButtonEdit,
     ClientSnippet,
     Landing,
+    ButtonPaid,
   },
   mixins: [ordersMixin],
   data() {
@@ -92,7 +95,7 @@ export default {
         objects: [],
         selectMode: "single",
       },
-      oid: "",
+      oids: [],
       path: "orders",
     };
   },
@@ -111,7 +114,9 @@ export default {
     },
     selected() {
       if (this.selected[0]) {
-        this.oid = this.selected[0].id;
+        this.oids = this.selected.map((e) => {
+          return e.id;
+        });
       }
     },
   },

@@ -57,13 +57,19 @@ export default {
   methods: {
     togglePaid: function() {
       if (this.paid == "danger" || this.paid == "dark") {
-        this.$confirm(`Set ${this.ids.length} orders Paid?`).then(() => {
+        this.$fire({
+          title: `Set ${this.ids.length} orders Paid?`,
+          showCancelButton: true,
+        }).then(() => {
           this.ids.forEach((i) => {
             updateSingleProp(`orders`, `${i}`, "paid", moment().format(), this);
           });
         });
       } else if (this.paid == "success") {
-        this.$confirm(`Set ${this.ids.length} orders Unpaid?`).then(() => {
+        this.$fire({
+          title: `Set ${this.ids.length} orders Unpaid?`,
+          showCancelButton: true,
+        }).then(() => {
           this.ids.forEach((i) => {
             updateSingleProp(`orders`, `${i}`, "paid", "", this);
           });

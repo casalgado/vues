@@ -404,7 +404,7 @@ export function updateSingleProp(path, oid, property, newValue, component) {
       if (error) {
         alert(error);
       } else {
-        component.$alert("success");
+        component.$fire({ title: "success" });
       }
     });
 }

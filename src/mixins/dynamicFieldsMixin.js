@@ -57,7 +57,12 @@ export const dynamicFieldsMixin = {
             form.total = total;
             form.products = products;
             form.date = moment(form.date).format();
-            form.deliver = moment(form.deliver).format();
+            if (form.deliver) {
+              form.deliver = moment(form.deliver).format();
+            }
+            if (form.paid && form.paid !== "") {
+              form.paid = moment(form.paid).format();
+            }
             if (form.client) {
               form.client = form.client.toLowerCase();
             }
@@ -145,9 +150,6 @@ export const dynamicFieldsMixin = {
                 // this.$router.push({ path: "/" });
               });
             } else {
-              if (form.paid !== "") {
-                form.paid = moment(form.paid).format();
-              }
               update(`${this.path}/${this.oid}`, form, this.oid).then((id) => {
                 if (this.path == "orders") {
                   // update client order history
