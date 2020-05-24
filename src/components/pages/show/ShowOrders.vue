@@ -22,9 +22,9 @@
     </b-card>
 
     <OrdersSummary
-      v-if="false"
-      :dbref="this.ref"
+      v-if="true"
       :objects="this.table.objects"
+      :expanded="false"
     />
     <!-- change printorders to 'invoice' -->
     <!-- <PrintOrders :objects="table.objects" /> -->
