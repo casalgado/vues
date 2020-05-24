@@ -3,29 +3,25 @@
     <h6 id="title">{{ table.title }}</h6>
     <Pagination :period="table.pagination" />
     <Table :table="table" />
-    <TableTotals :objects="this.table.objects" />
-    <b-card v-if="this.selected.length > 0" id="toolbox">
-      <p v-if="this.development">{{ this.oids }}</p>
-      <TableTotals :objects="this.selected" />
-      <ButtonPaid :ids="this.oids" />
+    <TableTotals :objects="table.objects" />
+    <b-card v-if="selected.length > 0" id="toolbox">
+      <p v-if="development">{{ oids }}</p>
+      <TableTotals :objects="selected" />
+      <ButtonPaid :ids="oids" />
       <ButtonEdit
-        v-if="this.selected.length == 1"
-        :oid="this.oids[0]"
+        v-if="selected.length == 1"
+        :oid="oids[0]"
         destination="EditOrder"
       />
       <ButtonDelete
-        v-if="this.selected.length == 1"
-        :oid="this.oids[0]"
-        :path="this.path"
+        v-if="selected.length == 1"
+        :oid="oids[0]"
+        :path="path"
         @delete="getObjects()"
       />
     </b-card>
-
-    <OrdersSummary
-      v-if="true"
-      :objects="this.table.objects"
-      :expanded="false"
-    />
+    <b-button variant="dark" @click="toggleSummary"> productos</b-button>
+    <OrdersSummary v-if="showSummary" :objects="table.objects" />
     <!-- change printorders to 'invoice' -->
     <!-- <PrintOrders :objects="table.objects" /> -->
   </div>
@@ -96,6 +92,7 @@ export default {
       },
       oids: [],
       path: "orders",
+      showSummary: false,
     };
   },
   computed: {
@@ -139,6 +136,9 @@ export default {
           e.displayPaid = true;
         });
       });
+    },
+    toggleSummary: function() {
+      this.showSummary = !this.showSummary;
     },
   },
 };

@@ -8,12 +8,12 @@
       <TableTotals :objects="selected" />
       <ButtonEdit
         v-if="selected.length == 1"
-        :oid="oid"
+        :oid="this.oids[0]"
         destination="EditExpense"
       />
       <ButtonDelete
         v-if="selected.length == 1"
-        :oid="oid"
+        :oid="this.oids[0]"
         :path="path"
         @:delete="getObjects()"
       />
@@ -77,10 +77,10 @@ export default {
         ],
         formattedObjects: [],
         objects: [],
-        selectMode: "single",
+        selectMode: "multi",
         pagination: "week",
       },
-      oid: "",
+      oid: [],
       path: "expenses",
     };
   },
@@ -94,13 +94,15 @@ export default {
     },
     selected() {
       if (this.selected[0]) {
-        this.oid = this.selected[0].id;
+        this.oids = this.selected.map((e) => {
+          return e.id;
+        });
       }
     },
   },
   created() {
     if (this.pagination) {
-      this.table.pagination = "day";
+      // if this route == ingresos then pagination = day
       this.table.title = "Egresos";
     }
   },

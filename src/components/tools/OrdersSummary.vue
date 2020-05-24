@@ -1,26 +1,29 @@
 <template>
   <table>
+    <tr @click="toggleExpanded">
+      <td class="tdn">Producto</td>
+      <td class="tdv">Ctd</td>
+      <td class="tdt">Total</td>
+    </tr>
     <tr v-for="(value, name) in this.summary" :key="name">
-      <td id="tdn">{{ name }}:</td>
-      <td id="tdv">{{ value.quantity }}</td>
-      <td id="tdt">{{ value.total }}</td>
+      <td class="tdn">{{ name }}:</td>
+      <td class="tdv">{{ value.quantity }}</td>
+      <td class="tdt">{{ value.total }}</td>
     </tr>
   </table>
 </template>
 <script>
+import numeral from "numeral";
 import { getAll } from "@/firebase";
 export default {
   name: "OrdersSummary",
   props: {
     objects: Array,
-    expanded: {
-      type: Boolean,
-      default: () => false,
-    },
   },
   data() {
     return {
       products: [],
+      expanded: false,
     };
   },
   computed: {
@@ -55,6 +58,7 @@ export default {
         } else {
           report[p.name] = { quantity: p.quantity, total: p.total };
         }
+        report[p.name].total = numeral(report[p.name].total).format("0,0");
       });
       const ordered = {};
       Object.keys(report)
@@ -62,8 +66,13 @@ export default {
         .forEach(function(key) {
           ordered[key] = report[key];
         });
-      ordered.total = { quantity: "-", total: glotal };
+      ordered.total = { quantity: "-", total: numeral(glotal).format("0,0") };
       return ordered;
+    },
+  },
+  methods: {
+    toggleExpanded: function() {
+      this.expanded = !this.expanded;
     },
   },
   mounted() {
@@ -74,14 +83,32 @@ export default {
 };
 </script>
 <style scoped>
-#tdn,
-#tdv,
-#tdt {
+.tdn,
+.tdv,
+.tdt {
   text-align: left;
 }
 
-#tdv,
-#tdt {
+.tdv,
+.tdt {
+  padding-left: 30px;
+}
+
+.tdn {
+  padding-right: 30px;
   padding-left: 10px;
+}
+
+tr:last-child {
+  font-weight: bold;
+}
+
+tr:first-child {
+  border-bottom: 1px solid var(--color-neutral);
+}
+
+table {
+  max-width: 680px;
+  margin: 0 auto;
 }
 </style>
