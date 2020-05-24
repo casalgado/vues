@@ -29,10 +29,6 @@ export default {
   computed: {
     summary: function() {
       let products = [];
-      /*
-      the three lines below this block can be toggled to display full list of products
-      or only the ones present on current table. Used to facilitate copying and pasting to sheets.
-      */
 
       if (this.expanded) {
         products = this.products.map((e) => {
@@ -58,7 +54,10 @@ export default {
         } else {
           report[p.name] = { quantity: p.quantity, total: p.total };
         }
-        report[p.name].total = numeral(report[p.name].total).format("0,0");
+      });
+      let keys = Object.keys(report);
+      keys.forEach((e) => {
+        report[e].total = numeral(report[e].total).format("0,0");
       });
       const ordered = {};
       Object.keys(report)
