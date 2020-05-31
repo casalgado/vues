@@ -1,48 +1,44 @@
 <template>
-  <div id="page">
+  <div id="invoice">
     <div id="logo">
-      <img alt="Es Alimento logo" src="https://i.imgur.com/oh4fort.png">
+      <img alt="Es Alimento logo" src="https://i.imgur.com/oh4fort.png" />
     </div>
     <div id="header">
       <ul>
         <li>ES ALIMENTO SAS</li>
-        <li>NIT: 983-291881-1</li>
-        <li>cra 52 # 79 - 253</li>
+        <li>cra 52 # 79 - 249</li>
+        <li>322 374 4173</li>
       </ul>
     </div>
     <div id="client_info">
       <ul>
         <li>Cliente:</li>
-        <li>{{ invoice.client }}</li>
-        <li>Id:</li>
-        <li>12.231.223</li>
+        <li>{{ invoice.client.name }}</li>
         <li>Direccion:</li>
-        <li>Cra 55 # 82 - 14</li>
+        <li>{{ invoice.client.address }}</li>
         <li>Telefono:</li>
-        <li>231 342 6432</li>
+        <li>{{ invoice.client.phone }}</li>
       </ul>
     </div>
     <div id="invoice_info">
       <ul>
         <li>Factura de Venta</li>
-        <li>.</li>
-        <li>Fecha:</li>
+        <li>{{ " " }}</li>
+        <li>Fecha de Facturacion:</li>
         <li>{{ date }}</li>
-        <li>Numero:</li>
-        <li>P-15-124</li>
       </ul>
     </div>
     <div id="objects">
       <table>
         <tr>
-          <th class="text-left">Codigo</th>
+          <th class="text-left">Entregado</th>
           <th class="text-left">Descripcion</th>
           <th class="text-right">Cantidad</th>
           <th class="text-right">Vr Unitario</th>
           <th class="text-right">Vr Total</th>
         </tr>
         <tr v-for="row in invoice.rows" :key="row.index">
-          <td class="text-left">{{ row.name }}</td>
+          <td class="text-left">{{ row.date }}</td>
           <td class="text-left">{{ row.product }}</td>
           <td class="text-right">{{ row.quantity }}</td>
           <td class="text-right">{{ row.unitPrice }}</td>
@@ -59,8 +55,9 @@
 </template>
 
 <script>
-import { save } from "@/firebase";
+import { save, getOneWhere } from "@/firebase";
 import moment from "moment";
+import numeral from "numeral";
 export default {
   name: "PrintOrders",
   props: {
@@ -69,6 +66,11 @@ export default {
   data() {
     return {
       date: moment().format("DD-MM-YYYY"),
+      invoice: {
+        client: {},
+        rows: this.rows,
+        total: this.total,
+      },
     };
   },
   computed: {
@@ -79,19 +81,21 @@ export default {
       if (this.objects.length > 0) {
         let rows = [];
         if (this.sameClient(this.selected)) {
-          let selected = this.selected.map((e) => e.name);
+          console.log(this.selected);
+          let selected = this.selected.map((e) => e.id);
           for (let i = 0; i < selected.length; i++) {
-            let object = this.objects.find((e) => e.name == selected[i]);
+            let object = this.objects.find((e) => e.id == selected[i]);
+            console.log(object);
             let products = object.products;
             for (let j = 0; j < products.length; j++) {
               let index = rows.length;
               rows.push({
                 index: index,
-                name: object.name,
+                date: moment(object.deliver).format("YY/MM/DD"),
                 product: products[j].name,
                 quantity: products[j].quantity,
-                unitPrice: products[j].unitPrice,
-                total: products[j].total,
+                unitPrice: numeral(products[j].unitPrice).format("0,0"),
+                total: numeral(products[j].total).format("0,0"),
               });
             }
           }
@@ -105,19 +109,15 @@ export default {
     },
     total: function() {
       if (this.selected.length > 0) {
-        return this.selected.reduce((a, b) => ({
-          total: parseInt(a.total) + parseInt(b.total),
-        })).total;
+        console.log(numeral(this.selected[0].total).value());
+        return numeral(
+          this.selected.reduce((a, b) => ({
+            total: numeral(a.total).value() + numeral(b.total).value(),
+          })).total
+        ).format("0,0");
       } else {
         return 0;
       }
-    },
-    invoice: function() {
-      return {
-        client: "el caminante",
-        rows: this.rows,
-        total: this.total,
-      };
     },
   },
   methods: {
@@ -133,8 +133,18 @@ export default {
       }
     },
     saveInput: function() {
-      console.log(this.invoice);
       save("invoices", this.invoice, this);
+    },
+  },
+  watch: {
+    selected() {
+      if (this.sameClient(this.selected)) {
+        getOneWhere("clients", "name", this.selected[0].client).then((c) => {
+          this.invoice.client = c;
+          this.invoice.rows = this.rows;
+          this.invoice.total = this.total;
+        });
+      }
     },
   },
 };

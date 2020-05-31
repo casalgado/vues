@@ -1,33 +1,45 @@
 <template>
   <div>
-    <h6 id="title">{{ table.title }}</h6>
-    <Pagination :period="table.pagination" />
-    <Table :table="table" />
-    <TableTotals :objects="table.objects" />
-    <b-card v-if="selected.length > 0" id="toolbox">
-      <p v-if="development">{{ oids }}</p>
-      <TableTotals :objects="selected" />
-      <ButtonPaid :ids="oids" />
-      <ButtonEdit
-        v-if="selected.length == 1"
-        :oid="oids[0]"
-        destination="EditOrder"
-      />
-      <ButtonDelete
-        v-if="selected.length == 1"
-        :oid="oids[0]"
-        :path="path"
-        @delete="getObjects()"
-      />
-    </b-card>
-    <b-button variant="dark" @click="toggleSummary"> productos</b-button>
-    <OrdersSummary v-if="showSummary" :objects="table.objects" />
+    <div id="table-cont">
+      <h6 id="title">{{ table.title }}</h6>
+      <Pagination :period="table.pagination" />
+      <Table :table="table" />
+      <TableTotals :objects="table.objects" />
+      <b-card v-if="selected.length > 0" id="toolbox">
+        <!-- <p v-if="development">{{ oids }}</p> -->
+        <TableTotals :objects="selected" />
+        <ButtonPaid :ids="oids" />
+        <ButtonEdit
+          v-if="selected.length == 1"
+          :oid="oids[0]"
+          destination="EditOrder"
+        />
+        <ButtonDelete
+          v-if="selected.length == 1"
+          :oid="oids[0]"
+          :path="path"
+          @delete="getObjects()"
+        />
+        <b-button
+          v-if="sameClient"
+          variant="info"
+          class="toolbox-button"
+          @click="print"
+        >
+          factura
+        </b-button>
+      </b-card>
+      <b-button variant="dark" @click="toggleSummary">
+        venta por producto
+      </b-button>
+      <OrdersSummary v-if="showSummary" :objects="table.objects" />
+    </div>
     <!-- change printorders to 'invoice' -->
-    <!-- <PrintOrders :objects="table.objects" /> -->
+    <PrintOrders :objects="table.objects" />
   </div>
 </template>
 <script>
-// import PrintOrders from "../../print/PrintOrders";
+import PrintOrders from "../../print/PrintOrders";
 import { ordersMixin } from "@/mixins/ordersMixin";
 import ButtonPaid from "../../tools/ButtonPaid";
 import ButtonEdit from "../../tools/ButtonEdit";
@@ -49,6 +61,7 @@ export default {
     OrdersSummary,
     ButtonEdit,
     ButtonDelete,
+    PrintOrders,
   },
   mixins: [ordersMixin],
   data() {
@@ -104,6 +117,18 @@ export default {
         return false;
       }
     },
+    sameClient: function() {
+      let objects = this.selected;
+      if (objects.length > 0) {
+        let client = objects[0].client;
+        return (
+          objects.map((e) => e.client).filter((e) => e == client).length ==
+          objects.length
+        );
+      } else {
+        return false;
+      }
+    },
     ...mapState(["ref", "date", "period", "selected"]),
   },
   watch: {
@@ -140,6 +165,9 @@ export default {
     toggleSummary: function() {
       this.showSummary = !this.showSummary;
     },
+    print: function() {
+      window.print();
+    },
   },
 };
 </script>
@@ -150,19 +178,25 @@ export default {
   font-weight: bold;
 }
 @media screen {
-  #page {
-    display: grid;
+  #invoice {
+    display: none;
+    padding-bottom: 300px;
   }
 }
 
 @media print {
-  #container,
-  #title,
-  #sidebar-content {
+  @page {
+    margin: 0;
+  }
+  body {
+    margin: 1.6cm;
+  }
+  #table-cont {
     display: none;
   }
 
-  #page {
+  #invoice {
+    padding: 1cm 1.6cm 1cm 1.6cm;
     color: black;
     display: grid;
   }

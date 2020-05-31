@@ -43,9 +43,11 @@ export default {
       });
       let report = {};
       let glotal = 0;
+      let glantity = 0;
       products.forEach((p) => {
         let keys = Object.keys(report);
         glotal += parseInt(p.total);
+        glantity += parseInt(p.quantity);
         if (keys.includes(p.name)) {
           report[p.name].quantity =
             parseInt(report[p.name].quantity) + parseInt(p.quantity);
@@ -65,7 +67,10 @@ export default {
         .forEach(function(key) {
           ordered[key] = report[key];
         });
-      ordered.total = { quantity: "-", total: numeral(glotal).format("0,0") };
+      ordered.total = {
+        quantity: numeral(glantity).format("0,0"),
+        total: numeral(glotal).format("0,0"),
+      };
       return ordered;
     },
   },
