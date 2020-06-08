@@ -6,6 +6,7 @@
     <div id="header">
       <ul>
         <li>ES ALIMENTO SAS</li>
+        <li>RUT: 1045676132</li>
         <li>cra 52 # 79 - 249</li>
         <li>322 374 4173</li>
       </ul>
