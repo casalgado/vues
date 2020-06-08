@@ -91,7 +91,7 @@ export default {
               let index = rows.length;
               rows.push({
                 index: index,
-                date: moment(object.deliver).format("YY/MM/DD"),
+                date: moment(object.deliver).format("DD/MM/YYYY"),
                 product: products[j].name,
                 quantity: products[j].quantity,
                 unitPrice: numeral(products[j].unitPrice).format("0,0"),
