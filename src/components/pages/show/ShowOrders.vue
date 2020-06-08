@@ -29,9 +29,12 @@
           factura
         </b-button>
       </b-card>
-      <b-button variant="dark" @click="toggleSummary">
+      <b-button variant="dark" class="post-table-button" @click="toggleSummary">
         venta por producto
       </b-button>
+      <b-button variant="dark" class="post-table-button" @click="showYear">
+        mostrar {{ year }}</b-button
+      >
       <OrdersSummary v-if="showSummary" :objects="table.objects" />
     </div>
     <!-- change printorders to 'invoice' -->
@@ -50,6 +53,7 @@ import TableTotals from "../../table/TableTotals";
 import OrdersSummary from "../../tools/OrdersSummary";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
+import moment from "moment";
 
 export default {
   name: "ShowOrders",
@@ -129,6 +133,9 @@ export default {
         return false;
       }
     },
+    year: function() {
+      return moment(this.date).format("YYYY");
+    },
     ...mapState(["ref", "date", "period", "selected"]),
   },
   watch: {
@@ -167,6 +174,10 @@ export default {
     },
     print: function() {
       window.print();
+    },
+    showYear: function() {
+      this.$store.commit("setPeriod", { period: "year" });
+      this.getObjects();
     },
   },
 };

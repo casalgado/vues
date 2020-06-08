@@ -76,6 +76,10 @@ input {
   background-color: var(--color-secondary-light);
 }
 
+.post-table-button {
+  margin: 15px;
+}
+
 .crud-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
