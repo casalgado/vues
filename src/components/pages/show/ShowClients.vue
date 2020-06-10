@@ -78,7 +78,6 @@ export default {
             label: "Cumple",
             sortable: true,
           },
-
           {
             key: "address",
             label: "Dir",
@@ -120,6 +119,11 @@ export default {
   },
   mounted() {
     this.getObjects();
+    if (window.innerWidth <= 767) {
+      this.table.fields = this.table.fields.filter(
+        (e) => e.key == "name" || e.key == "address"
+      );
+    }
   },
   methods: {
     getObjects: function() {

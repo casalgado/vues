@@ -14,7 +14,7 @@ export const ordersMixin = {
         }
         e.products = e.products.join("<br />");
         e.date = moment(e.date).format("MM/DD");
-        if (e.total > 1000000) {
+        if (e.total >= 1000000) {
           e.total =
             numeral(e.total)
               .divide(1000)
