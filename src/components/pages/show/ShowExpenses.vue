@@ -100,13 +100,12 @@ export default {
       }
     },
   },
-  created() {
-    if (this.pagination) {
-      // if this route == ingresos then pagination = day
+  created() {},
+  mounted() {
+    if (this.$route.fullPath === "/egresos") {
+      this.$store.commit("setPeriod", { period: "day" });
       this.table.title = "Egresos";
     }
-  },
-  mounted() {
     this.getObjects();
   },
   methods: {
