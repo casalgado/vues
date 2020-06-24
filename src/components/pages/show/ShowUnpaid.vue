@@ -1,21 +1,33 @@
 <template>
   <div>
-    <h6 id="title">{{ table.title }}</h6>
-    <Pagination :period="table.pagination" />
-    <Table :table="table" />
-    <TableTotals :objects="this.table.objects" />
-    <b-card v-if="this.selected.length > 0" id="toolbox">
-      <TableTotals :objects="this.selected" />
-      <ButtonPaid :ids="this.selectedIds" />
-      <ButtonEdit
-        v-if="this.selected.length == 1"
-        :oid="this.oids[0]"
-        destination="EditOrder"
-      />
-    </b-card>
+    <div id="table-cont">
+      <h6 id="title">{{ table.title }}</h6>
+      <Pagination :period="table.pagination" />
+      <Table :table="table" />
+      <TableTotals :objects="this.table.objects" />
+      <b-card v-if="this.selected.length > 0" id="toolbox">
+        <TableTotals :objects="this.selected" />
+        <ButtonPaid :ids="this.selectedIds" />
+        <ButtonEdit
+          v-if="this.selected.length == 1"
+          :oid="this.oids[0]"
+          destination="EditOrder"
+        />
+        <b-button
+          v-if="sameClient"
+          variant="info"
+          class="toolbox-button"
+          @click="print"
+        >
+          factura
+        </b-button>
+      </b-card>
+    </div>
+    <PrintOrders :objects="table.objects" />
   </div>
 </template>
 <script>
+import PrintOrders from "../../print/PrintOrders";
 import { ordersMixin } from "@/mixins/ordersMixin";
 import { toolboxMixin } from "@/mixins/toolboxMixin";
 import ButtonPaid from "../../tools/ButtonPaid";
@@ -34,6 +46,7 @@ export default {
     Pagination,
     ButtonPaid,
     ButtonEdit,
+    PrintOrders,
   },
   mixins: [ordersMixin, toolboxMixin],
   data() {
@@ -79,7 +92,21 @@ export default {
       path: "orders",
     };
   },
-  computed: mapState(["ref", "date", "period", "selected"]),
+  computed: {
+    sameClient: function() {
+      let objects = this.selected;
+      if (objects.length > 0) {
+        let client = objects[0].client;
+        return (
+          objects.map((e) => e.client).filter((e) => e == client).length ==
+          objects.length
+        );
+      } else {
+        return false;
+      }
+    },
+    ...mapState(["ref", "date", "period", "selected"]),
+  },
   watch: {
     date() {
       this.getObjects();
@@ -107,24 +134,33 @@ export default {
         );
       });
     },
+    print: function() {
+      window.print();
+    },
   },
 };
 </script>
 <style scoped>
 @media screen {
-  #page {
-    display: grid;
+  #invoice {
+    display: none;
+    padding-bottom: 300px;
   }
 }
 
 @media print {
-  #container,
-  #title,
-  #sidebar-content {
+  @page {
+    margin: 0;
+  }
+  body {
+    margin: 1.6cm;
+  }
+  #table-cont {
     display: none;
   }
 
-  #page {
+  #invoice {
+    padding: 1cm 1.6cm 1cm 1.6cm;
     color: black;
     display: grid;
   }

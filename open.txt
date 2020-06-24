@@ -42,6 +42,10 @@ styles
 testing
 - start testing small components
 
+sticky pagination
+scrollbar for tables
+consecutivo facturas + facturas desde por cobrar
+
 
 users
 - https://blog.logrocket.com/vue-firebase-authentication/
