@@ -32,10 +32,14 @@
       <b-button variant="dark" class="post-table-button" @click="toggleSummary">
         venta por producto
       </b-button>
+      <b-button variant="dark" class="post-table-button" @click="toggleByDay">
+        venta por dia
+      </b-button>
       <b-button variant="dark" class="post-table-button" @click="showYear">
         mostrar {{ year }}</b-button
       >
       <OrdersSummary v-if="showSummary" :objects="table.objects" />
+      <OrdersByDay v-if="showByDay" :objects="table.objects" />
     </div>
     <!-- change printorders to 'invoice' -->
     <PrintOrders :objects="table.objects" />
@@ -51,6 +55,7 @@ import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
 import OrdersSummary from "../../tools/OrdersSummary";
+import OrdersByDay from "../../tools/OrdersByDay";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
@@ -63,6 +68,7 @@ export default {
     Pagination,
     ButtonPaid,
     OrdersSummary,
+    OrdersByDay,
     ButtonEdit,
     ButtonDelete,
     PrintOrders,
@@ -110,6 +116,7 @@ export default {
       oids: [],
       path: "orders",
       showSummary: false,
+      showByDay: false,
     };
   },
   computed: {
@@ -171,6 +178,9 @@ export default {
     },
     toggleSummary: function() {
       this.showSummary = !this.showSummary;
+    },
+    toggleByDay: function() {
+      this.showByDay = !this.showByDay;
     },
     print: function() {
       window.print();
