@@ -33,7 +33,7 @@
         venta por producto
       </b-button>
       <b-button variant="dark" class="post-table-button" @click="toggleByDay">
-        venta por dia
+        produccion por dia
       </b-button>
       <b-button variant="dark" class="post-table-button" @click="showYear">
         mostrar {{ year }}</b-button
