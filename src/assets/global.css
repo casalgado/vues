@@ -12,11 +12,20 @@
 }
 
 body::-webkit-scrollbar {
-  display: none;
+  background: var(--color-secondary) !important;
+  border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-top: 2px solid var(--color-secondary);
+  border-bottom: 2px solid var(--color-secondary);
+  border-radius: 5px;
 }
 
 body {
   padding-right: 0px !important;
+  overflow-y: overlay;
 }
 
 /* bootstrap classes */
