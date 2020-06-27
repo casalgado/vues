@@ -5,6 +5,7 @@
     <Table :table="table" />
     <b-card v-if="selected.length > 0" id="toolbox">
       <p v-if="development">{{ oid }}</p>
+      <ClientHistorySummary :key="oid" :dbref="ref" :cid="oid" />
       <ButtonEdit
         v-if="selected.length == 1"
         :oid="oid"
@@ -20,7 +21,6 @@
       <b-button variant="dark" class="toolbox-button" @click="getAllClients">
         todos
       </b-button>
-      <ClientHistorySummary :key="oid" :dbref="ref" :cid="oid" />
     </b-card>
     <b-button variant="dark" class="toolbox-button" @click="getAllClients">
       todos

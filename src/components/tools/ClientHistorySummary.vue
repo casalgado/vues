@@ -50,6 +50,7 @@ export default {
 #chs {
   max-height: 300px;
   overflow-y: scroll;
+  margin-bottom: 20px;
 }
 
 #chs::-webkit-scrollbar {

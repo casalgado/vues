@@ -151,6 +151,12 @@ export default {
     padding-left: 5px !important;
   }
 }
+@media only screen and (max-width: 668px) {
+  #toolbox {
+    width: 100vw;
+    left: 0;
+  }
+}
 @media screen {
   #page {
     display: grid;

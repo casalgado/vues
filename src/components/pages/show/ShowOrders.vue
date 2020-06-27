@@ -7,6 +7,12 @@
       <TableTotals :objects="table.objects" />
       <b-card v-if="selected.length > 0" id="toolbox">
         <!-- <p v-if="development">{{ oids }}</p> -->
+        <!-- refactor below into a separate component -->
+        <ul v-if="screenxs && selected.length == 1">
+          <li v-for="p in onlyProducts" :key="p">
+            {{ p }}
+          </li>
+        </ul>
         <TableTotals :objects="selected" />
         <ButtonPaid :ids="oids" />
         <ButtonEdit
@@ -21,7 +27,7 @@
           @delete="getObjects()"
         />
         <b-button
-          v-if="sameClient"
+          v-if="sameClient && !screenxs"
           variant="info"
           class="toolbox-button"
           @click="print"
@@ -120,6 +126,12 @@ export default {
     };
   },
   computed: {
+    onlyProducts: function() {
+      return this.selected[0].products.split("<br />");
+    },
+    screenxs: function() {
+      return window.innerWidth <= 767;
+    },
     development: function() {
       const environment = process.env.NODE_ENV;
       if (environment === "development") {
@@ -161,8 +173,12 @@ export default {
     },
   },
   mounted() {
-    console.log("mounted");
     this.getObjects();
+    if (this.screenxs) {
+      this.table.fields = this.table.fields.filter(
+        (e) => e.key == "date" || e.key == "client" || e.key == "total"
+      );
+    }
   },
   methods: {
     getObjects: function() {
@@ -221,5 +237,14 @@ export default {
     color: black;
     display: grid;
   }
+}
+
+ul {
+  padding-left: 0px;
+}
+
+li {
+  list-style-type: none;
+  text-align: center;
 }
 </style>
