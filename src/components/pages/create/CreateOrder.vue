@@ -243,6 +243,9 @@ export default {
       let pgrandes = strings.filter((e) => {
         return e.includes("grande");
       });
+      let pmedios = strings.filter((e) => {
+        return e.includes("medio");
+      });
       let ppeque = strings.filter((e) => {
         return e.includes("pequeño");
       });
@@ -265,6 +268,9 @@ export default {
           return !pgrandes.includes(e);
         })
         .filter((e) => {
+          return !pmedios.includes(e);
+        })
+        .filter((e) => {
           return !ppeque.includes(e);
         })
         .filter((e) => {
@@ -276,7 +282,9 @@ export default {
       sorted = [
         ...sorted,
         ...pgrandes,
+        "",
         "pan de masa madre mediano",
+        ...pmedios,
         "",
         ...ppeque,
         "",
