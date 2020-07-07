@@ -24,25 +24,27 @@ export default {
     };
   },
   mounted() {
-    getById("clients", `${this.cid}`).then((e) => {
-      if (e.history) {
-        let keys = Object.keys(e.history);
-        let ordersTotal = 0;
-        console.log(e.history);
-        keys.forEach((k) => {
-          ordersTotal++;
-          e.history[k].products.forEach((p) => {
-            this.history.push([
-              `${moment(e.history[k].date).format("YYYY/MM/DD")}`,
-              `${p.quantity} ${p.name}`,
-            ]);
+    if (this.cid) {
+      getById("clients", `${this.cid}`).then((e) => {
+        if (e.history) {
+          let keys = Object.keys(e.history);
+          let ordersTotal = 0;
+          console.log(e.history);
+          keys.forEach((k) => {
+            ordersTotal++;
+            e.history[k].products.forEach((p) => {
+              this.history.push([
+                `${moment(e.history[k].date).format("YYYY/MM/DD")}`,
+                `${p.quantity} ${p.name}`,
+              ]);
+            });
           });
-        });
-        this.history.sort().unshift([ordersTotal, "pedidos"]);
-      } else {
-        this.history.unshift([0, "pedidos"]);
-      }
-    });
+          this.history.sort().unshift([ordersTotal, "pedidos"]);
+        } else {
+          this.history.unshift([0, "pedidos"]);
+        }
+      });
+    }
   },
 };
 </script>

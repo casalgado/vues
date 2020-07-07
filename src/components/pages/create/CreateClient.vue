@@ -1,6 +1,6 @@
 <template>
   <b-form v-if="show" id="form" @submit="submit" @reset="reset">
-    <h5 id="form-title">crear cliente</h5>
+    <h5 id="form-title">{{ oid ? "Editar Cliente" : "Crear Cliente" }}</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.email" :type="'email'" :label="'mail'" />
     <InputBasic v-model="form.phone" :type="'number'" :label="'telefono'" />
@@ -23,7 +23,13 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
-import { save, update, getAsOptionsForSelect, getById } from "@/firebase";
+import {
+  save,
+  update,
+  getAsOptionsForSelect,
+  getById,
+  renameClient,
+} from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
@@ -47,6 +53,7 @@ export default {
         comment: "",
         category: "",
       },
+      oldname: "",
       options: {
         categories: [],
       },
@@ -76,6 +83,7 @@ export default {
     ]).then(() => {
       if (this.oid !== "") {
         getById("clients", this.oid).then((object) => {
+          this.oldname = object.name;
           this.form.name = object.name;
           this.form.email = object.email;
           this.form.phone = object.phone.toString();
@@ -91,12 +99,16 @@ export default {
     submit(evt) {
       evt.preventDefault();
       this.$v.$touch();
+      let alertmsg = "¿continuar?";
+      if (this.oldname !== this.form.name) {
+        alertmsg = "¿continuar y renombrar cliente?";
+      }
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
       } else {
         this.$fire({
-          title: "¿continuar?",
+          title: alertmsg,
           showCancelButton: true,
         }).then((alertStatus) => {
           if (alertStatus.dismiss) {
@@ -115,6 +127,9 @@ export default {
               update(`${this.path}/${this.oid}`, this.form).then(() => {
                 this.$router.push({ name: "ShowClients" });
               });
+              if (this.oldname !== this.form.name) {
+                renameClient(this.oldname, this.form.name, this);
+              }
             }
           }
         });

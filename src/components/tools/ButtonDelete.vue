@@ -36,6 +36,7 @@ export default {
                   if (c) {
                     update(`clients/${c.id}/history`, { [oid]: null });
                     update("optionsForMenus/clients", {
+                      // @this should be cid below?
                       [oid]: null,
                     });
                   } else {

@@ -95,7 +95,7 @@ export const dynamicFieldsMixin = {
                   update("optionsForMenus/clients", {
                     [id]: { name: form.client },
                   });
-                  // update client order history
+                  // update existing client order history
                   getOneWhere("clients", "name", form.client).then((obj) => {
                     if (obj) {
                       let ck = obj.id;
