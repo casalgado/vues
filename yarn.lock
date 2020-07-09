@@ -11265,6 +11265,13 @@ vue-loader@^15.9.1:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-position-sticky@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/vue-position-sticky/-/vue-position-sticky-0.2.1.tgz#e3b6953abdff85df08cdad57e4c073af8629fa52"
+  integrity sha512-A4kIuXg5w/z+CkECl37leF6BnlguyVr5EGlnVa19p06EiQuIulxYz/44GFVcO9aOF2F4bjusmLqHt2y4h6ApSA==
+  dependencies:
+    vue "^2.5.16"
+
 vue-print-nb@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/vue-print-nb/-/vue-print-nb-1.5.0.tgz#b2af7fa2923ffe69ab4e98586e0037e993813161"
@@ -11329,7 +11336,7 @@ vue-template-es2015-compiler@1.9.x, vue-template-es2015-compiler@^1.6.0, vue-tem
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue@2.6.11, vue@^2.6.10:
+vue@2.6.11, vue@^2.5.16, vue@^2.6.10:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==

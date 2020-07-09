@@ -5,10 +5,13 @@ import store from "./store";
 import router from "./router";
 import BootstrapVue from "bootstrap-vue";
 import VueSimpleAlert from "vue-simple-alert";
+import vuePositionSticky from "vue-position-sticky";
 // import Print from 'vue-print-nb';
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "./assets/global.css";
+
+Vue.use(vuePositionSticky);
 
 // Vue.use(Print);
 Vue.use(BootstrapVue);

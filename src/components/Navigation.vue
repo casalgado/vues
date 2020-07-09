@@ -50,7 +50,7 @@
     >
       <b-dropdown-item>
         <router-link :to="{ name: 'ShowOrders' }">
-          <b-button variant="dark" class="nav-btn">Pedidos</b-button>
+          <b-button variant="dark" class="nav-btn">Ventas</b-button>
         </router-link>
       </b-dropdown-item>
 

@@ -83,7 +83,7 @@ export default {
   data() {
     return {
       table: {
-        title: "Pedidos",
+        title: "Ventas",
         fields: [
           {
             key: "date",

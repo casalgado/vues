@@ -104,6 +104,16 @@ input {
   color: var(--color-secondary-lighter) !important;
 }
 
+.table-cont {
+  height: 1000vh;
+}
+
+.paginationControls {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+}
+
 @media only screen and (max-width: 668px) {
   .orderClient {
     max-width: 110px;
