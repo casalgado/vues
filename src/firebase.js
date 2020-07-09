@@ -432,37 +432,98 @@ export function remove(path, oid) {
 }
 
 export function renameClient(oldname, newname, component) {
+  console.time("renameClient");
   let counter = 0;
-  getAll("orders").then((orders) => {
-    orders.forEach((o) => {
-      if (o.client == oldname) {
-        ref
-          .child("orders")
-          .child(o.id)
-          .update({ client: newname }, function(error) {
-            if (error) {
-              alert(error);
-            }
-          });
-        ref
-          .child("optionsForMenus")
-          .child("clients")
-          .child(o.id)
-          .update({ name: newname }, function(error) {
-            if (error) {
-              alert(error);
-            }
-          });
-        counter++;
-      }
+  component.$fire({
+    title: `wait for it`,
+    showConfirmButton: false,
+  });
+  getAll("orders")
+    .then((orders) => {
+      orders.forEach((o) => {
+        if (o.client == oldname) {
+          ref
+            .child("orders")
+            .child(o.id)
+            .update({ client: newname }, function(error) {
+              if (error) {
+                alert(error);
+              }
+            });
+          ref
+            .child("optionsForMenus")
+            .child("clients")
+            .child(o.id)
+            .update({ name: newname }, function(error) {
+              if (error) {
+                alert(error);
+              }
+            });
+          counter++;
+        }
+      });
+    })
+    .then(() => {
+      console.timeEnd("renameProduct");
+      component.$fire({
+        title: `${counter} pedido${counter == 1 ? "" : "s"} modificado${
+          counter == 1 ? "" : "s"
+        }`,
+      });
     });
+}
+
+export function renameProduct(oldname, newname, component) {
+  console.time("renameProduct");
+  let counter = 0;
+  component.$fire({
+    title: `wait for it`,
+    showConfirmButton: false,
+  });
+  Promise.all([
+    getAll("orders").then((orders) => {
+      orders.forEach((o) => {
+        o.products.forEach((p, i) => {
+          if (p.name == oldname) {
+            ref
+              .child(`orders/${o.id}/products/${i}`)
+              .update({ name: newname }, function(error) {
+                if (error) {
+                  alert(error);
+                }
+              });
+            counter++;
+          }
+        });
+      });
+    }),
+    getAll("clients").then((clients) => {
+      clients.forEach((c) => {
+        let cid = c.id;
+        if (c.history) {
+          let oids = Object.keys(c.history);
+          oids.forEach((o) => {
+            c.history[o].products.forEach((p, i) => {
+              if (p.name == oldname) {
+                ref
+                  .child(`clients/${cid}/history/${o}/products/${i}`)
+                  .update({ name: newname, test: "hello" }, function(error) {
+                    if (error) {
+                      alert(error);
+                    }
+                  });
+              }
+            });
+          });
+        }
+      });
+    }),
+  ]).then(() => {
+    console.timeEnd("renameProduct");
     component.$fire({
-      title: `${counter} pedido${counter > 1 ? "s" : ""} modificado${
-        counter > 1 ? "s" : ""
+      title: `${counter} registro${counter == 1 ? "" : "s"} modificado${
+        counter == 1 ? "" : "s"
       }`,
     });
-    console.log(orders);
-    console.log(oldname);
-    console.log(newname);
   });
 }

@@ -1,6 +1,6 @@
 <template>
   <b-form v-if="show" id="form" @submit="submit" @reset="reset">
-    <h5 id="form-title">crear producto</h5>
+    <h5 id="form-title">{{ oid ? "Editar Producto" : "Crear Producto" }}</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.price" :type="'text'" :label="'p venta'" />
     <InputBasic v-model="form.cost" :type="'text'" :label="'p costo'" />
@@ -22,7 +22,13 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
-import { save, getAsOptionsForSelect, getById, update } from "@/firebase";
+import {
+  save,
+  getAsOptionsForSelect,
+  getById,
+  update,
+  renameProduct,
+} from "@/firebase";
 import { mapState } from "vuex";
 export default {
   name: "CreateProduct",
@@ -47,6 +53,7 @@ export default {
       },
       show: true,
       path: "products",
+      oldname: "",
     };
   },
   validations: {
@@ -67,7 +74,6 @@ export default {
     Promise.all([
       getAsOptionsForSelect("optionsForMenus/productCategories").then(
         (options) => {
-          console.log(options);
           options.unshift({ value: "", text: "categoria" });
           this.options.categories = options;
         }
@@ -77,6 +83,7 @@ export default {
         getById(this.path, this.oid).then((object) => {
           object.price = object.price || "";
           object.cost = object.cost || "";
+          this.oldname = object.name;
           this.form.name = object.name;
           this.form.price = object.price.toString();
           this.form.cost = object.cost.toString();
@@ -88,13 +95,17 @@ export default {
   methods: {
     submit(evt) {
       evt.preventDefault();
+      let alertmsg = "¿continuar?";
+      if (this.oldname !== this.form.name) {
+        alertmsg = "¿continuar y renombrar producto?";
+      }
       this.$v.$touch();
       if (this.$v.$invalid) {
         console.log("invalid");
         this.submitStatus = "ERROR";
       } else {
         this.$fire({
-          title: "¿continuar?",
+          title: alertmsg,
           showCancelButton: true,
         }).then((alertStatus) => {
           if (alertStatus.dismiss) {
@@ -103,11 +114,14 @@ export default {
             this.form.name = this.form.name.toLowerCase();
             if (this.oid === "") {
               save(this.path, this.form, this).then(() => {
-                this.$router.go();
+                this.$router.push({ name: "ShowProducts" });
               });
             } else {
               update(`${this.path}/${this.oid}`, this.form).then(() => {
-                this.$router.go();
+                this.$router.push({ name: "ShowProducts" });
+                if (this.oldname !== this.form.name) {
+                  renameProduct(this.oldname, this.form.name, this);
+                }
               });
             }
           }

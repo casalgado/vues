@@ -234,8 +234,10 @@ export default {
       });
       let sorted = [
         "domicilio",
+        "",
         "pan de masa madre",
         "pan integral",
+        "",
         "pan de banano y semillas de girasol",
         "pan de semillas",
         "pan de zaatar",
