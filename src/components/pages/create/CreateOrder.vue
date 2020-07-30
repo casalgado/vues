@@ -230,32 +230,55 @@ export default {
     },
     reorder(products) {
       let strings = products.map((e) => {
+        console.log(e.text);
         return e.text;
       });
+      console.log(strings);
       let sorted = [
         "domicilio",
         "",
         "pan de masa madre",
+        "pan de masa madre mediano",
+        "pan de masa madre pequeño",
+        "mini masa madre",
         "pan integral",
-        "",
-        "pan de banano y semillas de girasol",
-        "pan de semillas",
+        "pan integral medio",
+        "pan integral  pequeño",
+        "pan de queso costeño grande",
+        "pan de queso costeño medio",
+        "pan de queso costeño pequeño",
         "pan de zaatar",
+        "pan de zaatar medio",
+        "pan de zaatar pequeño",
+        "pan de ajonjoli grande",
+        "pan ajonjoli medio",
+        "pan de ajonjoli pequeño",
+        "pan de banano y semillas de girasol",
+        "pan de banano y semillas de girasol pequeño",
+        "pan de semillas",
+        "pan de semillas pequeño",
+        "pan de uva grande",
+        "pan de uva pequeño",
+        "",
+        "pan integral de zaatar pequeño",
+        "pan integral de semillas",
+        "pan integral de uva grande",
+        "pan de uva integral pequeño",
+        "",
       ];
-      let pgrandes = strings.filter((e) => {
-        return e.includes("grande");
-      });
-      let pmedios = strings.filter((e) => {
-        return e.includes("medio");
-      });
-      let ppeque = strings.filter((e) => {
-        return e.includes("pequeño");
-      });
+      // let pgrandes = strings.filter((e) => {
+      //   return e.includes("grande");
+      // });
+      // let pmedios = strings.filter((e) => {
+      //   return e.includes("medio");
+      // });
+      // let ppeque = strings.filter((e) => {
+      //   return e.includes("pequeño");
+      // });
       let tortas = strings.filter((e) => {
         return e.includes("torta");
       });
-      ppeque.shift();
-      ppeque.pop();
+
       let potros = [
         "pan brioche",
         "pan de bono",
@@ -267,35 +290,12 @@ export default {
           return !sorted.includes(e);
         })
         .filter((e) => {
-          return !pgrandes.includes(e);
-        })
-        .filter((e) => {
-          return !pmedios.includes(e);
-        })
-        .filter((e) => {
-          return !ppeque.includes(e);
-        })
-        .filter((e) => {
           return !tortas.includes(e);
         })
         .filter((e) => {
           return e.split(" ")[0] !== "pan";
         });
-      sorted = [
-        ...sorted,
-        ...pgrandes,
-        "",
-        "pan de masa madre mediano",
-        ...pmedios,
-        "",
-        ...ppeque,
-        "",
-        ...potros,
-        "",
-        ...tortas,
-        "",
-        ...strings,
-      ];
+      sorted = [...sorted, ...potros, "", ...tortas, "", ...strings];
       products = sorted.map((e) => {
         return { text: e, value: e };
       });
