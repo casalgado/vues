@@ -291,9 +291,6 @@ export default {
         })
         .filter((e) => {
           return !tortas.includes(e);
-        })
-        .filter((e) => {
-          return e.split(" ")[0] !== "pan";
         });
       sorted = [...sorted, ...potros, "", ...tortas, "", ...strings];
       products = sorted.map((e) => {
