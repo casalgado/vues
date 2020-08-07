@@ -62,7 +62,15 @@ export default {
           showCancelButton: true,
         }).then(() => {
           this.ids.forEach((i) => {
-            updateSingleProp(`orders`, `${i}`, "paid", moment().format(), this);
+            updateSingleProp(
+              `orders`,
+              `${i}`,
+              "paid",
+              moment()
+                .subtract(1, "day")
+                .format(),
+              this
+            );
           });
         });
       } else if (this.paid == "success") {
