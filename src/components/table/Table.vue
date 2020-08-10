@@ -19,6 +19,21 @@
           <template v-slot:cell(products)="data">
             <span v-html="data.value" />
           </template>
+          <template v-slot:cell(paymentMethod)="data" class="p-icon-cont">
+            <img
+              v-if="data.item.paymentMethod == 'transferencia'"
+              src="../../assets/paymentIcons-01.svg"
+              alt=""
+              class="p-icon"
+            />
+            <img
+              v-if="data.item.paymentMethod == 'efectivo'"
+              src="../../assets/paymentIcons-02.svg"
+              alt=""
+              class="p-icon"
+            />
+          </template>
+          <div class="icon"></div>
         </b-table>
       </b-col>
     </b-row>
@@ -70,5 +85,16 @@ export default {
 
 #table-container {
   max-width: 680px;
+}
+
+.icon {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  background-color: white;
+}
+
+.p-icon {
+  width: 25px;
 }
 </style>

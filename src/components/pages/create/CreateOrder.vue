@@ -11,7 +11,23 @@
     <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
     <InputBasic v-model="form.deliver" :type="'date'" :label="'entregar'" />
     <InputBasic v-model="form.paid" :type="'date'" :label="'paid'" />
-
+    <b-form-group label="">
+      <div class="radio-group">
+        <p @click="form.paymentMethod = ''">metodo de pago</p>
+        <b-form-radio
+          v-model="form.paymentMethod"
+          name="efectivo"
+          value="efectivo"
+          >efectivo</b-form-radio
+        >
+        <b-form-radio
+          v-model="form.paymentMethod"
+          name="transferencia"
+          value="transferencia"
+          >transferencia</b-form-radio
+        >
+      </div>
+    </b-form-group>
     <div v-for="field in this.form.products" :key="field.id">
       <transition name="fade">
         <InputDynamic
@@ -71,6 +87,7 @@ export default {
         date: "",
         deliver: "",
         paid: "",
+        paymentMethod: "",
         products: [
           {
             id: 0,
@@ -167,6 +184,7 @@ export default {
           this.form.date = object.date.split("T")[0];
           this.form.deliver = object.date.split("T")[0];
           this.form.paid = object.paid.split("T")[0];
+          this.form.paymentMethod = object.paymentMethod;
           let products = object.products;
           for (let i = 0; i < products.length; i++) {
             this.form.products.push({
@@ -308,6 +326,16 @@ export default {
 
 button {
   width: 110px;
+}
+
+.radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.radio-group p:first-child {
+  text-align: left;
+  cursor: pointer;
 }
 
 .f-group {

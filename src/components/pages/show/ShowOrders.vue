@@ -113,6 +113,13 @@ export default {
             tdClass: "justifyLeft slim",
             thClass: "slim",
           },
+          {
+            key: "paymentMethod",
+            label: "",
+            sortable: true,
+            tdClass: "justifyCenter slim slimmer",
+            thClass: "slim",
+          },
         ],
         formattedObjects: [],
         objects: [],
@@ -176,7 +183,11 @@ export default {
     this.getObjects();
     if (this.screenxs) {
       this.table.fields = this.table.fields.filter(
-        (e) => e.key == "date" || e.key == "client" || e.key == "total"
+        (e) =>
+          e.key == "date" ||
+          e.key == "client" ||
+          e.key == "total" ||
+          e.key == "paymentMethod"
       );
     }
   },

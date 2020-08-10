@@ -57,6 +57,13 @@ export default {
             sortable: true,
             tdClass: "",
           },
+          {
+            key: "paymentMethod",
+            label: "",
+            sortable: true,
+            tdClass: "justifyCenter slim slimmer",
+            thClass: "slim",
+          },
         ],
         formattedObjects: [],
         objects: [],
