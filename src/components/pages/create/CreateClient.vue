@@ -83,14 +83,15 @@ export default {
     ]).then(() => {
       if (this.oid !== "") {
         getById("clients", this.oid).then((object) => {
-          this.oldname = object.name;
-          this.form.name = object.name;
-          this.form.email = object.email;
-          this.form.phone = object.phone.toString();
-          this.form.address = object.address;
-          this.form.birthday = object.birthday;
+          let phone = object.phone || "";
+          this.oldname = object.name || "";
+          this.form.name = object.name || "";
+          this.form.email = object.email || "";
+          this.form.phone = phone.toString();
+          this.form.address = object.address || "";
+          this.form.birthday = object.birthday || "";
           this.form.comment = object.comment || "";
-          this.form.category = object.category;
+          this.form.category = object.category || "";
         });
       }
     });

@@ -144,6 +144,7 @@ export default {
         this.form.products = [];
         getClientsLastOrder(val).then((e) => {
           let products = e.products;
+          this.form.paymentMethod = e.paymentMethod;
           for (let i = 0; i < products.length; i++) {
             this.form.products.push({
               id: i,
