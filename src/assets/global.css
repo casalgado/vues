@@ -264,6 +264,10 @@ body {
   border: var(--color-primary);
 }
 
+.custom-radio {
+  text-align: left;
+}
+
 /* material design shadows */
 
 .shadow-1 {

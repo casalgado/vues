@@ -7,7 +7,6 @@
       :options="this.options.client"
       :label="'cliente'"
     />
-
     <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
     <InputBasic v-model="form.deliver" :type="'date'" :label="'entregar'" />
     <InputBasic v-model="form.paid" :type="'date'" :label="'paid'" />
@@ -27,7 +26,18 @@
           >transferencia</b-form-radio
         >
       </div>
+      <!-- <div class="radio-group">
+        <p>e. inmediata</p>
+        <b-form-radio v-model="form.sameDayDelivery" name="si" :value="true"
+          >si</b-form-radio
+        >
+        <b-form-radio v-model="form.sameDayDelivery" name="no" :value="false"
+          >no</b-form-radio
+        >
+      </div> -->
     </b-form-group>
+    <div>{{ form.paymentMethod }}</div>
+    <div>{{ form.sameDayDelivery }}</div>
     <div v-for="field in this.form.products" :key="field.id">
       <transition name="fade">
         <InputDynamic
@@ -88,6 +98,7 @@ export default {
         deliver: "",
         paid: "",
         paymentMethod: "",
+        sameDayDelivery: false,
         products: [
           {
             id: 0,
