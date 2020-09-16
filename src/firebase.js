@@ -214,7 +214,15 @@ export function getMostUsedClients(size) {
           .filter((value, index, self) => {
             return self.indexOf(value) === index;
           })
-          .sort();
+          .map((e) => {
+            return e.trim();
+          })
+          .sort(function(a, b) {
+            return a.localeCompare(b);
+          });
+        console.log(sorted_unique);
+        console.log(" ");
+        console.log(objects);
         most_used = sorted_unique
           .map((e) => {
             let times_used = objects.filter((i) => {
