@@ -6,6 +6,18 @@
           <h6 id="title">{{ tableProduce.title }}</h6>
           <Pagination period="day" />
           <Table :table="tableProduce" :sidebar="false" />
+          <b-button
+            variant="dark"
+            class="post-table-button"
+            @click="showSummaryProduce = !showSummaryProduce"
+          >
+            por producto
+          </b-button>
+          <OrdersSummary
+            v-if="showSummaryProduce"
+            :objects="tableProduce.objects"
+            :onlyQuantities="true"
+          />
         </b-col>
         <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
           <h6 id="title">{{ tableDeliver.title }}</h6>
@@ -34,6 +46,7 @@ import Landing from "../../Landing";
 import ButtonEdit from "../../tools/ButtonEdit";
 import ButtonPaid from "../../tools/ButtonPaid";
 import ClientSnippet from "../../tools/ClientSnippet";
+import OrdersSummary from "../../tools/OrdersSummary";
 import Pagination from "../../table/Pagination";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
@@ -47,6 +60,7 @@ export default {
     ClientSnippet,
     Landing,
     ButtonPaid,
+    OrdersSummary,
   },
   mixins: [ordersMixin],
   data() {
@@ -97,6 +111,8 @@ export default {
       },
       oids: [],
       path: "orders",
+      showSummaryProduce: false,
+      showSummaryDeliver: false,
     };
   },
   computed: {

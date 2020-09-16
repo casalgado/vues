@@ -3,12 +3,12 @@
     <tr @click="toggleExpanded">
       <td class="tdn">Producto</td>
       <td class="tdv">Ctd</td>
-      <td class="tdt">Total</td>
+      <td v-if="!onlyQuantities" class="tdt">Total</td>
     </tr>
     <tr v-for="(value, name) in this.summary" :key="name">
       <td class="tdn">{{ name }}:</td>
       <td class="tdv">{{ value.quantity }}</td>
-      <td class="tdt">{{ value.total }}</td>
+      <td v-if="!onlyQuantities" class="tdt">{{ value.total }}</td>
     </tr>
   </table>
 </template>
@@ -19,6 +19,7 @@ export default {
   name: "OrdersSummary",
   props: {
     objects: Array,
+    onlyQuantities: Boolean,
   },
   data() {
     return {
