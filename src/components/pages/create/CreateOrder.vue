@@ -36,8 +36,8 @@
         >
       </div> -->
     </b-form-group>
-    <div>{{ form.paymentMethod }}</div>
-    <div>{{ form.sameDayDelivery }}</div>
+    <!-- <div>{{ form.paymentMethod }}</div>
+    <div>{{ form.sameDayDelivery }}</div> -->
     <div v-for="field in this.form.products" :key="field.id">
       <transition name="fade">
         <InputDynamic
@@ -271,40 +271,71 @@ export default {
         "pan de masa madre mediano",
         "pan de masa madre pequeño",
         "mini masa madre",
+        "",
         "pan integral",
         "pan integral medio",
         "pan integral  pequeño",
+        "",
         "pan de queso costeño grande",
         "pan de queso costeño medio",
         "pan de queso costeño pequeño",
+        "",
         "pan de zaatar",
         "pan de zaatar medio",
         "pan de zaatar pequeño",
+        "",
         "pan de ajonjoli grande",
         "pan ajonjoli medio",
         "pan de ajonjoli pequeño",
+        "",
         "pan de banano y semillas de girasol",
+        "pan de girasol y banano mediano",
         "pan de banano y semillas de girasol pequeño",
-        "pan de semillas",
+        "",
         "pan de semillas grande",
         "pan de semillas mediano",
         "pan de semillas pequeño",
+        "",
         "pan de uva grande",
         "pan de uva mediano",
         "pan de uva pequeño",
         "",
+        "pan de chocolate grande",
+        "pan de chocolate mediano",
+        "pan de chocolate pequeño",
+        "",
+        "",
+        "pan integral sin avena grande ",
+        "pan integral sin avena mediano",
+        "pan integral sin avena pequeño",
+        "",
         "pan integral queso grande",
+        "pan integral queso mediano",
         "pan integral queso pequeño",
+        "",
         "pan integral zaatar grande",
         "pan integral zaatar mediano",
         "pan integral de zaatar pequeño",
+        "",
+        "pan integral de ajonjoli grande",
+        "pan integral de ajonjoli mediano",
+        "pan integral de ajonjoli pequeño",
+        "",
         "pan integral de banano grande",
+        "pan integral de semillas y banano mediano",
         "pan integral de semillas y banano pequeño",
+        "",
         "pan integral de semillas",
         "pan integral de semillas mediano",
         "pan integral de semillas pequeño",
+        "",
         "pan integral de uva grande",
+        "pan integral de uva mediano",
         "pan integral de uva pequeño",
+        "",
+        "pan de chocolate integral grande",
+        "pan de chocolate integral mediano",
+        "pan de chocolate integral pequeño",
         "",
       ];
       // let pgrandes = strings.filter((e) => {
@@ -319,12 +350,36 @@ export default {
       let tortas = strings.filter((e) => {
         return e.includes("torta");
       });
-
-      let potros = [
-        "pan brioche",
+      let potros = ["pan de bono paquete", "pan de hamburguesa"];
+      let remove = [
+        "brownie de coco",
+        "brownie de mantequilla de mani",
+        "domicilio reembolsable",
+        "excedente",
+        "fermento de pimenton",
+        "galleta de jengibre",
+        "harina",
+        "helado de cafe",
+        "helado de maracuya",
+        "helado de nispero",
+        "helado de yogurt",
+        "integral de queso mediano",
         "pan de bono",
         "pan de bono paquete",
+        "pan de cafe pequeño",
         "pan de hamburguesa",
+        "pan de hamburguesa integral",
+        "pan de semillas grande ",
+        "pan de semillas mediano ",
+        "pan de semillas y banano mediano",
+        "pan de uva integral pequeño",
+        "pan integral de queso mediano",
+        "pan integral de zaatar mediano",
+        "pan integral pequeño",
+        "pan integral sin avena pequeno",
+        "pan mini masa madre",
+        "pan queso costeño pequeño",
+        "pan sin avena grande",
       ];
       strings = strings
         .filter((e) => {
@@ -332,11 +387,15 @@ export default {
         })
         .filter((e) => {
           return !tortas.includes(e);
+        })
+        .filter((e) => {
+          return !remove.includes(e);
         });
       sorted = [...sorted, ...potros, "", ...tortas, "", ...strings];
       products = sorted.map((e) => {
         return { text: e, value: e };
       });
+      console.log(strings);
       return products;
     },
   },
