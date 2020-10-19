@@ -170,9 +170,7 @@ export default {
       }
     },
     date: function(val) {
-      this.form.deliver = moment(val)
-        .add(1, "day")
-        .format("YYYY-MM-DD");
+      this.form.deliver = moment(val).format("YYYY-MM-DD");
     },
   },
   beforeCreate() {
