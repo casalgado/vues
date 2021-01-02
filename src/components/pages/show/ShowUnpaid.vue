@@ -37,6 +37,7 @@ import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
 import { getAllWhere } from "@/firebase";
 import { mapState } from "vuex";
+import moment from "moment";
 
 export default {
   name: "ShowUnpaid",
@@ -124,6 +125,7 @@ export default {
   },
   mounted() {
     this.getObjects();
+    console.log(moment());
   },
   methods: {
     getObjects: function() {

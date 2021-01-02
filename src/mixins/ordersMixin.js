@@ -28,7 +28,7 @@ export const ordersMixin = {
               .format("0.0") + "k";
         }
         if (e.paid == "") {
-          // refator
+          // refactor
           e.paid = "";
         } else {
           e.paid = moment(e.paid).format("MM/DD");

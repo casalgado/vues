@@ -348,7 +348,11 @@ export default {
       let tortas = strings.filter((e) => {
         return e.includes("torta");
       });
-      let potros = ["pan de bono paquete", "pan de hamburguesa"];
+      let potros = [
+        "pan de bono paquete",
+        "pan de hamburguesa",
+        "pan de hamburguesa integral",
+      ];
       let remove = [
         "brownie de coco",
         "brownie de mantequilla de mani",
