@@ -2,6 +2,7 @@
   <b-form v-if="show" id="form" @submit="submit" @reset="reset">
     <h5 id="form-title">{{ oid ? "Editar Cliente" : "Crear Cliente" }}</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
+    <InputBasic v-model="form.cc" :type="'number'" :label="'cedula'" />
     <InputBasic v-model="form.email" :type="'email'" :label="'mail'" />
     <InputBasic v-model="form.phone" :type="'number'" :label="'telefono'" />
     <InputBasic v-model="form.address" :type="'text'" :label="'direccion'" />
@@ -49,6 +50,7 @@ export default {
         email: "",
         phone: "",
         address: "",
+        cc: "",
         birthday: "",
         comment: "",
         category: "",
@@ -84,8 +86,10 @@ export default {
       if (this.oid !== "") {
         getById("clients", this.oid).then((object) => {
           let phone = object.phone || "";
+          let cc = object.cc || "";
           this.oldname = object.name || "";
           this.form.name = object.name || "";
+          this.form.cc = cc.toString();
           this.form.email = object.email || "";
           this.form.phone = phone.toString();
           this.form.address = object.address || "";
@@ -141,6 +145,7 @@ export default {
         evt.preventDefault();
       }
       this.form.name = "";
+      this.form.cc = "";
       this.form.email = "";
       this.form.phone = 0;
       this.form.address = "";

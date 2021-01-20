@@ -69,6 +69,11 @@ export default {
             sortable: true,
           },
           {
+            key: "cc",
+            label: "CC",
+            sortable: true,
+          },
+          {
             key: "lastOrder",
             label: "Ult",
             sortable: true,
