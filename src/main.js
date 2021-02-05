@@ -6,6 +6,7 @@ import router from "./router";
 import BootstrapVue from "bootstrap-vue";
 import VueSimpleAlert from "vue-simple-alert";
 import vuePositionSticky from "vue-position-sticky";
+import JsonCSV from "vue-json-csv";
 // import Print from 'vue-print-nb';
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -17,6 +18,8 @@ Vue.use(vuePositionSticky);
 Vue.use(BootstrapVue);
 
 Vue.use(VueSimpleAlert, { background: "#1d1c1c" });
+
+Vue.component("downloadCsv", JsonCSV);
 
 Vue.directive("click-outside", {
   bind: function(el, binding, vnode) {
