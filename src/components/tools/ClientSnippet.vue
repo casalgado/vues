@@ -1,9 +1,10 @@
 <template>
   <div id="client-snippet">
-    <p>{{ this.name }}</p>
-    <p>{{ this.phone }}</p>
-    <p>{{ this.address }}</p>
-    <p>{{ this.birthday }}</p>
+    <p>- {{ this.name }}</p>
+    <p>- {{ this.phone }}</p>
+    <p>- {{ this.address }}</p>
+    <p>- {{ this.birthday }}</p>
+    <p>- {{ this.email }}</p>
   </div>
 </template>
 <script>
@@ -32,6 +33,7 @@ export default {
         this.address = client.address;
         this.phone = client.phone;
         this.birthday = client.birthday;
+        this.email = client.email;
       });
     });
   },
