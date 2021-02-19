@@ -1,12 +1,12 @@
-<template>
+vue<template>
   <div>
-    <p @click="download">test</p>
+    <!-- <p @click="download">test</p> -->
     <download-csv
       class="btn btn-default export-button"
       :data="formattedObjects"
       :name="filename"
     >
-      <p>Export</p>
+      <p>Exportar por Cliente</p>
     </download-csv>
   </div>
 </template>
@@ -15,7 +15,7 @@ import moment from "moment";
 import { getOneWhere } from "@/firebase";
 import _ from "lodash";
 export default {
-  name: "ButtonExport",
+  name: "ButtonExportOrdersByClient",
   props: {
     objects: Array,
   },
@@ -35,46 +35,48 @@ export default {
       objs.forEach((e) => {
         fmo.push({
           cliente: e.client,
-          correo: "",
-          cedula: "",
-          direccion: "",
-          telefono: "",
-          producto: "",
-          cantidad: "",
-          subtotal: "",
+          fecha: e.date.split("T")[0],
+          metodo: e.paymentMethod,
+          productos: e.products.filter((j) => {
+            return j.name !== "domicilio";
+          }).length,
+          domicilio:
+            e.products.filter((j) => {
+              return j.name == "domicilio";
+            }).length >= 1
+              ? "si"
+              : "no",
           total: e.total,
         });
-        e.products.forEach((p) => {
-          fmo.push({
-            cliente: "",
-            correo: "",
-            cedula: "",
-            direccion: "",
-            telefono: "",
-            producto: p.name,
-            cantidad: p.quantity,
-            subtotal: p.total,
-            total: "",
-          });
-        });
-        fmo.push({
-          cliente: "",
-          correo: "",
-          cedula: "",
-          direccion: "",
-          telefono: "",
-          producto: "",
-          cantidad: "",
-          subtotal: "",
-          total: "",
-        });
+
+        // e.products.forEach((p) => {
+        //   fmo.push({
+        //     cliente: "",
+        //     fecha: "",
+        //     metodo: "",
+        //     productos: p.name,
+        //     domicilio: "",
+        //     total: p.total,
+        //   });
+        // });
+        // fmo.push({
+        //   cliente: "",
+        //   correo: "",
+        //   cedula: "",
+        //   direccion: "",
+        //   telefono: "",
+        //   producto: "",
+        //   cantidad: "",
+        //   subtotal: "",
+        //   total: "",
+        // });
       });
       return fmo;
     },
     filename() {
       let period = this.$store.state.period;
       let date = this.$store.state.date;
-      let string = "Ingresos ";
+      let string = "Venta por Cliente ";
       if (period == "day") {
         string += moment(date).format("dddd DD MMM");
       } else if (period == "month") {
@@ -101,7 +103,6 @@ export default {
       this.formattedObjects.forEach(
         function(e) {
           if (e.cliente !== "") {
-            console.log(e.cliente);
             getOneWhere("clients", "name", e.cliente).then((client) => {
               if (client) {
                 this.emails[client.name] = client.email;
@@ -132,7 +133,7 @@ p:hover {
 }
 
 .export-button {
-  width: 120px;
+  width: 180px;
   padding: 0px;
   margin: 0 auto;
 }
