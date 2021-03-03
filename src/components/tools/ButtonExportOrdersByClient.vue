@@ -133,7 +133,7 @@ p:hover {
 }
 
 .export-button {
-  width: 180px;
+  width: 220px;
   padding: 0px;
   margin: 0 auto;
 }

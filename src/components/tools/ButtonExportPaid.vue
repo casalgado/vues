@@ -6,7 +6,7 @@
       :data="formattedObjects"
       :name="filename"
     >
-      <p>Export</p>
+      <p>Exportar por Factura</p>
     </download-csv>
   </div>
 </template>
@@ -132,7 +132,7 @@ p:hover {
 }
 
 .export-button {
-  width: 120px;
+  width: 220px;
   padding: 0px;
   margin: 0 auto;
 }

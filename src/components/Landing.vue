@@ -58,4 +58,8 @@ img {
   width: 100%;
   max-width: 520px;
 }
+
+input {
+  color: white;
+}
 </style>
