@@ -32,12 +32,12 @@ export default {
     formatObjects() {
       let fmo = [];
       let objs = _.orderBy(this.objects, "client");
-      let counter = 1;
+      let counter = 0;
       objs.forEach((e) => {
         counter++;
         fmo.push({
           o: counter,
-          date: e.date.split("T")[0],
+          fecha: e.date.split("T")[0],
           cliente: e.client,
           correo: "",
           cedula: "",
@@ -52,7 +52,7 @@ export default {
           counter++;
           fmo.push({
             o: counter,
-            date: "",
+            fecha: "",
             cliente: "",
             correo: "",
             cedula: "",
@@ -67,7 +67,7 @@ export default {
         counter++;
         fmo.push({
           o: counter,
-          date: "",
+          fecha: "",
           cliente: "",
           correo: "",
           cedula: "",
