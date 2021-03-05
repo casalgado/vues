@@ -1,13 +1,34 @@
 {
-	"hosting": {
-		"target": "masa",
-		"public": "dist",
-		"ignore": [ "firebase.json", "**/.*", "**/node_modules/**" ],
-		"rewrites": [
-			{
-				"source": "**",
-				"destination": "/index.html"
-			}
-		]
-	}
+  "hosting": {
+    "target": "masa",
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "emulators": {
+    "database": {
+      "port": 9000
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "auth": {
+      "port": 9099
+    },
+    "ui": {
+      "enabled": true
+    }
+  }
 }

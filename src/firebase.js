@@ -17,7 +17,7 @@ moment.updateLocale("es", {
 
 moment.locale("es");
 
-const app = initializeApp({
+let config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
   authDomain: "es-alimento.firebaseapp.com",
   databaseURL: "https://es-alimento.firebaseio.com",
@@ -25,7 +25,15 @@ const app = initializeApp({
   storageBucket: "es-alimento.appspot.com",
   messagingSenderId: process.env.VUE_APP_FIREBASE_SENDER_ID,
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
-});
+};
+
+if (location.hostname === "localhost" && location.port !== "8080") {
+  config = {
+    databaseURL: "http://localhost:9000/?ns=es-alimento",
+  };
+}
+
+const app = initializeApp(config);
 
 const database = app.database();
 const environment = process.env.NODE_ENV;

@@ -1,0 +1,17 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "esalimento": {
+      "orders": {
+        ".indexOn": ["date", "deliver", "client", "paid"]
+      },
+      "expenses": {
+        ".indexOn": "date"
+      },
+      "clients": {
+        ".indexOn": ["name", "since"]
+      }
+    }
+  }
+}
