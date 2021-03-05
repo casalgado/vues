@@ -35,9 +35,11 @@ export default {
       let counter = 0;
       objs.forEach((e) => {
         counter++;
+        console.log(e);
         fmo.push({
           o: counter,
-          fecha: e.date.split("T")[0],
+          fecha_venta: e.date.split("T")[0],
+          fecha_cancelacion: e.paid.split("T")[0],
           cliente: e.client,
           correo: "",
           cedula: "",
