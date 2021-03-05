@@ -104,6 +104,18 @@ export default {
       console.log(this.emails);
       console.log(this.formattedObjects);
     },
+    formatCounter: function(counter, date) {
+      let zeroes = "";
+      if (counter < 10) {
+        zeroes = "000";
+      } else if (counter < 100) {
+        zeroes = "00";
+      } else if (counter < 1000) {
+        zeroes = "0";
+      }
+      let day = date.split("T")[0].split("-")[2];
+      return day + zeroes + counter.toString();
+    },
   },
   watch: {
     formatObjects() {
