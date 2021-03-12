@@ -38,6 +38,7 @@ export default {
         console.log(e);
         fmo.push({
           o: counter,
+          id: e.id,
           fecha_venta: e.date.split("T")[0],
           fecha_cancelacion: e.paid.split("T")[0],
           cliente: e.client,
@@ -54,6 +55,7 @@ export default {
           counter++;
           fmo.push({
             o: counter,
+            id: "",
             fecha: "",
             cliente: "",
             correo: "",
@@ -69,6 +71,7 @@ export default {
         counter++;
         fmo.push({
           o: counter,
+          id: "",
           fecha: "",
           cliente: "",
           correo: "",

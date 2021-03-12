@@ -27,11 +27,15 @@ let config = {
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
 };
 
+console.log(config);
+
 if (location.hostname === "localhost" && location.port !== "8080") {
   config = {
     databaseURL: "http://localhost:9000/?ns=es-alimento",
   };
 }
+
+console.log(config);
 
 const app = initializeApp(config);
 
