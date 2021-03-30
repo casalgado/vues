@@ -1,10 +1,26 @@
 <template>
   <div id="client-snippet">
-    <p>- {{ this.name }}</p>
-    <p>- {{ this.phone }}</p>
-    <p>- {{ this.address }}</p>
-    <p>- {{ this.birthday }}</p>
-    <p>- {{ this.email }}</p>
+    <p>
+      <img src="../../assets/icons_name.svg" class="icon" /> {{ this.name }}
+    </p>
+    <p>
+      <img src="../../assets/icons_phone.svg" class="icon" /> {{ this.phone }}
+    </p>
+    <p>
+      <img src="../../assets/icons_address.svg" class="icon" />
+      {{ this.address }}
+    </p>
+    <p>
+      <img src="../../assets/icons_birthday.svg" class="icon" />
+      {{ this.birthday }}
+    </p>
+    <p>
+      <img src="../../assets/icons_email.svg" class="icon" /> {{ this.email }}
+    </p>
+    <p>
+      <img src="../../assets/icons_comment.svg" class="icon" />
+      {{ this.comment }}
+    </p>
   </div>
 </template>
 <script>
@@ -21,6 +37,8 @@ export default {
       address: "",
       phone: "",
       birthday: "",
+      email: "",
+      comment: "",
     };
   },
   mounted() {
@@ -34,12 +52,20 @@ export default {
         this.phone = client.phone;
         this.birthday = client.birthday;
         this.email = client.email;
+        this.comment = order.comment;
       });
     });
   },
 };
 </script>
 <style scoped>
+.icon {
+  width: 14px;
+  height: 14px;
+  position: relative;
+  top: -2px;
+}
+
 #client-snippet {
   padding-top: 15px;
 }

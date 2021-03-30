@@ -10,6 +10,7 @@
     <InputBasic v-model="form.date" :type="'date'" :label="'producir'" />
     <InputBasic v-model="form.deliver" :type="'date'" :label="'entregar'" />
     <InputBasic v-model="form.paid" :type="'date'" :label="'paid'" />
+    <InputBasic v-model="form.comment" :type="'text'" :label="'comentario'" />
     <b-form-group label="">
       <div class="radio-group">
         <p @click="form.paymentMethod = ''">metodo de pago</p>
@@ -99,6 +100,7 @@ export default {
         paid: "",
         paymentMethod: "",
         sameDayDelivery: false,
+        comment: "",
         products: [
           {
             id: 0,
@@ -195,6 +197,7 @@ export default {
           this.form.deliver = object.date.split("T")[0];
           this.form.paid = object.paid.split("T")[0];
           this.form.paymentMethod = object.paymentMethod;
+          this.form.comment = object.comment;
           let products = object.products;
           for (let i = 0; i < products.length; i++) {
             this.form.products.push({

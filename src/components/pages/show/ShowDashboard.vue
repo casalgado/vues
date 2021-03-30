@@ -82,6 +82,13 @@ export default {
             tdClass: "justifyLeft slim orderProduct",
             thClass: "slim",
           },
+          {
+            key: "comment",
+            label: "C",
+            sortable: true,
+            tdClass: "justifyLeft slim orderComment",
+            thClass: "slim",
+          },
         ],
         formattedObjects: [],
         objects: [],
@@ -102,6 +109,13 @@ export default {
             label: "Productos",
             sortable: true,
             tdClass: "justifyLeft slim orderProduct",
+            thClass: "slim",
+          },
+          {
+            key: "comment",
+            label: "C",
+            sortable: true,
+            tdClass: "justifyLeft slim orderComment",
             thClass: "slim",
           },
         ],
@@ -142,12 +156,22 @@ export default {
   methods: {
     getObjects: function() {
       getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
+        for (let i = 0; i < e.length; i++) {
+          if (e[i].comment && e[i].comment != "") {
+            e[i].comment = "O";
+          }
+        }
         this.tableProduce.objects = JSON.parse(JSON.stringify(e));
         this.tableProduce.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
         );
       });
       getByDateRange(`orders`, "deliver", this.date, this.period).then((e) => {
+        for (let i = 0; i < e.length; i++) {
+          if (e[i].comment && e[i].comment != "") {
+            e[i].comment = "O";
+          }
+        }
         this.tableDeliver.objects = JSON.parse(JSON.stringify(e));
         this.tableDeliver.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
