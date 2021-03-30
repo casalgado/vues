@@ -47,7 +47,7 @@
       <OrdersSummary v-if="showSummary" :objects="table.objects" />
       <OrdersByDay v-if="showByDay" :objects="table.objects" />
       <div id="export-section">
-        <ButtonExportPaid :objects="this.table.objects" />
+        <ButtonExportInvoice :objects="this.table.objects" />
         <ButtonExportOrdersByClient :objects="table.objects" />
         <ButtonExportOrdersByProduct :objects="table.objects" />
       </div>
@@ -69,7 +69,7 @@ import OrdersSummary from "../../tools/OrdersSummary";
 import OrdersByDay from "../../tools/OrdersByDay";
 import ButtonExportOrdersByClient from "../../tools/ButtonExportOrdersByClient";
 import ButtonExportOrdersByProduct from "../../tools/ButtonExportOrdersByProduct";
-import ButtonExportPaid from "../../tools/ButtonExportPaid";
+import ButtonExportInvoice from "../../tools/ButtonExportInvoice";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
@@ -85,7 +85,7 @@ export default {
     OrdersByDay,
     ButtonExportOrdersByClient,
     ButtonExportOrdersByProduct,
-    ButtonExportPaid,
+    ButtonExportInvoice,
     ButtonEdit,
     ButtonDelete,
     PrintOrders,

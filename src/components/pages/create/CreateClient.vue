@@ -119,7 +119,14 @@ export default {
           if (alertStatus.dismiss) {
             console.log("dismiss");
           } else {
-            this.form.name = this.form.name.toLowerCase();
+            this.form.name = this.form.name.toLowerCase().trim();
+            this.form.cc = this.form.cc.toLowerCase().trim();
+            this.form.email = this.form.email.toLowerCase().trim();
+            this.form.phone = this.form.phone.toLowerCase().trim();
+            this.form.address = this.form.address.toLowerCase().trim();
+            this.form.birthday = this.form.birthday.toLowerCase().trim();
+            this.form.comment = this.form.comment.toLowerCase().trim();
+            this.form.category = this.form.category.toLowerCase().trim();
             if (this.oid === "") {
               this.form.since = moment().format();
               save(this.path, this.form, this).then((id) => {

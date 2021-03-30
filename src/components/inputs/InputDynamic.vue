@@ -96,6 +96,7 @@ export default {
       let unitPrice = this.input.unitPrice;
       let quantity = this.input.quantity;
       let total = this.input.total;
+
       if (field == "unitPrice") {
         this.input.total = unitPrice * quantity;
       } else if (field == "total") {
@@ -113,6 +114,10 @@ export default {
             this.$emit("update-field", this.input);
           }
         });
+      }
+      if (this.input.name == "iva 19%") {
+        this.input.unitPrice = Math.round(this.input.unitPrice * 0.19);
+        this.input.total = Math.round(this.input.total * 0.19);
       }
       this.input.id = this.id;
       this.input.active = true;

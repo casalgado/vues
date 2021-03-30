@@ -4,7 +4,7 @@
     <Pagination period="day" />
     <Table :table="table" />
     <TableTotals :objects="this.table.objects" />
-    <ButtonExportPaid :objects="this.table.objects" />
+    <ButtonExportInvoice :objects="this.table.objects" />
     <b-card v-if="this.selected.length > 0" id="toolbox">
       <TableTotals :objects="this.selected" />
       <ButtonEdit
@@ -22,7 +22,7 @@ import { ordersMixin } from "../../../mixins/ordersMixin";
 import Table from "../../table/Table";
 import TableTotals from "../../table/TableTotals";
 import ButtonEdit from "../../tools/ButtonEdit";
-import ButtonExportPaid from "../../tools/ButtonExportPaid";
+import ButtonExportInvoice from "../../tools/ButtonExportInvoice";
 import Pagination from "../../table/Pagination";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
@@ -34,7 +34,7 @@ export default {
     Pagination,
     TableTotals,
     ButtonEdit,
-    ButtonExportPaid,
+    ButtonExportInvoice,
   },
   mixins: [ordersMixin],
   data() {

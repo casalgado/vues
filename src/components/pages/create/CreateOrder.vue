@@ -266,6 +266,7 @@ export default {
         "domicilio",
         "descuento referente 30%",
         "descuento referido 25%",
+        "iva 19%",
         "",
         "original grande",
         "pan de masa madre mediano",

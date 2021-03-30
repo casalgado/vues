@@ -111,7 +111,7 @@ export default {
           if (alertStatus.dismiss) {
             console.log("dismiss");
           } else {
-            this.form.name = this.form.name.toLowerCase();
+            this.form.name = this.form.name.toLowerCase().trim();
             if (this.oid === "") {
               save(this.path, this.form, this).then(() => {
                 this.$router.push({ name: "ShowProducts" });

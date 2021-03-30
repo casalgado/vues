@@ -15,7 +15,7 @@ import moment from "moment";
 import { getOneWhere } from "@/firebase";
 import _ from "lodash";
 export default {
-  name: "ButtonExportPaid",
+  name: "ButtonExportInvoice",
   props: {
     objects: Array,
   },
@@ -33,6 +33,7 @@ export default {
       let fmo = [];
       let objs = _.orderBy(this.objects, "client");
       let counter = 0;
+      console.log(objs);
       objs.forEach((e) => {
         counter++;
         console.log(e);
@@ -72,6 +73,7 @@ export default {
         fmo.push({
           o: counter,
           id: "",
+
           fecha: "",
           cliente: "",
           correo: "",
@@ -130,6 +132,7 @@ export default {
           if (e.cliente !== "") {
             console.log(e.cliente);
             getOneWhere("clients", "name", e.cliente).then((client) => {
+              console.log(client);
               if (client) {
                 this.emails[client.name] = client.email;
                 e.correo = client.email;
