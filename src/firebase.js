@@ -228,9 +228,7 @@ export function getMostUsedClients(size) {
           .sort(function(a, b) {
             return a.localeCompare(b);
           });
-        console.log(sorted_unique);
-        console.log(" ");
-        console.log(objects);
+
         most_used = sorted_unique
           .map((e) => {
             let times_used = objects.filter((i) => {

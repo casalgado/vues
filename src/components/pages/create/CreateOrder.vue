@@ -191,13 +191,12 @@ export default {
         this.form.products = [];
         getById("orders", this.oid).then((object) => {
           console.log("beforeCreate");
-          console.log(object);
           this.form.client = object.client;
           this.form.date = object.date.split("T")[0];
           this.form.deliver = object.date.split("T")[0];
           this.form.paid = object.paid.split("T")[0];
           this.form.paymentMethod = object.paymentMethod;
-          this.form.comment = object.comment;
+          this.form.comment = object.comment || "";
           let products = object.products;
           for (let i = 0; i < products.length; i++) {
             this.form.products.push({
@@ -261,10 +260,8 @@ export default {
     },
     reorder(products) {
       let strings = products.map((e) => {
-        console.log(e.text);
         return e.text;
       });
-      console.log(strings);
       let sorted = [
         "domicilio",
         "descuento referente 30%",
@@ -576,7 +573,7 @@ export default {
       products = sorted.map((e) => {
         return { text: e, value: e };
       });
-      console.log(strings);
+
       return products;
     },
   },
