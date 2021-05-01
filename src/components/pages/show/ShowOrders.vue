@@ -44,9 +44,7 @@
       <b-button variant="dark" class="post-table-button" @click="showYear">
         mostrar {{ year }}</b-button
       >
-      <b-button variant="dark" class="post-table-button" @click="showYear">
-        para inventario {{ year }}</b-button
-      >
+      <InventoryButton :objects="this.table.objects" />
       <OrdersSummary v-if="showSummary" :objects="table.objects" />
       <OrdersByDay v-if="showByDay" :objects="table.objects" />
       <div id="export-section">
@@ -73,6 +71,7 @@ import OrdersByDay from "../../tools/OrdersByDay";
 import ButtonExportOrdersByClient from "../../tools/ButtonExportOrdersByClient";
 import ButtonExportOrdersByProduct from "../../tools/ButtonExportOrdersByProduct";
 import ButtonExportInvoice from "../../tools/ButtonExportInvoice";
+import InventoryButton from "../../tools/InventoryButton";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
@@ -89,6 +88,7 @@ export default {
     ButtonExportOrdersByClient,
     ButtonExportOrdersByProduct,
     ButtonExportInvoice,
+    InventoryButton,
     ButtonEdit,
     ButtonDelete,
     PrintOrders,

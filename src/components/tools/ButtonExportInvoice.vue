@@ -33,10 +33,8 @@ export default {
       let fmo = [];
       let objs = _.orderBy(this.objects, "client");
       let counter = 0;
-      console.log(objs);
       objs.forEach((e) => {
         counter++;
-        console.log(e);
         fmo.push({
           o: counter,
           id: e.id,
@@ -107,11 +105,10 @@ export default {
     },
   },
   methods: {
-    download: function() {
-      console.log(this.emails);
-      console.log(this.formattedObjects);
+    download: function () {
+      console.log(".");
     },
-    formatCounter: function(counter, date) {
+    formatCounter: function (counter, date) {
       let zeroes = "";
       if (counter < 10) {
         zeroes = "000";
@@ -128,11 +125,9 @@ export default {
     formatObjects() {
       this.formattedObjects = this.formatObjects;
       this.formattedObjects.forEach(
-        function(e) {
+        function (e) {
           if (e.cliente !== "") {
-            console.log(e.cliente);
             getOneWhere("clients", "name", e.cliente).then((client) => {
-              console.log(client);
               if (client) {
                 this.emails[client.name] = client.email;
                 e.correo = client.email;

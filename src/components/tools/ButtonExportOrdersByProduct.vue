@@ -31,7 +31,6 @@ export default {
     },
     formattedObjects() {
       let productNames = Object.keys(this.summary);
-      console.log(this.summary);
       let fmo = [];
       let date = this.dateString();
       productNames.forEach((p) => {
@@ -53,7 +52,7 @@ export default {
       string += this.dateString();
       return (string += ".csv");
     },
-    summary: function() {
+    summary: function () {
       let products = [];
 
       if (this.expanded) {
@@ -90,7 +89,7 @@ export default {
       const ordered = {};
       Object.keys(report)
         .sort()
-        .forEach(function(key) {
+        .forEach(function (key) {
           ordered[key] = report[key];
         });
       ordered.total = {
@@ -101,7 +100,7 @@ export default {
     },
   },
   methods: {
-    download: function() {
+    download: function () {
       console.log(this.summary);
     },
     dateString() {

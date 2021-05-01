@@ -3,7 +3,7 @@
     <h5 id="form-title">{{ oid ? "Editar Producto" : "Crear Producto" }}</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.price" :type="'text'" :label="'p venta'" />
-    <InputBasic v-model="form.cost" :type="'text'" :label="'p costo'" />
+    <InputBasic v-model="form.recipe" :type="'text'" :label="'receta'" />
     <InputSelect
       v-model="form.category"
       :options="this.options.categories"
@@ -45,7 +45,7 @@ export default {
       form: {
         name: "",
         price: "",
-        cost: "",
+        recipe: "",
         category: "",
       },
       options: {
@@ -82,11 +82,11 @@ export default {
       if (this.oid !== "") {
         getById(this.path, this.oid).then((object) => {
           object.price = object.price || "";
-          object.cost = object.cost || "";
+          object.recipe = object.recipe || "";
           this.oldname = object.name;
           this.form.name = object.name;
           this.form.price = object.price.toString();
-          this.form.cost = object.cost.toString();
+          this.form.recipe = object.recipe.toString();
           this.form.category = object.category;
         });
       }
@@ -134,7 +134,7 @@ export default {
       }
       this.name = "";
       this.price = "";
-      this.cost = "";
+      this.recipe = "";
       this.category = "";
       this.show = false;
       this.$nextTick(() => {

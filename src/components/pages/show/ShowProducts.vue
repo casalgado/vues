@@ -49,8 +49,8 @@ export default {
             tdClass: "justifyLeft",
           },
           {
-            key: "cost",
-            label: "costo",
+            key: "recipe",
+            label: "receta",
             sortable: true,
           },
           {
@@ -88,7 +88,7 @@ export default {
     this.getObjects();
   },
   methods: {
-    getObjects: function() {
+    getObjects: function () {
       getAll(`products`).then((e) => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
@@ -96,7 +96,7 @@ export default {
         );
       });
     },
-    format: function(objects) {
+    format: function (objects) {
       let items = objects.map((e) => {
         e.price = numeral(e.price).format("0,0");
         return e;
