@@ -527,22 +527,22 @@ export default {
         },
         {
           referencia: 14,
-          producto: "pan de hamburguesa x12:",
+          producto: "pan de hamburguesa x1",
           categoria: "otros",
           harina: "original",
           tamaño: "unico",
-          "harina de trigo": 550,
+          "harina de trigo": 45.8,
           "harina integral": "",
           "masa madre": "",
           almidon: "",
-          agua: 250,
-          sal: 10,
+          agua: 20.8,
+          sal: 0.8,
           aceite: "",
-          azucar: 6.6,
-          huevos: 2,
-          levadura: 15,
-          leche: 24,
-          margarina: 24,
+          azucar: 0.6,
+          huevos: 0.2,
+          levadura: 1.3,
+          leche: 2,
+          margarina: 2,
           ajonjoli: "",
           avena: "",
           banano: "",
@@ -2221,20 +2221,20 @@ export default {
     };
   },
   methods: {
-    ingredientReport: function () {
+    ingredientReport: function() {
       const report = [];
-      this.ingredients.forEach(function (i) {
+      this.ingredients.forEach(function(i) {
         let ingredient = i[0];
         let reportRow = { ingredient: ingredient, total: 0.0 };
         report.push(reportRow);
       });
       console.log(report);
       this.list.forEach(
-        function (p) {
+        function(p) {
           if (p.recipe && p.recipe !== "00") {
-            this.recipes.forEach(function (r) {
+            this.recipes.forEach(function(r) {
               if (p.recipe == r.referencia) {
-                report.forEach(function (row) {
+                report.forEach(function(row) {
                   if (r[row.ingredient] == "") {
                     r[row.ingredient] = 0;
                   }
@@ -2278,7 +2278,7 @@ export default {
         const ordered = {};
         Object.keys(report)
           .sort()
-          .forEach(function (key) {
+          .forEach(function(key) {
             ordered[key] = report[key];
           });
 
@@ -2297,5 +2297,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
