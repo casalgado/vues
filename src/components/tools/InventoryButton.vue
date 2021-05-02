@@ -2239,7 +2239,9 @@ export default {
                     r[row.ingredient] = 0;
                   }
 
-                  row.total += parseFloat(r[row.ingredient]) * p.quantity;
+                  row.total += Math.round(
+                    parseFloat(r[row.ingredient]) * p.quantity
+                  );
                 });
               }
             });
