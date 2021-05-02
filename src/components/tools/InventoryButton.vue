@@ -2221,34 +2221,42 @@ export default {
     };
   },
   methods: {
-    ingredientReport: function() {
+    ingredientReport: function () {
       const report = [];
-      this.ingredients.forEach(function(i) {
+      this.ingredients.forEach(function (i) {
         let ingredient = i[0];
         let reportRow = { ingredient: ingredient, total: 0.0 };
         report.push(reportRow);
       });
-      console.log(report);
       this.list.forEach(
-        function(p) {
+        function (p) {
           if (p.recipe && p.recipe !== "00") {
-            this.recipes.forEach(function(r) {
-              if (p.recipe == r.referencia) {
-                report.forEach(function(row) {
-                  if (r[row.ingredient] == "") {
-                    r[row.ingredient] = 0;
-                  }
+            this.recipes.forEach(
+              function (r) {
+                if (p.recipe == r.referencia) {
+                  report.forEach(
+                    function (row) {
+                      if (r[row.ingredient] == "") {
+                        r[row.ingredient] = 0;
+                      }
+                      if (this.isString(r[row.ingredient])) {
+                        r[row.ingredient] = parseFloat(
+                          r[row.ingredient].replace(/,/g, "")
+                        );
+                      }
+                      console.log(r.referencia);
 
-                  row.total += Math.round(
-                    parseFloat(r[row.ingredient]) * p.quantity
+                      console.log(parseFloat(r[row.ingredient]));
+                      row.total += Math.round(r[row.ingredient] * p.quantity);
+                    }.bind(this)
                   );
-                });
-              }
-            });
+                }
+              }.bind(this)
+            );
           }
         }.bind(this)
       );
-      console.log(report);
+
       this.report = report;
     },
     getProducts() {
@@ -2257,11 +2265,8 @@ export default {
         p.forEach((k) => {
           nvr[k.name] = k.recipe || "00";
         });
-        console.log(nvr);
         let namesVsRecipes = nvr;
-
         let products = [];
-
         this.objects.forEach((e) => {
           e.products.forEach((p) => {
             products.push(p);
@@ -2280,7 +2285,7 @@ export default {
         const ordered = {};
         Object.keys(report)
           .sort()
-          .forEach(function(key) {
+          .forEach(function (key) {
             ordered[key] = report[key];
           });
 
@@ -2294,6 +2299,9 @@ export default {
         });
         this.ingredientReport();
       });
+    },
+    isString(x) {
+      return Object.prototype.toString.call(x) === "[object String]";
     },
   },
 };
