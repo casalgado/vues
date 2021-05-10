@@ -34,12 +34,14 @@ export default {
       let objs = _.orderBy(this.objects, "client");
       let counter = 0;
       objs.forEach((e) => {
+        console.log(e);
         counter++;
         fmo.push({
           o: counter,
           id: e.id,
           fecha_venta: e.date.split("T")[0],
           fecha_cancelacion: e.paid.split("T")[0],
+          metodo: e.paymentMethod,
           cliente: e.client,
           correo: "",
           cedula: "",
@@ -105,10 +107,10 @@ export default {
     },
   },
   methods: {
-    download: function () {
+    download: function() {
       console.log(".");
     },
-    formatCounter: function (counter, date) {
+    formatCounter: function(counter, date) {
       let zeroes = "";
       if (counter < 10) {
         zeroes = "000";
@@ -125,7 +127,7 @@ export default {
     formatObjects() {
       this.formattedObjects = this.formatObjects;
       this.formattedObjects.forEach(
-        function (e) {
+        function(e) {
           if (e.cliente !== "") {
             getOneWhere("clients", "name", e.cliente).then((client) => {
               if (client) {
