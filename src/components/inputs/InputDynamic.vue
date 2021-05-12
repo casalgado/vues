@@ -10,6 +10,7 @@
       size="sm"
       @change="onChange('name')"
     />
+    <b-button id="fast-select" variant="info">+</b-button>
 
     <b-form-group class="f-group price-group" label="$ Unitario" size="sm" />
     <b-form-input
@@ -126,11 +127,16 @@ export default {
 }
 
 #product-select {
-  grid-column: 2 / span 8;
+  grid-column: 2 / span 6;
+}
+
+#fast-select {
+  grid-column: span 1;
+  justify-self: right;
 }
 
 .price-input {
-  grid-column: span 3;
+  grid-column: span 2;
 }
 
 .price-group {
@@ -139,7 +145,8 @@ export default {
   align-self: end;
 }
 
-#remove-button {
+#remove-button,
+#fast-select {
   height: 30px;
   width: 30px;
   padding: 0px;
