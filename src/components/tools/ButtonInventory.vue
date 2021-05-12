@@ -17,7 +17,7 @@
 <script>
 import { getAll } from "@/firebase";
 export default {
-  name: "InventoryButton",
+  name: "ButtonInventory",
   props: {
     objects: Array,
   },

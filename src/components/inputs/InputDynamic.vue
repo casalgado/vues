@@ -3,21 +3,10 @@
     <b-button id="remove-button" variant="danger" @click="remove()">x</b-button>
 
     <b-form-select
-      v-if="!this.onlyText"
       id="product-select"
       v-model="input.name"
       class="custom-input"
       :options="options"
-      size="sm"
-      @change="onChange('name')"
-    />
-    <b-form-input
-      id="product-select"
-      v-else
-      v-model="input.name"
-      class="custom-input"
-      placeholder="..."
-      type="text"
       size="sm"
       @change="onChange('name')"
     />
@@ -61,10 +50,6 @@ export default {
     id: Number,
     priority: String,
     populate: Object,
-    onlyText: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -78,7 +63,7 @@ export default {
     };
   },
   computed: {
-    name: function() {
+    name: function () {
       return this.input.name;
     },
   },
