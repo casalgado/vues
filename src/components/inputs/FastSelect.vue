@@ -2,20 +2,22 @@
   <div id="selection-cont">
     <b-button id="fast-select" variant="info" @click="toggleShow">+</b-button>
     <div id="selection" v-if="show">
-      <div class="flavor button">original</div>
-      <div class="flavor button">integral</div>
-      <div class="flavor button">queso</div>
-      <div class="flavor button">zaatar</div>
-      <div class="flavor button">uva</div>
-      <div class="flavor button">girasol</div>
-      <div class="flavor button">semillas</div>
-      <div class="flavor button">ajonjoli</div>
-      <div class="flavor button">pimienta</div>
-      <div class="flour button">blanca</div>
-      <div class="flour button">integral</div>
-      <div class="size button">P</div>
-      <div class="size button">M</div>
-      <div class="size button">G</div>
+      <div @click="setCode('xx0x')" class="button btn flour">blanca</div>
+      <div @click="setCode('xx1x')" class="button btn flour">integral</div>
+
+      <div @click="setCode('01xx')" class="button btn flavor">original</div>
+      <div @click="setCode('02xx')" class="button btn flavor">integral</div>
+      <div @click="setCode('03xx')" class="button btn flavor">queso</div>
+      <div @click="setCode('04xx')" class="button btn flavor">zaatar</div>
+      <div @click="setCode('05xx')" class="button btn flavor">uva</div>
+      <div @click="setCode('06xx')" class="button btn flavor">girasol</div>
+      <div @click="setCode('07xx')" class="button btn flavor">semillas</div>
+      <div @click="setCode('08xx')" class="button btn flavor">ajonjoli</div>
+      <div @click="setCode('09xx')" class="button btn flavor">pimienta</div>
+
+      <div @click="setCode('xxx3')" class="button btn size">P</div>
+      <div @click="setCode('xxx2')" class="button btn size">M</div>
+      <div @click="setCode('xxx1')" class="button btn size">G</div>
     </div>
   </div>
 </template>
@@ -26,23 +28,46 @@ export default {
   data() {
     return {
       show: false,
+      code: "xxxx",
     };
   },
   methods: {
-    makeSelection: function () {
-      this.$emit("fast-select", this.chooseProduct("0101"));
+    makeSelection: function (code) {
+      this.$emit("fast-select", this.chooseProduct(code));
     },
     toggleShow: function () {
       this.show = !this.show;
+    },
+    setCode(input) {
+      let newCode = [];
+      let ready = 0;
+      this.code.split("").forEach(function (e, i) {
+        if (parseInt(input[i]) + 1) {
+          e = input[i];
+        }
+        if (parseInt(e) + 1) {
+          ready++;
+        }
+        newCode.push(e);
+      });
+      newCode = newCode.join("");
+      this.code = newCode;
+      console.log(ready);
+      if (ready == 4) {
+        this.makeSelection(this.code);
+        this.toggleShow();
+        this.code = "xxxx";
+      }
+      console.log(this.code);
     },
     chooseProduct(code) {
       const productList = {
         "0101": "original grande",
         "0102": "pan de masa madre mediano",
         "0103": "pan de masa madre pequeño",
-        "0201": "pan integral sin avena grande",
-        "0202": "pan integral sin avena mediano",
-        "0203": "pan integral sin avena pequeno",
+        "0111": "pan integral sin avena grande",
+        "0112": "pan integral sin avena mediano",
+        "0113": "pan integral sin avena pequeno",
         "0301": "pan de queso costeño grande",
         "0302": "pan de queso costeño medio",
         "0303": "pan de queso costeño pequeño",
@@ -67,6 +92,9 @@ export default {
         "0211": "pan integral",
         "0212": "pan integral mediano",
         "0213": "pan integral pequeño",
+        "0201": "pan integral",
+        "0202": "pan integral mediano",
+        "0203": "pan integral pequeño",
         "0311": "pan integral de queso grande",
         "0312": "pan integral de queso mediano",
         "0313": "pan integral de queso pequeño",
@@ -118,17 +146,23 @@ export default {
   z-index: 99;
 }
 
-.flavor,
-.size {
+.flour {
+  margin-bottom: 5px;
+  grid-column: span 3;
+}
+
+.flavor {
   grid-column: span 2;
 }
 
-.flour {
-  grid-column: span 3;
+.size {
+  margin-top: 5px;
+  grid-column: span 2;
 }
 
 .button {
   border: 1px solid var(--color-neutral);
+  color: var(--color-neutral);
   border-radius: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
