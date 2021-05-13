@@ -10,7 +10,7 @@
       size="sm"
       @change="onChange('name')"
     />
-    <b-button id="fast-select" variant="info">+</b-button>
+    <FastSelect @fast-select="fastSelect" />
 
     <b-form-group class="f-group price-group" label="$ Unitario" size="sm" />
     <b-form-input
@@ -42,9 +42,11 @@
   </div>
 </template>
 <script>
+import FastSelect from "./FastSelect";
 import { getOneWhere } from "@/firebase";
 export default {
   name: "InputDynamic",
+  components: { FastSelect },
   props: {
     options: Array,
     property: String,
@@ -78,6 +80,10 @@ export default {
     this.input.total = this.populate.total;
   },
   methods: {
+    fastSelect(payload) {
+      this.input.name = payload;
+      this.onChange("name");
+    },
     onChange(field) {
       let unitPrice = this.input.unitPrice;
       let quantity = this.input.quantity;
@@ -140,7 +146,7 @@ export default {
 }
 
 .price-group {
-  grid-column: span 6;
+  grid-column: 2 / span 4;
   justify-self: start;
   align-self: end;
 }
