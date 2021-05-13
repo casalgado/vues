@@ -167,4 +167,8 @@ export default {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
+.button:hover {
+  opacity: 0.5;
+}
 </style>
