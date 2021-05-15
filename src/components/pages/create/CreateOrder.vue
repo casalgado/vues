@@ -37,6 +37,7 @@
         >
       </div> -->
     </b-form-group>
+    <b-button variant="info" @click="addProduct">+ producto</b-button>
     <!-- <div>{{ form.paymentMethod }}</div>
     <div>{{ form.sameDayDelivery }}</div> -->
     <div v-for="field in this.form.products" :key="field.id">
@@ -57,7 +58,6 @@
       <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
       <p v-if="$v.form.date.$error"><kbd>Debe incluir fecha produccion</kbd></p>
       <p v-if="$v.form.deliver.$error"><kbd>Debe incluir fecha entrega</kbd></p>
-      <b-button variant="info" @click="addProduct">+ producto</b-button>
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-card>
 
@@ -149,6 +149,10 @@ export default {
     },
     date() {
       return this.form.date;
+    },
+    reversedProducts() {
+      let p = this.form.products;
+      return p.reverse();
     },
   },
   watch: {
