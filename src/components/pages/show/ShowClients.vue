@@ -166,7 +166,7 @@ export default {
           d.push(h[k]["date"]);
         });
         let ult = moment().diff(moment(d.sort()[d.length - 1]), "days");
-        return `${ult} d`;
+        return `${ult}d`;
       } else {
         return "-";
       }
