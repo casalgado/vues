@@ -2,22 +2,61 @@
   <div id="selection-cont">
     <b-button id="fast-select" variant="info" @click="toggleShow">+</b-button>
     <div id="selection" v-if="show">
-      <div @click="setCode('xx0x')" class="button btn flour">blanca</div>
-      <div @click="setCode('xx1x')" class="button btn flour">integral</div>
+      <div class="text sp6">masa madre</div>
+      <div @click="setCode('xx0x')" id="hb" class="button btn sp3 mb">
+        blanca
+      </div>
+      <div @click="setCode('xx1x')" id="hi" class="button btn sp3 mb">
+        integral
+      </div>
 
-      <div @click="setCode('01xx')" class="button btn flavor">original</div>
-      <div @click="setCode('02xx')" class="button btn flavor">integral</div>
-      <div @click="setCode('03xx')" class="button btn flavor">queso</div>
-      <div @click="setCode('04xx')" class="button btn flavor">zaatar</div>
-      <div @click="setCode('05xx')" class="button btn flavor">uva</div>
-      <div @click="setCode('06xx')" class="button btn flavor">girasol</div>
-      <div @click="setCode('07xx')" class="button btn flavor">semillas</div>
-      <div @click="setCode('08xx')" class="button btn flavor">ajonjoli</div>
-      <div @click="setCode('09xx')" class="button btn flavor">pimienta</div>
+      <div @click="setCode('01xx')" id="og" class="button btn sp2">
+        original
+      </div>
+      <div @click="setCode('02xx')" id="it" class="button btn sp2">
+        integral
+      </div>
+      <div @click="setCode('03xx')" id="qs" class="button btn sp2">
+        queso
+      </div>
+      <div @click="setCode('04xx')" id="zt" class="button btn sp2">
+        zaatar
+      </div>
+      <div @click="setCode('05xx')" id="uv" class="button btn sp2">uva</div>
+      <div @click="setCode('06xx')" id="gs" class="button btn sp2">
+        girasol
+      </div>
+      <div @click="setCode('07xx')" id="sm" class="button btn sp2">
+        semillas
+      </div>
+      <div @click="setCode('08xx')" id="aj" class="button btn sp2">
+        ajonjoli
+      </div>
+      <div @click="setCode('09xx')" id="ch" class="button btn sp2">
+        chocolate
+      </div>
 
-      <div @click="setCode('xxx3')" class="button btn size">P</div>
-      <div @click="setCode('xxx2')" class="button btn size">M</div>
-      <div @click="setCode('xxx1')" class="button btn size">G</div>
+      <div @click="setCode('xxx3')" id="peq" class="button btn sp2 mt mb">
+        P
+      </div>
+      <div @click="setCode('xxx2')" id="med" class="button btn sp2 mt mb">
+        M
+      </div>
+      <div @click="setCode('xxx1')" id="gra" class="button btn sp2 mt mb">
+        G
+      </div>
+      <div class="text sp6">tortas</div>
+      <div @click="setCode('xxx2')" id="peq" class="button btn sp3">mini</div>
+      <div @click="setCode('xxx1')" id="med" class="button btn sp3">norm</div>
+      <div @click="setCode('990x')" id="sm" class="button btn sp2">
+        banano
+      </div>
+      <div @click="setCode('980x')" id="aj" class="button btn sp2">
+        naranja
+      </div>
+      <div @click="setCode('970x')" id="ch" class="button btn sp2">
+        zanahoria
+      </div>
     </div>
   </div>
 </template>
@@ -32,16 +71,16 @@ export default {
     };
   },
   methods: {
-    makeSelection: function (code) {
+    makeSelection: function(code) {
       this.$emit("fast-select", this.chooseProduct(code));
     },
-    toggleShow: function () {
+    toggleShow: function() {
       this.show = !this.show;
     },
     setCode(input) {
       let newCode = [];
       let ready = 0;
-      this.code.split("").forEach(function (e, i) {
+      this.code.split("").forEach(function(e, i) {
         if (parseInt(input[i]) + 1) {
           e = input[i];
         }
@@ -116,6 +155,12 @@ export default {
         "0911": "pan integral de chocolate grande",
         "0912": "pan integral de chocolate mediano",
         "0913": "pan integral de chocolate pequeño",
+        "9902": "mini torta de banano",
+        "9802": "mini torta de naranja",
+        "9702": "mini torta de zanahoria",
+        "9901": "torta de pan con banano",
+        "9801": "torta de naranja",
+        "9701": "torta de zanahoria",
       };
       return productList[code];
     },
@@ -144,20 +189,32 @@ export default {
   gap: 4px;
   border-radius: 5px;
   z-index: 99;
+  padding: 10px;
 }
 
-.flour {
-  margin-bottom: 5px;
+.text {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.sp6 {
+  grid-column: span 6;
+}
+
+.sp3 {
   grid-column: span 3;
 }
 
-.flavor {
+.sp2 {
   grid-column: span 2;
 }
 
-.size {
+.mb {
+  margin-bottom: 5px;
+}
+
+.mt {
   margin-top: 5px;
-  grid-column: span 2;
 }
 
 .button {

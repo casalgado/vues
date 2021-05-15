@@ -570,6 +570,7 @@ export default {
           return !remove.includes(e);
         });
       sorted = [...sorted, ...potros, "", ...tortas, "", ...strings];
+      console.log(sorted);
       products = sorted.map((e) => {
         return { text: e, value: e };
       });
