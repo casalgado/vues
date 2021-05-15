@@ -70,6 +70,13 @@ export default {
             thClass: "slim",
           },
           {
+            key: "daysAgo",
+            label: "D",
+            sortable: true,
+            tdClass: "justifyLeft slim orderClient",
+            thClass: "slim",
+          },
+          {
             key: "products",
             label: "Productos",
             sortable: true,
@@ -134,6 +141,7 @@ export default {
         this.table.formattedObjects = this.format(
           JSON.parse(JSON.stringify(e))
         );
+        console.log(this.table.formattedObjects);
       });
     },
     print: function() {

@@ -13,6 +13,7 @@ export const ordersMixin = {
           e.products[i] = `${e.quantity[i]}  ${e.products[i]}`;
         }
         e.products = e.products.join("<br />");
+        e.daysAgo = moment().diff(moment(e.date), "days");
         e.date = moment(e.date).format("MM/DD");
         if (e.total >= 1000000) {
           e.total =
