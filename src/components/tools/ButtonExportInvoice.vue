@@ -31,7 +31,7 @@ export default {
     },
     formatObjects() {
       let fmo = [];
-      let objs = _.orderBy(this.objects, "client");
+      let objs = _.orderBy(this.objects, "date");
       let counter = 0;
       objs.forEach((e) => {
         console.log(e);
@@ -107,10 +107,10 @@ export default {
     },
   },
   methods: {
-    download: function() {
+    download: function () {
       console.log(".");
     },
-    formatCounter: function(counter, date) {
+    formatCounter: function (counter, date) {
       let zeroes = "";
       if (counter < 10) {
         zeroes = "000";
@@ -127,7 +127,7 @@ export default {
     formatObjects() {
       this.formattedObjects = this.formatObjects;
       this.formattedObjects.forEach(
-        function(e) {
+        function (e) {
           if (e.cliente !== "") {
             getOneWhere("clients", "name", e.cliente).then((client) => {
               if (client) {
