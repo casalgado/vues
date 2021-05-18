@@ -8,23 +8,27 @@ export const dynamicFieldsMixin = {
       let id = this.form.products.length;
       this.form.products.unshift({
         id: id,
-        active: true,
+        active: false,
         name: "",
         unitPrice: 1,
         quantity: 1,
         total: 1,
       });
-      // setTimeout(
-      //   function() {
-      //     this.form.products[0].active = true;
-      //   }.bind(this)
-      // );
+      setTimeout(
+        function() {
+          this.form.products[0].active = true;
+        }.bind(this)
+      );
     },
     updateField(payload) {
-      this.form.products[payload.id].name = payload.name;
-      this.form.products[payload.id].unitPrice = payload.unitPrice;
-      this.form.products[payload.id].quantity = payload.quantity;
-      this.form.products[payload.id].total = payload.total;
+      this.form.products.forEach((e) => {
+        if (e.id == payload.id) {
+          e.name = payload.name;
+          e.unitPrice = payload.unitPrice;
+          e.quantity = payload.quantity;
+          e.total = payload.total;
+        }
+      });
     },
     removeField(payload) {
       this.form.products.forEach((e) => {
