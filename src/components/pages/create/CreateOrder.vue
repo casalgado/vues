@@ -589,7 +589,7 @@ button {
 }
 
 .fade-enter-active {
-  transition: opacity 1s;
+  transition: opacity 0.3s;
 }
 
 .fade-leave-active {
