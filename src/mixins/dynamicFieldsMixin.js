@@ -6,7 +6,7 @@ export const dynamicFieldsMixin = {
   methods: {
     addProduct() {
       let id = this.form.products.length;
-      this.form.products.push({
+      this.form.products.unshift({
         id: id,
         active: true,
         name: "",
@@ -14,6 +14,7 @@ export const dynamicFieldsMixin = {
         quantity: 1,
         total: 1,
       });
+      console.log(this.form.products);
     },
     updateField(payload) {
       this.form.products[payload.id].name = payload.name;
@@ -22,7 +23,11 @@ export const dynamicFieldsMixin = {
       this.form.products[payload.id].total = payload.total;
     },
     removeField(payload) {
-      this.form.products[payload.id].active = false;
+      this.form.products.forEach((e) => {
+        if (e.id == payload.id) {
+          e.active = false;
+        }
+      });
     },
 
     submit(evt) {

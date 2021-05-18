@@ -110,14 +110,6 @@ export default {
             quantity: 1,
             total: 5000,
           },
-          {
-            id: 1,
-            active: true,
-            name: "",
-            unitPrice: 1,
-            quantity: 1,
-            total: 1,
-          },
         ],
       },
       path: "orders",
@@ -149,10 +141,6 @@ export default {
     },
     date() {
       return this.form.date;
-    },
-    reversedProducts() {
-      let p = this.form.products;
-      return p.reverse();
     },
   },
   watch: {
@@ -245,14 +233,6 @@ export default {
             unitPrice: 5000,
             quantity: 1,
             total: 5000,
-          },
-          {
-            id: 1,
-            active: true,
-            name: "",
-            unitPrice: 1,
-            quantity: 1,
-            total: 1,
           },
         ],
       };
@@ -574,7 +554,6 @@ export default {
           return !remove.includes(e);
         });
       sorted = [...sorted, ...potros, "", ...tortas, "", ...strings];
-      console.log(sorted);
       products = sorted.map((e) => {
         return { text: e, value: e };
       });
