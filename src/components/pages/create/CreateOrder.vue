@@ -588,12 +588,24 @@ button {
   grid-template-columns: 1fr 8fr;
 }
 
-.fade-enter-active,
+.fade-enter-active {
+  transition: opacity 1s;
+}
+
 .fade-leave-active {
   transition: opacity 0.3s;
 }
-.fade-enter,
+
+.fade-enter {
+  opacity: 0.3;
+}
+
 .fade-leave-to {
   opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave {
+  opacity: 1;
 }
 </style>
