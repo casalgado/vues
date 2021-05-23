@@ -15,6 +15,7 @@
     />
 
     <InputBasic v-model="form.date" :type="'date'" :label="'fecha'" />
+    <b-button variant="info" @click="addProduct">+ producto</b-button>
 
     <div v-for="field in form.products" :key="field.id">
       <transition name="fade">
@@ -33,7 +34,6 @@
     <b-card id="toolbox">
       <p v-if="$v.form.provider.$error"><kbd>Debe incluir proveedor</kbd></p>
       <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
-      <b-button variant="info" @click="addProduct">+ producto</b-button>
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-card>
 
