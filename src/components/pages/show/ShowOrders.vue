@@ -138,7 +138,7 @@ export default {
         formattedObjects: [],
         objects: [],
         selectMode: "multi",
-        pagination: "week",
+        pagination: "day",
       },
       oids: [],
       path: "orders",
@@ -147,13 +147,13 @@ export default {
     };
   },
   computed: {
-    onlyProducts: function () {
+    onlyProducts: function() {
       return this.selected[0].products.split("<br />");
     },
-    screenxs: function () {
+    screenxs: function() {
       return window.innerWidth <= 767;
     },
-    development: function () {
+    development: function() {
       const environment = process.env.NODE_ENV;
       if (environment === "development") {
         return true;
@@ -161,7 +161,7 @@ export default {
         return false;
       }
     },
-    sameClient: function () {
+    sameClient: function() {
       let objects = this.selected;
       if (objects.length > 0) {
         let client = objects[0].client;
@@ -173,7 +173,7 @@ export default {
         return false;
       }
     },
-    year: function () {
+    year: function() {
       return moment(this.date).format("YYYY");
     },
     ...mapState(["ref", "date", "period", "selected"]),
@@ -206,7 +206,7 @@ export default {
     }
   },
   methods: {
-    getObjects: function () {
+    getObjects: function() {
       getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
         this.table.objects = JSON.parse(JSON.stringify(e));
         this.table.formattedObjects = this.format(
@@ -217,16 +217,16 @@ export default {
         });
       });
     },
-    toggleSummary: function () {
+    toggleSummary: function() {
       this.showSummary = !this.showSummary;
     },
-    toggleByDay: function () {
+    toggleByDay: function() {
       this.showByDay = !this.showByDay;
     },
-    print: function () {
+    print: function() {
       window.print();
     },
-    showYear: function () {
+    showYear: function() {
       this.$store.commit("setPeriod", { period: "year" });
       this.getObjects();
     },
