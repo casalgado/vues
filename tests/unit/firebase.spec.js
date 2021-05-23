@@ -1,42 +1,39 @@
-const firebase = require("@firebase/testing");
+const firebase = require("@firebase/testing"); //<--- You want this to be the top guy!!!
+const admin = require("firebase-admin");
+const mockdata = require("./mockdata");
 
-const PROJECT_ID = "es-alimento";
+const projectId = "es-alimento";
+let ref = "orders/-M6xAbfdqG_-rzKqRv4w";
+process.env.GCLOUD_PROJECT = projectId;
+process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
+let app = admin.initializeApp({
+  projectId: projectId,
+  databaseURL: "http://localhost:9000/?ns=es-alimento",
+});
+let database = firebase.database(app);
 
-describe("Component", () => {
-  test("knows basic addition", () => {
-    const add = 1 + 2;
-    expect(add).toBe(3);
-  });
-
-  it("can read database", async () => {
-    const db = firebase
-      .initializeTestApp({
-        projectId: PROJECT_ID,
-        databaseURL: "https://es-alimento.firebaseio.com",
-      })
-      .database();
-    const testRef = db.ref("backup/clients");
-    await firebase.assertSucceeds(testRef.once("value"));
-  });
+beforeAll(async () => {
+  database
+    .ref()
+    .set(mockdata.mockdata)
+    .then((k) => {
+      console.log(k);
+    });
+  await setTimeout(10000);
 });
 
-import { initializeAdminApp } from "@firebase/rules-unit-testing";
-import admin from "firebase-admin";
+test("knows basic addition", () => {
+  const add = 1 + 2;
+  expect(add).toBe(3);
+});
 
-describe("Component", () => {
-  test("knows basic addition", () => {
-    const add = 1 + 2;
-    expect(add).toBe(3);
-  });
-
-  it("can read database", async () => {
-    const app = admin.initializeApp({
-      projectId: "es-alimento",
-      databaseURL: "http://localhost:9000/?ns=es-alimento",
+it("can read database", async () => {
+  let order;
+  await database
+    .ref(ref)
+    .once("value")
+    .then((snap) => {
+      order = snap.val();
     });
-    const db = app.database();
-    console.log(db.ref("backup/clients"));
-    const testRef = db.ref("backup/clients");
-    await firebase.assertSucceeds(testRef.once("value"));
-  });
+  expect(order.client).toEqual("adriana martin");
 });
