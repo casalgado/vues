@@ -1,6 +1,7 @@
 const firebase = require("@firebase/testing"); //<--- You want this to be the top guy!!!
 const admin = require("firebase-admin");
 const mockdata = require("./mockdata");
+import { testMethod, save } from "./../../src/firebaseMethods";
 
 const projectId = "es-alimento";
 let ref = "orders/-M6xAbfdqG_-rzKqRv4w";
@@ -29,6 +30,7 @@ test("knows basic addition", () => {
 
 it("can read database", async () => {
   let order;
+  testMethod("beto");
   await database
     .ref(ref)
     .once("value")
@@ -36,4 +38,20 @@ it("can read database", async () => {
       order = snap.val();
     });
   expect(order.client).toEqual("adriana martin");
+});
+
+it("can save to database", async () => {
+  let ref = database.ref();
+  let order;
+  let orderKey;
+  testMethod("beto");
+  await save(ref, "data", { test: "data" });
+  await ref
+    .child("data")
+    .once("value")
+    .then((snap) => {
+      order = snap.val();
+      orderKey = Object.keys(order)[0];
+    });
+  expect(order[orderKey]).toEqual({ test: "data" });
 });
