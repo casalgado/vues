@@ -214,7 +214,7 @@ export default {
 .f-group {
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: 1fr 8fr;
+  grid-template-columns: 1fr 5fr;
 }
 
 .fade-enter-active,
