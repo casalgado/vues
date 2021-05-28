@@ -75,7 +75,7 @@ import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
 import {
   getClientsLastOrder,
-  getMostUsedClients,
+  getClientListWithMostUsedFirst,
   getAsOptionsForSelect,
   getById,
 } from "@/firebase";
@@ -174,7 +174,7 @@ export default {
         options.unshift({ value: "", text: "producto" });
         this.options.product = options;
       }),
-      getMostUsedClients(20).then((options) => {
+      getClientListWithMostUsedFirst(20).then((options) => {
         options.unshift({ value: "", text: "cliente" });
         this.options.client = options;
       }),

@@ -24,13 +24,9 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import InputBasic from "../../inputs/InputBasic";
 import InputSelect from "../../inputs/InputSelect";
-import {
-  save,
-  update,
-  getAsOptionsForSelect,
-  getById,
-  renameClient,
-} from "@/firebase";
+import { update, getAsOptionsForSelect, renameClient } from "@/firebase";
+import { ref } from "@/firebaseInit";
+import { save, getById } from "@/firebaseMethods";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
@@ -84,7 +80,7 @@ export default {
       ),
     ]).then(() => {
       if (this.oid !== "") {
-        getById("clients", this.oid).then((object) => {
+        getById(ref, "clients", this.oid).then((object) => {
           let phone = object.phone || "";
           let cc = object.cc || "";
           this.oldname = object.name || "";
@@ -129,7 +125,7 @@ export default {
             this.form.category = this.form.category.toLowerCase().trim();
             if (this.oid === "") {
               this.form.since = moment().format();
-              save(this.path, this.form, this).then((id) => {
+              save(ref, this.path, this.form, this).then((id) => {
                 update("optionsForMenus/clients", {
                   [id]: { name: this.form.name },
                 });
