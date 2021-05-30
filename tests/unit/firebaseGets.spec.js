@@ -1,8 +1,7 @@
-const firebase = require("@firebase/testing"); //<--- You want this to be the top guy!!!
+const firebase = require("@firebase/testing");
 const admin = require("firebase-admin");
 const mockdata = require("./mockdata");
 import {
-  save,
   getAll,
   getOneWhere,
   getAllWhere,
@@ -10,7 +9,10 @@ import {
   getById,
   getByDateRange,
   getClientListWithMostUsedFirst,
-} from "./../../src/firebaseMethods";
+  getProviderListWithMostUsedFirst,
+  getClientsLastOrder,
+  getProvidersLastExpense,
+} from "../../src/firebaseMethods";
 import moment from "moment";
 
 const projectId = "es-alimento";
@@ -48,25 +50,6 @@ it("can read database", async () => {
       order = snap.val();
     });
   expect(order.client).toEqual("adriana martin");
-});
-
-describe("can save() to database", () => {
-  let ref = database.ref();
-  let path = "testPath";
-  let order;
-  let orderKey;
-  it("saves strings and numbers", async () => {
-    await save(ref, path, { propOne: "valueOne", propTwo: 2 });
-    await ref
-      .child(path)
-      .once("value")
-      .then((snap) => {
-        order = snap.val();
-        orderKey = Object.keys(order)[0];
-      });
-    expect(order[orderKey].propOne).toEqual("valueOne");
-    expect(order[orderKey].propTwo).toEqual(2);
-  });
 });
 
 describe("can getAll() records", () => {
@@ -199,7 +182,7 @@ describe("can getAllOrdersWhereProduct()", () => {
     returns.forEach((e) => {
       returnedOrders.push(`${e.client}-${e.date}`);
     });
-    expect(returnedOrders).toEqual(mockbaseOrders);
+    expect(mockbaseOrders).toEqual(returnedOrders);
   });
 });
 
@@ -223,7 +206,7 @@ describe("can getById()", () => {
     await getById(ref, "clients", idClientCarlosAS).then((val) => {
       returns = val;
     });
-    expect(returns).toEqual(clientCarlosAS);
+    expect(clientCarlosAS).toEqual(returns);
   });
 
   it("gets correct order with id", async () => {
@@ -250,7 +233,7 @@ describe("can getById()", () => {
     await getById(ref, "orders", idOrderCarlosAS).then((val) => {
       returns = val;
     });
-    expect(returns).toEqual(orderCarlosAS);
+    expect(orderCarlosAS).toEqual(returns);
   });
 });
 
@@ -320,7 +303,7 @@ describe("getClientListWithMostUsedFirst()", () => {
   let ref = database.ref();
   let returns;
   let size = 20;
-  it("gets the correct amount of mostUsed", async () => {
+  it("gets the correct amount of mostUsed clients", async () => {
     let returnedSize = 0;
     await getClientListWithMostUsedFirst(ref, size).then((val) => {
       returns = val;
@@ -331,6 +314,65 @@ describe("getClientListWithMostUsedFirst()", () => {
       }
       returnedSize += 1;
     }
-    expect(returnedSize).toEqual(size);
+    expect(size).toEqual(returnedSize);
+  });
+});
+
+describe("getProviderListWithMostUsedFirst()", () => {
+  let ref = database.ref();
+  let returns;
+  let size = 20;
+  it("gets the correct amount of mostUsed providers", async () => {
+    let returnedSize = 0;
+    await getProviderListWithMostUsedFirst(ref, size).then((val) => {
+      returns = val;
+    });
+    for (let i = 0; i < returns.length; i++) {
+      if (returns[i].value) {
+        break;
+      }
+      returnedSize += 1;
+    }
+    expect(size).toEqual(returnedSize);
+  });
+});
+
+describe("getClientsLastOrder()", () => {
+  let ref = database.ref();
+  let returns;
+  let client = "carlos alberto salgado";
+  let clientOrders = [];
+
+  it("gets the last order for client", async () => {
+    let orders = mockdata.mockdata.orders;
+    for (let i = 0; i < Object.keys(orders).length; i++) {
+      if (orders[Object.keys(orders)[i]].client == client) {
+        clientOrders.push(orders[Object.keys(orders)[i]]);
+      }
+    }
+    await getClientsLastOrder(ref, client).then((val) => {
+      returns = val;
+    });
+    expect(clientOrders.pop()).toEqual(returns);
+  });
+});
+
+describe("getProvidersLastExpense()", () => {
+  let ref = database.ref();
+  let returns;
+  let provider = "dispropan";
+  let providerExpenses = [];
+
+  it("gets the last order for client", async () => {
+    let expenses = mockdata.mockdata.expenses;
+    for (let i = 0; i < Object.keys(expenses).length; i++) {
+      if (expenses[Object.keys(expenses)[i]].provider == provider) {
+        providerExpenses.push(expenses[Object.keys(expenses)[i]]);
+      }
+    }
+    await getProvidersLastExpense(ref, provider).then((val) => {
+      returns = val;
+    });
+    expect(providerExpenses.pop()).toEqual(returns);
   });
 });

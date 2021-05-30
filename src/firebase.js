@@ -343,19 +343,6 @@ export function update(path, payload, key, component) {
   });
 }
 
-export function updateSingleProp(path, oid, property, newValue, component) {
-  ref
-    .child(path)
-    .child(oid)
-    .update({ [property]: newValue }, function(error) {
-      if (error) {
-        alert(error);
-      } else {
-        component.$fire({ title: "success" });
-      }
-    });
-}
-
 export function remove(path, oid) {
   console.time("remove");
   return new Promise((resolve) => {

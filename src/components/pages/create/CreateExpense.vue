@@ -50,11 +50,12 @@ import InputSelect from "../../inputs/InputSelect";
 import InputBasic from "../../inputs/InputBasic";
 import InputDynamic from "../../inputs/InputDynamic";
 import {
-  getMostUsed,
   getAsOptionsForSelect,
   getById,
   getProvidersLastExpense,
 } from "@/firebase";
+import { ref } from "@/firebaseInit";
+import { getProviderListWithMostUsedFirst } from "@/firebaseMethods";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
@@ -139,7 +140,7 @@ export default {
   },
   beforeCreate() {
     Promise.all([
-      getMostUsed(`expenses`, "provider", 20).then((options) => {
+      getProviderListWithMostUsedFirst(ref, 20).then((options) => {
         options.unshift({ value: "", text: "proveedor" });
         this.options.provider = options;
       }),

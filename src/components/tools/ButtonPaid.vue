@@ -10,7 +10,7 @@
   </b-button>
 </template>
 <script>
-import { getById, updateSingleProp } from "@/firebase";
+import { getById, update } from "@/firebase";
 import moment from "moment";
 import { mapState } from "vuex";
 
@@ -62,7 +62,7 @@ export default {
           showCancelButton: true,
         }).then(() => {
           this.ids.forEach((i) => {
-            updateSingleProp(`orders`, `${i}`, "paid", moment().format(), this);
+            update(`orders/${i}`, { paid: moment().format() }, `${i}`, this);
           });
         });
       } else if (this.paid == "success") {
@@ -71,7 +71,7 @@ export default {
           showCancelButton: true,
         }).then(() => {
           this.ids.forEach((i) => {
-            updateSingleProp(`orders`, `${i}`, "paid", "", this);
+            update(`orders/${i}`, { paid: "" }, `${i}`, this);
           });
         });
       }
