@@ -3,9 +3,9 @@
     <h5 id="form-title">{{ oid ? "Editar Cliente" : "Crear Cliente" }}</h5>
     <InputBasic v-model="form.name" :type="'text'" :label="'nombre'" />
     <InputBasic v-model="form.cc" :type="'number'" :label="'cedula'" />
-    <InputBasic v-model="form.email" :type="'email'" :label="'mail'" />
-    <InputBasic v-model="form.phone" :type="'number'" :label="'telefono'" />
     <InputBasic v-model="form.address" :type="'text'" :label="'direccion'" />
+    <InputBasic v-model="form.phone" :type="'number'" :label="'telefono'" />
+    <InputBasic v-model="form.email" :type="'email'" :label="'mail'" />
     <InputBasic v-model="form.birthday" :type="'date'" :label="'cumpleaños'" />
     <InputSelect
       v-model="form.category"
