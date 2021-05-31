@@ -106,7 +106,7 @@ describe("can save(), update() and remove()", () => {
   });
 
   it("removes record", async () => {
-    let empty;
+    let oldClient;
     await remove(ref, "clients", clientId);
     await ref
       .child(`deleteHistory/${clientId}`)
@@ -118,11 +118,11 @@ describe("can save(), update() and remove()", () => {
       .child(`clients/${clientId}`)
       .once("value")
       .then((snap) => {
-        empty = snap.val();
+        oldClient = snap.val();
       });
     returnedClient.id = deletedClient.id;
     returnedClient.path = deletedClient.path;
     expect(deletedClient).toEqual(returnedClient);
-    expect(empty).toEqual(null);
+    expect(oldClient).toEqual(null);
   });
 });

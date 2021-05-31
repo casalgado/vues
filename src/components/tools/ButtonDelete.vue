@@ -13,10 +13,8 @@ export default {
     oid: String,
     path: String,
   },
-  mounted() {},
   methods: {
     remove: function() {
-      this.$emit("delete");
       let quote = dquotes[Math.floor(Math.random() * dquotes.length)];
       this.$fire({
         title: `"${quote.quote}"`,
@@ -24,7 +22,7 @@ export default {
         showCancelButton: true,
       }).then((alertStatus) => {
         if (alertStatus.dismiss) {
-          console.log("dismiss");
+          console.log("not deleted");
         } else {
           let oid = this.oid;
           remove(this.path, oid).then(() => {
@@ -36,7 +34,6 @@ export default {
                   if (c) {
                     update(`clients/${c.id}/history`, { [oid]: null });
                     update("optionsForMenus/clients", {
-                      // @this should be cid below?
                       [oid]: null,
                     });
                   } else {

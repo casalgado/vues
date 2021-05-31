@@ -12,7 +12,7 @@
         destination="EditClient"
       />
       <ButtonDelete
-        v-if="selected.length == 1"
+        v-if="selected.length == 1 && selected[0].lastOrder == '-'"
         :oid="oid"
         :path="path"
         @:delete="getObjects()"
