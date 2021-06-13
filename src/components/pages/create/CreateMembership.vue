@@ -7,9 +7,17 @@
       :label="'cliente'"
       :allow-text="false"
     />
+    <b-button variant="info" class="addWeek" @click="addWeek()"
+      >Agregar Semana
+    </b-button>
     <div>
       <div v-for="(value, name) in form.plan" :key="name">
-        <b-button variant="info" @click="addProduct(name)">+ producto</b-button>
+        <b-button
+          variant="dark"
+          class="addProductForWeek"
+          @click="addProduct(name)"
+          >{{ expandWeekName(name) }} + {{ productsThisWeek(name) }}</b-button
+        >
         <div v-for="field in value" :key="field.id">
           <transition name="fade">
             <InputDynamic
@@ -19,6 +27,8 @@
               :options="options.product"
               :priority="'unitPrice'"
               :populate="field"
+              :activeWeek="name"
+              :slim="true"
               @remove-field="removeField"
               @update-field="updateField"
             />
@@ -26,7 +36,6 @@
         </div>
       </div>
     </div>
-
     <b-card id="toolbox">
       <p v-if="$v.form.client.$error"><kbd>Debe incluir cliente</kbd></p>
       <b-button type="submit" variant="primary">Submit</b-button>
@@ -61,46 +70,10 @@ export default {
       form: {
         clientName: "",
         plan: {
-          w1: [
-            {
-              id: 0,
-              active: true,
-              name: "",
-              unitPrice: 0,
-              quantity: 1,
-              total: 0,
-            },
-          ],
-          w2: [
-            {
-              id: 0,
-              active: true,
-              name: "",
-              unitPrice: 0,
-              quantity: 1,
-              total: 0,
-            },
-          ],
-          w3: [
-            {
-              id: 0,
-              active: true,
-              name: "",
-              unitPrice: 0,
-              quantity: 1,
-              total: 0,
-            },
-          ],
-          w4: [
-            {
-              id: 0,
-              active: true,
-              name: "",
-              unitPrice: 0,
-              quantity: 1,
-              total: 0,
-            },
-          ],
+          w1: [],
+          w2: [],
+          w3: [],
+          w4: [],
         },
       },
       options: {
@@ -145,10 +118,49 @@ export default {
   },
   methods: {
     addProduct(name) {
-      console.log(name);
+      let id = this.form.plan[name].length;
+      this.form.plan[name].unshift({
+        id: id,
+        active: false,
+        name: "",
+        unitPrice: 1,
+        quantity: 1,
+        total: 1,
+      });
+      setTimeout(
+        function () {
+          this.form.plan[name][0].active = true;
+        }.bind(this)
+      );
     },
-    removeField() {},
-    updateField() {},
+    updateField(payload) {
+      const activeWeek = payload.activeWeek;
+      const products = this.form.plan[activeWeek];
+      products.forEach((e) => {
+        if (e.id == payload.id) {
+          e.name = payload.name;
+          e.unitPrice = payload.unitPrice;
+          e.quantity = payload.quantity;
+          e.total = payload.total;
+        }
+      });
+    },
+    removeField(payload) {
+      const activeWeek = payload.activeWeek;
+      const products = this.form.plan[activeWeek];
+      products.forEach((e) => {
+        if (e.id == payload.id) {
+          e.active = false;
+        }
+      });
+    },
+    expandWeekName(name) {
+      const weekNumber = name[1];
+      return `Semana ${weekNumber}`;
+    },
+    productsThisWeek(name) {
+      return `${this.form.plan[name].filter((e) => e.active).length}`;
+    },
     submit(evt) {
       evt.preventDefault();
       let alertmsg = "¿continuar?";
@@ -432,6 +444,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 * {
   margin: 5px;
@@ -446,5 +459,17 @@ export default {
 #container {
   display: grid;
   grid-template-columns: 2fr 1fr;
+}
+
+.addProductForWeek {
+  width: 100%;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.addWeek {
+  width: 100%;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 </style>

@@ -21,7 +21,11 @@
       size="sm"
       @change="onChange('name')"
     />
-    <FastSelect v-if="!this.onlyText" @fast-select="fastSelect" />
+    <FastSelect
+      v-if="!this.onlyText"
+      :class="hideIfSlim()"
+      @fast-select="fastSelect"
+    />
 
     <b-form-group class="f-group price-group" label="$ Unitario" size="sm" />
     <b-form-input
@@ -42,10 +46,15 @@
       @change="onChange('quantity')"
     />
 
-    <b-form-group class="f-group price-group" label="$ Total" />
+    <b-form-group
+      class="f-group price-group"
+      :class="hideIfSlim()"
+      label="$ Total"
+    />
     <b-form-input
       v-model="input.total"
       class="custom-input price-input"
+      :class="hideIfSlim()"
       type="number"
       size="sm"
       @change="onChange('total')"
@@ -64,9 +73,17 @@ export default {
     id: Number,
     priority: String,
     populate: Object,
+    slim: {
+      type: Boolean,
+      default: false,
+    },
     onlyText: {
       type: Boolean,
       default: false,
+    },
+    activeWeek: {
+      type: String,
+      default: "",
     },
   },
   data() {
@@ -81,7 +98,7 @@ export default {
     };
   },
   computed: {
-    name: function() {
+    name: function () {
       return this.input.name;
     },
   },
@@ -95,6 +112,13 @@ export default {
     this.input.total = this.populate.total;
   },
   methods: {
+    hideIfSlim() {
+      if (this.slim) {
+        return "hide";
+      } else {
+        return "";
+      }
+    },
     fastSelect(payload) {
       this.input.name = payload;
       this.onChange("name");
@@ -128,11 +152,12 @@ export default {
       }
       this.input.id = this.id;
       this.input.active = true;
+      this.input.activeWeek = this.activeWeek;
       this.$emit("update-field", this.input);
     },
     remove() {
       console.log(this.id);
-      this.$emit("remove-field", { id: this.id });
+      this.$emit("remove-field", { id: this.id, activeWeek: this.activeWeek });
     },
   },
 };
@@ -171,5 +196,9 @@ export default {
   height: 30px;
   width: 30px;
   padding: 0px;
+}
+
+.hide {
+  display: none;
 }
 </style>

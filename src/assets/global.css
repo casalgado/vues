@@ -152,7 +152,7 @@ input {
   width: 100%;
   max-width: 640px;
   background-color: var(--color-primary);
-  bottom: 10%;
+  bottom: 5%;
 }
 
 .toolbox-button {
