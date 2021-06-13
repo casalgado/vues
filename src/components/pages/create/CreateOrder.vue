@@ -68,6 +68,7 @@
 </template>
 <script>
 import { dynamicFieldsMixin } from "@/mixins/dynamicFieldsMixin";
+import { reorderProductsMixin } from "@/mixins/reorderProductsMixin";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import InputSelect from "../../inputs/InputSelect";
@@ -84,7 +85,7 @@ import moment from "moment";
 export default {
   name: "CreateOrder",
   components: { InputSelect, InputBasic, InputDynamic },
-  mixins: [dynamicFieldsMixin, validationMixin],
+  mixins: [dynamicFieldsMixin, validationMixin, reorderProductsMixin],
   props: {
     oid: {
       type: String,
@@ -144,7 +145,7 @@ export default {
     },
   },
   watch: {
-    client: function(val) {
+    client: function (val) {
       if (this.oid === "" && this.options.client.includes(this.form.client)) {
         this.form.products = [];
         getClientsLastOrder(val).then((e) => {
@@ -163,7 +164,7 @@ export default {
         });
       }
     },
-    date: function(val) {
+    date: function (val) {
       this.form.deliver = moment(val).format("YYYY-MM-DD");
     },
   },
@@ -202,12 +203,8 @@ export default {
           }
         });
       } else {
-        this.form.date = moment()
-          .add(1, "day")
-          .format("YYYY-MM-DD");
-        this.form.deliver = moment()
-          .add(2, "day")
-          .format("YYYY-MM-DD");
+        this.form.date = moment().add(1, "day").format("YYYY-MM-DD");
+        this.form.deliver = moment().add(2, "day").format("YYYY-MM-DD");
       }
     });
   },
@@ -218,12 +215,8 @@ export default {
       }
       this.form = {
         client: "",
-        date: moment()
-          .add(1, "day")
-          .format("YYYY-MM-DD"),
-        deliver: moment()
-          .add(2, "day")
-          .format("YYYY-MM-DD"),
+        date: moment().add(1, "day").format("YYYY-MM-DD"),
+        deliver: moment().add(2, "day").format("YYYY-MM-DD"),
         paid: "",
         products: [
           {
@@ -241,324 +234,6 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    },
-    reorder(products) {
-      let strings = products.map((e) => {
-        return e.text;
-      });
-      let sorted = [
-        "domicilio",
-        "descuento referente 30%",
-        "descuento referido 25%",
-        "iva 19%",
-        "",
-        "original grande",
-        "pan de masa madre mediano",
-        "pan de masa madre pequeño",
-        "original 25% dcto",
-        "original mediano 25% dcto",
-        "original pequeño 25% dcto",
-        "original 30% dcto",
-        "original mediano 30% dcto",
-        "original pequeño 30% dcto",
-        "",
-        "pan de queso costeño grande",
-        "pan de queso costeño medio",
-        "pan de queso costeño pequeño",
-        "queso costeño 25% dcto",
-        "queso mediano 25% dcto",
-        "queso pequeño 25% dcto",
-        "queso costeño 30% dcto",
-        "queso mediano 30% dcto",
-        "queso pequeño 30% dcto",
-        "",
-        "pan integral",
-        "pan integral mediano",
-        "pan integral pequeño",
-        "integral y avena 25% dcto",
-        "integral y avena mediano 25% dcto",
-        "integral y avena pequeño 25% dcto",
-        "integral y avena 30% dcto",
-        "integral y avena mediano 30% dcto",
-        "integral y avena pequeño 30% dcto",
-        "",
-        "pan de zaatar",
-        "pan de zaatar mediano",
-        "pan de zaatar pequeño",
-        "zaatar 25% dcto",
-        "zaatar mediano 25% dcto",
-        "zaatar pequeño 25% dcto",
-        "zaatar 30% dcto",
-        "zaatar mediano 30% dcto",
-        "zaatar pequeño 30% dcto",
-        "",
-        "pan de uva grande",
-        "pan de uva mediano",
-        "pan de uva pequeño",
-        "uva fermentada 25% dcto",
-        "uva mediano 25% dcto",
-        "uva pequeño 25% dcto",
-        "uva fermentada 30% dcto",
-        "uva mediano 30% dcto",
-        "uva pequeño 30% dcto",
-        "",
-        "pan de banano y semillas de girasol",
-        "pan de banano y semillas de girasol mediano",
-        "pan de banano y semillas de girasol pequeño",
-        "",
-        "girasol y banano mediano 25% dcto",
-        "girasol y banano pequeño 25% dcto",
-        "",
-        "girasol y banano mediano 30% dcto",
-        "girasol y banano pequeño 30% dcto",
-        "",
-        "pan de semillas grande",
-        "pan 5 semillas mediano",
-        "pan de semillas pequeño",
-        "5 semillas 25% dcto",
-        "5 semillas mediano 25% dcto",
-        "5 semillas pequeño 25% dcto",
-        "5 semillas 30% dcto",
-        "5 semillas mediano 30% dcto",
-        "5 semillas pequeño 30% dcto",
-        "",
-        "pan de ajonjoli grande",
-        "pan de ajonjoli mediano",
-        "pan de ajonjoli pequeño",
-        "ajonjolí 25% dcto",
-        "ajonjolí mediano 25% dcto",
-        "ajonjolí pequeño 25% dcto",
-        "ajonjolí 30% dcto",
-        "ajonjolí mediano 30% dcto",
-        "ajonjolí pequeño 30% dcto",
-        "",
-        "pan de chocolate grande",
-        "pan de chocolate mediano",
-        "pan de chocolate pequeño",
-        "",
-        "chocolate mediano 25% dcto",
-        "chocolate pequeño 25% dcto",
-        "",
-        "chocolate mediano 30% dcto",
-        "chocolate pequeño 30% dcto",
-        "",
-        "pan integral sin avena grande",
-        "pan integral sin avena mediano",
-        "pan integral sin avena pequeno",
-        "integral original 25% dcto",
-        "integral original mediano 25% dcto",
-        "integral original pequeño 25% dcto",
-        "integral original 30% dcto",
-        "integral original mediano 30% dcto",
-        "integral original pequeño 30% dcto",
-        "",
-        "pan integral de queso grande",
-        "pan integral de queso mediano",
-        "pan integral de queso pequeño",
-        "integral queso costeño 25% dcto",
-        "integral queso mediano 25% dcto",
-        "integral queso pequeño 25% dcto",
-        "integral queso costeño 30% dcto",
-        "integral queso mediano 30% dcto",
-        "integral queso pequeño 30% dcto",
-        "",
-        "pan integral de zaatar grande",
-        "pan integral de zaatar mediano",
-        "pan integral de zaatar pequeño",
-        "integral zaatar 25% dcto",
-        "integral zaatar mediano 25% dcto",
-        "integral zaatar pequeño 25% dcto",
-        "integral zaatar 30% dcto",
-        "integral zaatar mediano 30% dcto",
-        "integral zaatar pequeño 30% dcto",
-        "",
-        "pan integral de uva grande",
-        "pan integral de uva mediano",
-        "pan integral de uva pequeño",
-        "integral uva fermentada 25% dcto",
-        "integral uva mediano 25% dcto",
-        "integral uva pequeño 25% dcto",
-        "integral uva fermentada 30% dcto",
-        "integral uva mediano 30% dcto",
-        "integral uva pequeño 30% dcto",
-        "",
-        "pan integral de semillas y banano grande",
-        "pan integral de semillas y banano mediano",
-        "pan integral de semillas y banano pequeño",
-        "integral semillas de girasol 25% dcto",
-        "integral girasol y banano mediano 25% dcto",
-        "integral girasol y banano pequeño 25% dcto",
-        "integral semillas de girasol 30% dcto",
-        "integral girasol y banano mediano 30% dcto",
-        "integral girasol y banano pequeño 30% dcto",
-        "",
-        "pan integral de semillas",
-        "pan integral de semillas mediano",
-        "pan integral de semillas pequeño",
-        "integral 5 semillas 25% dcto",
-        "integral 5 semillas mediano 25% dcto",
-        "integral 5 semillas pequeño 25% dcto",
-        "integral 5 semillas 30% dcto",
-        "integral 5 semillas mediano 30% dcto",
-        "integral 5 semillas pequeño 30% dcto",
-        "",
-        "pan integral de ajonjoli grande",
-        "pan integral de ajonjoli mediano",
-        "pan integral de ajonjoli pequeño",
-        "integral ajonjolí 25% dcto",
-        "integral ajonjolí mediano 25% dcto",
-        "integral ajonjolí pequeño 25% dcto",
-        "integral ajonjolí 30% dcto",
-        "integral ajonjolí mediano 30% dcto",
-        "integral ajonjolí pequeño 30% dcto",
-        "",
-        "pan integral de chocolate grande",
-        "pan integral de chocolate mediano",
-        "pan integral de chocolate pequeño",
-        "",
-        "integral chocolate mediano 25% dcto",
-        "integral chocolate pequeño 25% dcto",
-        "",
-        "integral chocolate mediano 30% dcto",
-        "integral chocolate pequeño 30% dcto",
-      ];
-      // let past_sorted = [
-      //   "domicilio",
-      //   "",
-      //   "pan de masa madre",
-      //   "pan de masa madre mediano",
-      //   "pan de masa madre pequeño",
-      //   "mini masa madre",
-      //   "",
-      //   "pan integral",
-      //   "pan integral mediano",
-      //   "pan integral pequeño",
-      //   "",
-      //   "pan de queso costeño grande",
-      //   "pan de queso costeño medio",
-      //   "pan de queso costeño pequeño",
-      //   "",
-      //   "pan de zaatar",
-      //   "pan de zaatar mediano",
-      //   "pan de zaatar pequeño",
-      //   "",
-      //   "pan de ajonjoli grande",
-      //   "pan de ajonjoli mediano",
-      //   "pan de ajonjoli pequeño",
-      //   "",
-      //   "pan de banano y semillas de girasol",
-      //   "pan de banano y semillas de girasol mediano",
-      //   "pan de banano y semillas de girasol pequeño",
-      //   "",
-      //   "pan de semillas grande",
-      //   "pan de semillas mediano",
-      //   "pan de semillas pequeño",
-      //   "",
-      //   "pan de uva grande",
-      //   "pan de uva mediano",
-      //   "pan de uva pequeño",
-      //   "",
-      //   "pan de chocolate grande",
-      //   "pan de chocolate mediano",
-      //   "pan de chocolate pequeño",
-      //   "",
-      //   "",
-      //   "pan integral sin avena grande ",
-      //   "pan integral sin avena mediano",
-      //   "pan integral sin avena pequeño",
-      //   "",
-      //   "pan integral de queso grande",
-      //   "pan integral de queso mediano",
-      //   "pan integral de queso pequeño",
-      //   "",
-      //   "pan integral de zaatar grande",
-      //   "pan integral de zaatar mediano",
-      //   "pan integral de zaatar pequeño",
-      //   "",
-      //   "pan integral de ajonjoli grande",
-      //   "pan integral de ajonjoli mediano",
-      //   "pan integral de ajonjoli pequeño",
-      //   "",
-      //   "pan integral de semillas y banano grande",
-      //   "pan integral de semillas y banano mediano",
-      //   "pan integral de semillas y banano pequeño",
-      //   "",
-      //   "pan integral de semillas",
-      //   "pan integral de semillas mediano",
-      //   "pan integral de semillas pequeño",
-      //   "",
-      //   "pan integral de uva grande",
-      //   "pan integral de uva mediano",
-      //   "pan integral de uva pequeño",
-      //   "",
-      //   "pan integral de chocolate grande",
-      //   "pan integral de chocolate mediano",
-      //   "pan integral de chocolate pequeño",
-      //   "",
-      // ];
-      // let pgrandes = strings.filter((e) => {
-      //   return e.includes("grande");
-      // });
-      // let pmedios = strings.filter((e) => {
-      //   return e.includes("medio");
-      // });
-      // let ppeque = strings.filter((e) => {
-      //   return e.includes("pequeño");
-      // });
-      let tortas = strings.filter((e) => {
-        return e.includes("torta");
-      });
-      let potros = [
-        "pan de bono paquete",
-        "pan de hamburguesa",
-        "pan de hamburguesa integral",
-      ];
-      let remove = [
-        "brownie de coco",
-        "brownie de mantequilla de mani",
-        "domicilio reembolsable",
-        "excedente",
-        "fermento de pimenton",
-        "galleta de jengibre",
-        "harina",
-        "helado de cafe",
-        "helado de maracuya",
-        "helado de nispero",
-        "helado de yogurt",
-        "integral de queso mediano",
-        "pan de bono",
-        "pan de bono paquete",
-        "pan de cafe pequeño",
-        "pan de hamburguesa",
-        "pan de hamburguesa integral",
-        "pan de semillas grande ",
-        "pan de semillas mediano ",
-        "pan de semillas y banano mediano",
-        "pan de uva integral pequeño",
-        "pan integral de queso mediano",
-        "pan integral de zaatar mediano",
-        "pan integral pequeño",
-        "pan integral sin avena pequeno",
-        "pan mini masa madre",
-        "pan queso costeño pequeño",
-        "pan sin avena grande",
-      ];
-      strings = strings
-        .filter((e) => {
-          return !sorted.includes(e);
-        })
-        .filter((e) => {
-          return !tortas.includes(e);
-        })
-        .filter((e) => {
-          return !remove.includes(e);
-        });
-      sorted = [...sorted, ...potros, "", ...tortas, "", ...strings];
-      products = sorted.map((e) => {
-        return { text: e, value: e };
-      });
-
-      return products;
     },
   },
 };

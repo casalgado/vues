@@ -69,6 +69,11 @@ export default {
           clientId: "-M6xAgG8jSknkjX48g7d",
           clientName: "client 1",
           startDate: "2021-06-06",
+          weekdaySelection: {
+            w1: 2,
+            w2: 2,
+            w3: 2,
+          },
           plan: {
             w1: [
               { name: "pan original", quantity: "1" },
@@ -85,6 +90,11 @@ export default {
           clientId: "-M6xAgGBzMQCZUr9m8zj",
           clientName: "client 2",
           startDate: "2021-06-13",
+          weekdaySelection: {
+            w1: 1,
+            w2: null,
+            w3: 5,
+          },
           plan: {
             w1: [
               { name: "pan original sin avena", quantity: "1" },
@@ -99,6 +109,9 @@ export default {
           clientId: "-MZdFk171FcKoxDBZflS",
           clientName: "client 3",
           startDate: "2021-06-20",
+          weekdaySelection: {
+            w1: 1,
+          },
           plan: {
             w1: [{ name: "pan de masa madre mediano", quantity: "1" }],
             w2: [{ name: "pan de masa madre mediano", quantity: "1" }],
@@ -110,6 +123,9 @@ export default {
           clientId: "-M6xAgGIh0auEJ7Ufq0Y",
           clientName: "client 4",
           startDate: "2021-06-24",
+          weekdaySelection: {
+            w1: 1,
+          },
           plan: {
             w1: [{ name: "pan de zaatar", quantity: "1" }],
           },
