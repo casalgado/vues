@@ -100,6 +100,15 @@
           ></router-link
         >
       </b-dropdown-item>
+
+      <b-dropdown-item>
+        <router-link :to="{ name: 'Memberships' }"
+          ><b-button variant="success" class="nav-btn"
+            >Membresias</b-button
+          ></router-link
+        >
+      </b-dropdown-item>
+
       <b-dropdown-item>
         <router-link :to="{ name: 'ShowDashboard' }"
           ><b-button variant="primary" class="nav-btn"
@@ -114,7 +123,7 @@
 import { mapState } from "vuex";
 export default {
   name: "Navigation",
-  data: function() {
+  data: function () {
     return {
       db: "",
     };
@@ -125,7 +134,7 @@ export default {
     },
   },
   computed: {
-    development: function() {
+    development: function () {
       const environment = process.env.NODE_ENV;
       if (environment === "development") {
         return true;

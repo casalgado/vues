@@ -95,6 +95,18 @@ const routes = [
         component: () => import("@/components/pages/create/CreateClient.vue"),
         props: true,
       },
+      {
+        path: "membresias/",
+        name: "Memberships",
+        component: () => import("@/components/pages/show/ShowMemberships.vue"),
+        props: true,
+      },
+      {
+        path: "crear/membresia/",
+        name: "CreateMembership",
+        component: () =>
+          import("@/components/pages/create/CreateMembership.vue"),
+      },
       // {
       //   path: "crear/proveedor/",
       //   name: "CreateProvider",

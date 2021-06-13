@@ -101,7 +101,7 @@ export default {
     };
   },
   computed: {
-    sameClient: function() {
+    sameClient: function () {
       let objects = this.selected;
       if (objects.length > 0) {
         let client = objects[0].client;
@@ -135,16 +135,22 @@ export default {
     console.log(moment());
   },
   methods: {
-    getObjects: function() {
+    getObjects: function () {
       getAllWhere(`orders`, "paid", "").then((e) => {
-        this.table.objects = JSON.parse(JSON.stringify(e));
+        this.table.objects = JSON.parse(JSON.stringify(e)).filter(function (e) {
+          console.log(moment(e.date).isAfter(moment()));
+          return !moment(e.date).isAfter(moment());
+        });
         this.table.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e))
+          JSON.parse(JSON.stringify(e)).filter(function (e) {
+            console.log(moment(e.date).isAfter(moment()));
+            return !moment(e.date).isAfter(moment());
+          })
         );
         console.log(this.table.formattedObjects);
       });
     },
-    print: function() {
+    print: function () {
       window.print();
     },
   },
