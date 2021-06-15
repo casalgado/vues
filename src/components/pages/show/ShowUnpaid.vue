@@ -3,11 +3,15 @@
     <div id="table-cont">
       <h6 id="title">{{ table.title }}</h6>
       <Pagination :period="table.pagination" />
+      <b-form id="dateform" v-if="showDateSelection">
+        <InputBasic v-model="datePaid" :type="'date'" />
+      </b-form>
       <Table :table="table" />
       <TableTotals :objects="this.table.objects" />
       <b-card v-if="this.selected.length > 0" id="toolbox">
+        <p v-if="this.datePaid != ''">fecha cancelacion: {{ this.datePaid }}</p>
         <TableTotals :objects="this.selected" />
-        <ButtonPaid :ids="this.selectedIds" />
+        <ButtonPaid :ids="this.selectedIds" :datePaid="this.datePaid" />
         <ButtonEdit
           v-if="this.selected.length == 1"
           :oid="this.oids[0]"
@@ -32,12 +36,12 @@ import { ordersMixin } from "@/mixins/ordersMixin";
 import { toolboxMixin } from "@/mixins/toolboxMixin";
 import ButtonPaid from "../../tools/ButtonPaid";
 import ButtonEdit from "../../tools/ButtonEdit";
+import InputBasic from "../../inputs/InputBasic.vue";
 import Table from "../../table/Table";
 import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
 import { getAllWhere } from "@/firebase";
 import { mapState } from "vuex";
-import moment from "moment";
 
 export default {
   name: "ShowUnpaid",
@@ -48,6 +52,7 @@ export default {
     ButtonPaid,
     ButtonEdit,
     PrintOrders,
+    InputBasic,
   },
   mixins: [ordersMixin, toolboxMixin],
   data() {
@@ -98,6 +103,8 @@ export default {
       },
       oids: [],
       path: "orders",
+      datePaid: "",
+      showDateSelection: true,
     };
   },
   computed: {
@@ -132,7 +139,9 @@ export default {
   },
   mounted() {
     this.getObjects();
-    console.log(moment());
+    if (window.innerWidth <= 767) {
+      this.showDateSelection = false;
+    }
   },
   methods: {
     getObjects: function () {
@@ -162,6 +171,13 @@ export default {
     display: none;
     padding-bottom: 300px;
   }
+}
+
+#dateform {
+  width: 80px;
+  position: absolute;
+  left: 30px;
+  top: 78px;
 }
 
 @media print {
