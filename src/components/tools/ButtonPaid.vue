@@ -18,6 +18,12 @@ export default {
   name: "ButtonPaid",
   props: {
     ids: Array,
+    datePaid: {
+      type: String,
+      default: () => {
+        return "";
+      },
+    },
   },
   data() {
     return {
@@ -55,14 +61,22 @@ export default {
     this.getOrders();
   },
   methods: {
-    togglePaid: function() {
+    togglePaid: function () {
       if (this.paid == "danger" || this.paid == "dark") {
         this.$fire({
           title: `Set ${this.ids.length} orders Paid?`,
           showCancelButton: true,
         }).then(() => {
+          if (this.datePaid == "") {
+            this.datePaid = moment();
+          }
           this.ids.forEach((i) => {
-            update(`orders/${i}`, { paid: moment().format() }, `${i}`, this);
+            update(
+              `orders/${i}`,
+              { paid: moment(this.datePaid).format() },
+              `${i}`,
+              this
+            );
           });
         });
       } else if (this.paid == "success") {
@@ -76,7 +90,7 @@ export default {
         });
       }
     },
-    getOrders: function() {
+    getOrders: function () {
       this.objects = [];
       this.ids.forEach((i) => {
         getById("orders", `${i}`).then((e) => {
