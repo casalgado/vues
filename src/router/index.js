@@ -97,7 +97,7 @@ const routes = [
       },
       {
         path: "membresias/",
-        name: "Memberships",
+        name: "ShowMemberships",
         component: () => import("@/components/pages/show/ShowMemberships.vue"),
         props: true,
       },

@@ -68,6 +68,8 @@ import InputDynamic from "../../inputs/InputDynamic";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import {
+  save,
+  update,
   getClientListWithMostUsedFirst,
   getById,
   getAsOptionsForSelect,
@@ -88,7 +90,7 @@ export default {
     return {
       form: {
         clientName: "",
-        weekdaySelection: { w1: 1, w2: 1, w3: 1, w4: 1 },
+        weekdaySelection: { w1: 0, w2: 0, w3: 0, w4: 0 },
         plan: {
           w1: [],
           w2: [],
@@ -124,7 +126,7 @@ export default {
             {},
             this.form.weekdaySelection,
             {
-              [addedWeek]: 1,
+              [addedWeek]: 0,
             }
           );
         }.bind(this)
@@ -189,7 +191,7 @@ export default {
     expandWeekDaySelection(name) {
       const weekday = this.form.weekdaySelection[name];
       return [
-        "domingo",
+        null,
         "lunes",
         "martes",
         "miercoles",
@@ -212,6 +214,21 @@ export default {
     productsThisWeek(name) {
       return `${this.form.plan[name].filter((e) => e.active).length}`;
     },
+    weeksThatNeedToSelectDay(form) {
+      const weeks = Object.keys(form.plan);
+      let weeksThatNeedToSelectDay = [];
+      for (let i = 0; i < weeks.length; i++) {
+        let week = weeks[i];
+        console.log(form.weekdaySelection[week]);
+        if (
+          form.plan[week].filter((e) => e.active == true).length >= 1 &&
+          form.weekdaySelection[week] == 0
+        ) {
+          weeksThatNeedToSelectDay.push(week);
+        }
+      }
+      return weeksThatNeedToSelectDay;
+    },
     submit(evt) {
       evt.preventDefault();
       let alertmsg = "¿continuar?";
@@ -228,16 +245,35 @@ export default {
           if (alertStatus.dismiss) {
             console.log("dismiss");
           } else {
-            console.log(this.form);
-            // if (this.oid === "") {
-            //   save(this.path, this.form, this).then(() => {
-            //     this.$router.push({ name: "ShowProducts" });
-            //   });
-            // } else {
-            //   update(`${this.path}/${this.oid}`, this.form).then(() => {
-            //     this.$router.push({ name: "ShowMemberships" });
-            //   });
-            // }
+            const form = Object.assign({}, this.form);
+            let weeksThatNeedDay = this.weeksThatNeedToSelectDay(this.form);
+            if (weeksThatNeedDay.length == 0) {
+              for (let i = 0; i < Object.keys(this.form.plan).length; i++) {
+                let week = Object.keys(this.form.plan)[i];
+                if (form.plan[week] == []) {
+                  form.plan[week] = [{ active: true }];
+                }
+                form.plan[week] = form.plan[week].filter(
+                  (e) => e.active == true
+                );
+              }
+              console.log(form);
+              if (this.oid === "") {
+                save(this.path, this.form, this).then(() => {
+                  //this.$router.push({ name: "ShowMemberships" });
+                });
+              } else {
+                update(`${this.path}/${this.oid}`, this.form).then(() => {
+                  this.$router.push({ name: "ShowMemberships" });
+                });
+              }
+            } else {
+              this.$fire({
+                title: `debe elegir dia de entrega en semana${
+                  weeksThatNeedDay.length == 1 ? "" : "s"
+                } ${weeksThatNeedDay.map((e) => e[1])}`,
+              });
+            }
           }
         });
       }
