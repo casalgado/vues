@@ -41,7 +41,7 @@ describe("Component", () => {
 });
 
 import { initializeApp } from "firebase";
-import { save } from "./../../src/firebase";
+import { save } from "../../../src/firebase";
 
 describe("Component", () => {
   test("knows basic addition", () => {
