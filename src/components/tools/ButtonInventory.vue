@@ -2312,7 +2312,7 @@ export default {
           banano: "",
           cafe: "",
           canela: "",
-          "queso costeño": "",
+          "queso costeño": "60",
           "semillas de chia": "",
           "semillas de girasol": "",
           "semillas de linaza": "",
