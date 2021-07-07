@@ -42,6 +42,7 @@ import Pagination from "../../table/Pagination";
 import TableTotals from "../../table/TableTotals";
 import { getAllWhere } from "@/firebase";
 import { mapState } from "vuex";
+import moment from "moment";
 
 export default {
   name: "ShowUnpaid",
@@ -108,7 +109,7 @@ export default {
     };
   },
   computed: {
-    sameClient: function () {
+    sameClient: function() {
       let objects = this.selected;
       if (objects.length > 0) {
         let client = objects[0].client;
@@ -139,19 +140,20 @@ export default {
   },
   mounted() {
     this.getObjects();
+    console.log(moment());
     if (window.innerWidth <= 767) {
       this.showDateSelection = false;
     }
   },
   methods: {
-    getObjects: function () {
+    getObjects: function() {
       getAllWhere(`orders`, "paid", "").then((e) => {
-        this.table.objects = JSON.parse(JSON.stringify(e)).filter(function (e) {
+        this.table.objects = JSON.parse(JSON.stringify(e)).filter(function(e) {
           console.log(moment(e.date).isAfter(moment()));
           return !moment(e.date).isAfter(moment());
         });
         this.table.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e)).filter(function (e) {
+          JSON.parse(JSON.stringify(e)).filter(function(e) {
             console.log(moment(e.date).isAfter(moment()));
             return !moment(e.date).isAfter(moment());
           })
@@ -159,7 +161,7 @@ export default {
         console.log(this.table.formattedObjects);
       });
     },
-    print: function () {
+    print: function() {
       window.print();
     },
   },
