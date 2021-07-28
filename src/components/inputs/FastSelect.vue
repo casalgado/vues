@@ -16,16 +16,10 @@
       <div @click="setCode('02xx')" id="it" class="button btn sp2">
         integral
       </div>
-      <div @click="setCode('03xx')" id="qs" class="button btn sp2">
-        queso
-      </div>
-      <div @click="setCode('04xx')" id="zt" class="button btn sp2">
-        zaatar
-      </div>
+      <div @click="setCode('03xx')" id="qs" class="button btn sp2">queso</div>
+      <div @click="setCode('04xx')" id="zt" class="button btn sp2">zaatar</div>
       <div @click="setCode('05xx')" id="uv" class="button btn sp2">uva</div>
-      <div @click="setCode('06xx')" id="gs" class="button btn sp2">
-        girasol
-      </div>
+      <div @click="setCode('06xx')" id="gs" class="button btn sp2">girasol</div>
       <div @click="setCode('07xx')" id="sm" class="button btn sp2">
         semillas
       </div>
@@ -46,15 +40,11 @@
         G
       </div>
       <div class="text sp6">tortas</div>
-      <div @click="setCode('xxx2')" id="peq" class="button btn sp3">mini</div>
-      <div @click="setCode('xxx1')" id="med" class="button btn sp3">norm</div>
-      <div @click="setCode('990x')" id="sm" class="button btn sp2">
-        banano
-      </div>
-      <div @click="setCode('980x')" id="aj" class="button btn sp2">
-        naranja
-      </div>
-      <div @click="setCode('970x')" id="ch" class="button btn sp2">
+      <div @click="setCode('xxx2')" id="" class="button btn sp3">mini</div>
+      <div @click="setCode('xxx1')" id="" class="button btn sp3">norm</div>
+      <div @click="setCode('990x')" id="sm" class="button btn sp2">banano</div>
+      <div @click="setCode('980x')" id="og" class="button btn sp2">naranja</div>
+      <div @click="setCode('970x')" id="qs" class="button btn sp2">
         zanahoria
       </div>
     </div>
@@ -71,16 +61,16 @@ export default {
     };
   },
   methods: {
-    makeSelection: function(code) {
+    makeSelection: function (code) {
       this.$emit("fast-select", this.chooseProduct(code));
     },
-    toggleShow: function() {
+    toggleShow: function () {
       this.show = !this.show;
     },
     setCode(input) {
       let newCode = [];
       let ready = 0;
-      this.code.split("").forEach(function(e, i) {
+      this.code.split("").forEach(function (e, i) {
         if (parseInt(input[i]) + 1) {
           e = input[i];
         }
@@ -155,12 +145,12 @@ export default {
         "0911": "pan integral de chocolate grande",
         "0912": "pan integral de chocolate mediano",
         "0913": "pan integral de chocolate pequeño",
-        "9902": "mini torta de banano",
-        "9802": "mini torta de naranja",
-        "9702": "mini torta de zanahoria",
-        "9901": "torta de pan con banano",
-        "9801": "torta de naranja",
-        "9701": "torta de zanahoria",
+        9902: "mini torta de banano",
+        9802: "mini torta de naranja",
+        9702: "mini torta de zanahoria",
+        9901: "torta de pan con banano",
+        9801: "torta de naranja",
+        9701: "torta de zanahoria",
       };
       return productList[code];
     },
@@ -227,5 +217,52 @@ export default {
 
 .button:hover {
   opacity: 0.5;
+}
+
+#og {
+  color: #e6e6e6;
+  background-color: #c4761a;
+}
+#it {
+  color: #c4761a;
+  background-color: #e6e6e6;
+}
+#qs {
+  color: #e6e6e6;
+  background-color: #7f311c;
+}
+#zt {
+  color: #e6e6e6;
+  background-color: #484d29;
+}
+#uv {
+  color: #e6e6e6;
+  background-color: #463a3a;
+}
+#gs {
+  color: #e6e6e6;
+  background-color: #ba6128;
+}
+#sm {
+  color: #e6e6e6;
+  background-color: #a4976e;
+}
+#aj {
+  color: #e6e6e6;
+  background-color: #b2937e;
+}
+#ch {
+  color: #e6e6e6;
+  background-color: #270028;
+}
+
+#peq {
+  font-size: 0.6em;
+  padding-top: 10px;
+}
+
+#med {
+  font-size: 0.8em;
+  padding-top: 8px;
 }
 </style>
