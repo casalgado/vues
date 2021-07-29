@@ -2,7 +2,7 @@
   <b-form v-if="show" id="form" @submit="submit" @reset="reset">
     <h5 id="form-title">{{ oid ? "Editar Membresia" : "Crear Membresia" }}</h5>
     <InputSelect
-      v-model="form.clientName"
+      v-model="form.client"
       :options="this.options.client"
       :label="'cliente'"
       :allow-text="false"
@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       form: {
-        clientName: "",
+        client: "",
         plan: {
           w1: [],
           w2: [],
@@ -179,14 +179,16 @@ export default {
           if (alertStatus.dismiss) {
             console.log("dismiss");
           } else {
-            this.form.name = this.form.name.toLowerCase().trim();
+            let formClone = { ...this.form };
+            console.log(this.form.plan);
+            this.form.client = this.form.client.toLowerCase().trim();
             if (this.oid === "") {
-              save(this.path, this.form, this).then(() => {
-                this.$router.push({ name: "ShowProducts" });
+              save(this.path, formClone, this).then(() => {
+                // this.$router.push({ name: "CreateMembership" });
               });
             } else {
               update(`${this.path}/${this.oid}`, this.form).then(() => {
-                this.$router.push({ name: "ShowProducts" });
+                // this.$router.push({ name: "CreateMembership" });
               });
             }
           }

@@ -38,6 +38,13 @@
           ></router-link
         >
       </b-dropdown-item>
+      <b-dropdown-item>
+        <router-link :to="{ name: 'CreateMembership' }"
+          ><b-button variant="dark" class="nav-btn"
+            >Membresia</b-button
+          ></router-link
+        >
+      </b-dropdown-item>
     </b-dropdown>
 
     <b-dropdown
