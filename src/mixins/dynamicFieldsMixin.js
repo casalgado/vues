@@ -86,6 +86,7 @@ export const dynamicFieldsMixin = {
                 form.provider = form.provider.toLowerCase();
               }
               if (this.oid === "") {
+                console.log(form);
                 save(`${this.path}`, form, this).then((id) => {
                   if (this.path == "orders") {
                     // save new client

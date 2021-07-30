@@ -29,7 +29,12 @@
             class="addProductForWeek"
             @click="addProduct(name)"
             >{{ expandWeekName(name) }} - {{ expandWeekDaySelection(name) }} -
-            {{ productsThisWeek(name) }} productos</b-button
+            {{ productsThisWeek(name) }}
+            {{
+              productsThisWeek(name) == 0
+                ? "agrerar producto"
+                : "producto" + (productsThisWeek(name) == 1 ? "" : "s")
+            }}</b-button
           >
           <b-button
             variant="dark"
@@ -212,7 +217,12 @@ export default {
         (this.form.weekdaySelection[name] + 7) % 7;
     },
     productsThisWeek(name) {
-      return `${this.form.plan[name].filter((e) => e.active).length}`;
+      const string = `${this.form.plan[name].filter((e) => e.active).length}`;
+      if (string == "0") {
+        return "";
+      } else {
+        return string;
+      }
     },
     weeksThatNeedToSelectDay(form) {
       const weeks = Object.keys(form.plan);
@@ -264,7 +274,7 @@ export default {
                 });
               } else {
                 update(`${this.path}/${this.oid}`, this.form).then(() => {
-                  this.$router.push({ name: "ShowMemberships" });
+                  // this.$router.push({ name: "ShowMemberships" });
                 });
               }
             } else {
