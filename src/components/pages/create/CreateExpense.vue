@@ -99,9 +99,6 @@ export default {
         required,
         minLength: minLength(2),
       },
-      category: {
-        required,
-      },
     },
   },
   computed: {
