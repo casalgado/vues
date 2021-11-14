@@ -33,7 +33,7 @@
     </div>
     <b-card id="toolbox">
       <p v-if="$v.form.provider.$error"><kbd>Debe incluir proveedor</kbd></p>
-      <p v-if="$v.form.category.$error"><kbd>Debe incluir categoria</kbd></p>
+
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-card>
 
@@ -114,7 +114,7 @@ export default {
     },
   },
   watch: {
-    provider: function(val) {
+    provider: function (val) {
       console.log(val);
       if (
         this.oid === "" &&
