@@ -85,6 +85,14 @@
       </b-dropdown-item>
 
       <b-dropdown-item>
+        <router-link :to="{ name: 'ShowClientHistoryReport' }"
+          ><b-button variant="dark" class="nav-btn"
+            >Reporte Clientes</b-button
+          ></router-link
+        >
+      </b-dropdown-item>
+
+      <b-dropdown-item>
         <router-link :to="{ name: 'ShowCashIn' }"
           ><b-button variant="success" class="nav-btn"
             >Ingresos</b-button

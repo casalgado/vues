@@ -31,6 +31,12 @@ const routes = [
         component: () => import("../components/pages/show/ShowProducts.vue"),
       },
       {
+        path: "reporteclientes/",
+        name: "ShowClientHistoryReport",
+        component: () =>
+          import("../components/pages/show/ShowClientHistoryReport.vue"),
+      },
+      {
         path: "porcobrar/",
         name: "ShowUnpaid",
         component: () => import("../components/pages/show/ShowUnpaid.vue"),
