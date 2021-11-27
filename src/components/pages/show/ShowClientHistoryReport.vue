@@ -2,15 +2,27 @@
   <div id="reports">
     <button @click="generate">Generar</button>
     <div id="table-container">
-      <table v-for="(item, index) in formattedTables" v-bind:key="index">
-        <tr>
-          <th>{{ labeledPeriod(item.date) }}</th>
-        </tr>
-        <tr v-for="(object, index) in item.objects" v-bind:key="index + 10">
-          <td class="name-cell">{{ object.name }}</td>
-          <td>{{ object.total }}</td>
-        </tr>
-      </table>
+      <div v-for="(table, index) in formattedTables" v-bind:key="index">
+        <table>
+          <tr>
+            <th>{{ labeledPeriod(table.date) }}</th>
+          </tr>
+          <tr
+            v-for="(object, index) in table.objects"
+            v-bind:key="index + 10"
+            :class="object.status"
+          >
+            <td class="name-cell">{{ object.name }}</td>
+            <td>{{ object.total }}</td>
+          </tr>
+        </table>
+        <ul id="clientSummary">
+          <li>ausente: {{ table.clientSummary.absent }}</li>
+          <li>nuevo: {{ table.clientSummary.new }}</li>
+          <li>viejo: {{ table.clientSummary.old }}</li>
+          <li>persistente:{{ table.clientSummary.persistent }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -35,6 +47,7 @@ export default {
   computed: {
     formattedTables: function () {
       let tables = [...this.tablesForRendering];
+      tables.reverse();
       // remove duplicates in each list
       for (let i = 0; i < tables.length; i++) {
         let withoutDuplicates = [];
@@ -65,12 +78,12 @@ export default {
         }
       }
       let uniqueNames = [...new Set(allNames)];
-      console.log(uniqueNames);
+
       // then we pad each list with names that are not present
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
         let currentTableNames = tables[i].objects.map((e) => e.name);
-        console.log(currentTableNames);
+
         for (let j = 0; j < uniqueNames.length; j++) {
           if (!currentTableNames.includes(uniqueNames[j])) {
             currentTable.objects.push({ name: uniqueNames[j], total: 0 });
@@ -81,9 +94,42 @@ export default {
         );
       }
       // add status to each of the objects of the lists
-      // this methods
+      for (let i = 0; i < tables.length; i++) {
+        let currentTable = tables[i];
+        console.log(currentTable.newClients.sort());
+        for (let j = 0; j < currentTable.objects.length; j++) {
+          if (currentTable.objects[j].total == 0) {
+            currentTable.objects[j].status = "darkened";
+            currentTable.clientSummary.absent += 1;
+          } else if (
+            currentTable.newClients.includes(currentTable.objects[j].name)
+          ) {
+            currentTable.objects[j].status = "new";
+            currentTable.clientSummary.new += 1;
+          } else {
+            if (currentTable.objects[j].status != "darkened") {
+              currentTable.objects[j].status = "old";
+              currentTable.clientSummary.old += 1;
+            }
 
-      return tables.reverse();
+            if (i > 0) {
+              let objectsFromLastPeriod = tables[i - 1].objects;
+              for (let k = 0; k < objectsFromLastPeriod.length; k++) {
+                if (
+                  objectsFromLastPeriod[k].total > 0 &&
+                  objectsFromLastPeriod[k].name == currentTable.objects[j].name
+                ) {
+                  currentTable.objects[j].status = "persistent";
+                  currentTable.clientSummary.persistent += 1;
+                  currentTable.clientSummary.old -= 1;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return tables;
     },
     ...mapState(["ref", "date", "period", "selected"]),
   },
@@ -94,7 +140,8 @@ export default {
           name: e.client,
           total: e.total,
           type: e.type,
-          status: "new",
+          date: e.date,
+          status: "",
         };
       });
       return items;
@@ -103,14 +150,34 @@ export default {
       let date = moment(this.date);
       for (let i = 0; i < this.form.range; i++) {
         let dateClone = moment(date).format(); // clone is necessary label the tables correctly
-        getByDateRange("orders", "date", date, this.form.period).then((e) => {
-          let objects = this.format(JSON.parse(JSON.stringify(e)));
-          let table = {
-            date: dateClone,
-            objects: objects,
-          };
-          this.tablesForRendering.push(table);
-        });
+        getByDateRange("orders", "date", date, this.form.period)
+          .then((e) => {
+            let objects = this.format(JSON.parse(JSON.stringify(e)));
+            let table = {
+              date: dateClone,
+              objects: objects,
+              clientSummary: {
+                absent: 0,
+                new: 0,
+                old: 0,
+                persistent: 0,
+              },
+            };
+            return table;
+          })
+          .then((table) => {
+            let tdate = moment(table.date).format();
+            console.log(tdate);
+            getByDateRange(`clients`, "since", tdate, this.form.period).then(
+              (e) => {
+                table.newClients = JSON.parse(JSON.stringify(e)).map(
+                  (e) => e.name
+                );
+                console.log(table.newClients);
+                this.tablesForRendering.push(table);
+              }
+            );
+          });
         date.subtract(1, this.form.period).format();
       }
     },
@@ -140,6 +207,19 @@ table {
   min-width: 250px;
 }
 
+td,
+th {
+  height: 15px;
+}
+
+tr {
+  border-bottom: 1px solid gray;
+}
+
+li {
+  list-style-type: none;
+}
+
 #table-container {
   display: grid;
   grid-template-columns: repeat(12, fit-content(250px));
@@ -148,15 +228,26 @@ table {
   height: 90vh;
 }
 
-.new {
-  background-color: lightsteelblue;
-  color: black;
-}
-
 .name-cell {
   text-align: left;
   text-overflow: clip;
   padding-left: 5px;
   padding-right: 5px;
+}
+
+.darkened {
+  color: rgb(63, 63, 63);
+}
+
+.new {
+  background-color: lightsteelblue;
+  color: black;
+}
+
+.old {
+}
+
+.persistent {
+  background-color: rgb(139, 184, 139);
 }
 </style>
