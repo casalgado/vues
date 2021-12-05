@@ -193,18 +193,19 @@ export default {
       let date = moment(this.date);
       for (let i = 0; i < this.form.range; i++) {
         let dateClone = moment(date).format(); // clone is necessary label the tables correctly
+        let emptyClientSummary = Object.assign(
+          {},
+          {
+            absent: 0,
+            new: 0,
+            old: 0,
+            persistent: 0,
+          }
+        );
         getByDateRange("orders", "date", date, this.form.period)
           .then((e) => {
             let clients = this.format(JSON.parse(JSON.stringify(e)));
-            let emptyClientSummary = Object.assign(
-              {},
-              {
-                absent: 0,
-                new: 0,
-                old: 0,
-                persistent: 0,
-              }
-            );
+
             let table = {
               date: dateClone,
               clients: clients,
@@ -289,6 +290,7 @@ li {
   grid-auto-flow: column;
   overflow: auto;
   height: 90vh;
+  width: 98%;
 }
 
 .name-cell {
