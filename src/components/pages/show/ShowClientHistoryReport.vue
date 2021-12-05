@@ -38,6 +38,7 @@
           <li>nuevo: {{ table.clientSummary.new }}</li>
           <li>viejo: {{ table.clientSummary.old }}</li>
           <li>persistente:{{ table.clientSummary.persistent }}</li>
+          <li>total:{{ table.clientSummary.total }}</li>
         </ul>
       </div>
     </div>
@@ -163,6 +164,11 @@ export default {
               }
             }
           }
+          currentTable.clientSummary.total =
+            currentTable.clientSummary.absent +
+            currentTable.clientSummary.new +
+            currentTable.clientSummary.persistent +
+            currentTable.clientSummary.old;
         }
       }
 
@@ -246,10 +252,6 @@ export default {
 </script>
 
 <style scoped>
-table {
-  min-width: 280px;
-}
-
 td,
 th {
   height: 15px;
@@ -283,7 +285,7 @@ li {
 
 #table-container {
   display: grid;
-  grid-template-columns: repeat(12, fit-content(250px));
+  grid-template-columns: repeat(12, fit-content(280px));
   grid-auto-flow: column;
   overflow: auto;
   height: 90vh;
@@ -294,6 +296,7 @@ li {
   text-overflow: clip;
   padding-left: 5px;
   padding-right: 5px;
+  max-width: 216px;
 }
 
 .darkened {
