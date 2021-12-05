@@ -1,6 +1,23 @@
 <template>
   <div id="reports">
-    <button @click="generate">Generar</button>
+    <div id="controls">
+      <InputSelect
+        v-model="form.period"
+        :options="form.periodOptions"
+        :label="'periodo'"
+        :allow-text="false"
+      />
+      <InputSelect
+        v-model="form.range"
+        :options="form.rangeOptions"
+        :label="'cantidad'"
+        :allow-text="false"
+      />
+      <b-button @click="generate" type="submit" variant="primary" id="submit"
+        >Generar</b-button
+      >
+    </div>
+
     <div id="table-container">
       <div v-for="(table, index) in formattedTables" v-bind:key="index">
         <table>
@@ -8,12 +25,12 @@
             <th>{{ labeledPeriod(table.date) }}</th>
           </tr>
           <tr
-            v-for="(object, index) in table.objects"
+            v-for="(client, index) in table.clients"
             v-bind:key="index + 10"
-            :class="object.status"
+            :class="client.status"
           >
-            <td class="name-cell">{{ object.name }}</td>
-            <td>{{ object.total }}</td>
+            <td class="name-cell">{{ client.name }}</td>
+            <td>{{ client.total }}</td>
           </tr>
         </table>
         <ul id="clientSummary">
@@ -28,20 +45,39 @@
 </template>
 
 <script>
+import InputSelect from "../../inputs/InputSelect";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "ShowClientHistoryReport",
-  components: {},
+  components: { InputSelect },
   data() {
     return {
       form: {
-        period: "month",
-        range: 4,
+        period: "week",
+        range: "1",
+        periodOptions: [
+          { value: "week", text: "semanas" },
+          { value: "month", text: "meses" },
+        ],
+        rangeOptions: [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+        ],
       },
       tablesForRendering: [],
-      objects: [],
+      clients: [],
     };
   },
   computed: {
@@ -52,8 +88,8 @@ export default {
       for (let i = 0; i < tables.length; i++) {
         let withoutDuplicates = [];
         let currentTable = tables[i];
-        for (let j = 0; j < currentTable.objects.length; j++) {
-          let currentObject = currentTable.objects[j];
+        for (let j = 0; j < currentTable.clients.length; j++) {
+          let currentObject = currentTable.clients[j];
           let included = false;
           for (let k = 0; k < withoutDuplicates.length; k++) {
             let includedObject = withoutDuplicates[k];
@@ -66,15 +102,15 @@ export default {
             withoutDuplicates.push(currentObject);
           }
         }
-        tables[i].objects = withoutDuplicates;
+        tables[i].clients = withoutDuplicates;
       }
-      //combine all lists so that they have the same number of objects
+      //combine all lists so that they have the same number of clients
       let allNames = [];
       // first we get a list of all names
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
-        for (let j = 0; j < currentTable.objects.length; j++) {
-          allNames.push(currentTable.objects[j].name);
+        for (let j = 0; j < currentTable.clients.length; j++) {
+          allNames.push(currentTable.clients[j].name);
         }
       }
       let uniqueNames = [...new Set(allNames)];
@@ -82,47 +118,48 @@ export default {
       // then we pad each list with names that are not present
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
-        let currentTableNames = tables[i].objects.map((e) => e.name);
+        let currentTableNames = tables[i].clients.map((e) => e.name);
 
         for (let j = 0; j < uniqueNames.length; j++) {
           if (!currentTableNames.includes(uniqueNames[j])) {
-            currentTable.objects.push({ name: uniqueNames[j], total: 0 });
+            currentTable.clients.push({ name: uniqueNames[j], total: 0 });
           }
         }
-        currentTable.objects = currentTable.objects.sort((a, b) =>
+        currentTable.clients = currentTable.clients.sort((a, b) =>
           a.name.localeCompare(b.name)
         );
       }
-      // add status to each of the objects of the lists
+      // add status to each of the clients of the lists
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
         console.log(currentTable.newClients.sort());
-        for (let j = 0; j < currentTable.objects.length; j++) {
-          if (currentTable.objects[j].total == 0) {
-            currentTable.objects[j].status = "darkened";
+        for (let j = 0; j < currentTable.clients.length; j++) {
+          if (currentTable.clients[j].total == 0) {
+            currentTable.clients[j].status = "darkened";
             currentTable.clientSummary.absent += 1;
-          } else if (
-            currentTable.newClients.includes(currentTable.objects[j].name)
-          ) {
-            currentTable.objects[j].status = "new";
-            currentTable.clientSummary.new += 1;
           } else {
-            if (currentTable.objects[j].status != "darkened") {
-              currentTable.objects[j].status = "old";
-              currentTable.clientSummary.old += 1;
-            }
-
-            if (i > 0) {
-              let objectsFromLastPeriod = tables[i - 1].objects;
-              for (let k = 0; k < objectsFromLastPeriod.length; k++) {
-                if (
-                  objectsFromLastPeriod[k].total > 0 &&
-                  objectsFromLastPeriod[k].name == currentTable.objects[j].name
-                ) {
-                  currentTable.objects[j].status = "persistent";
-                  currentTable.clientSummary.persistent += 1;
-                  currentTable.clientSummary.old -= 1;
+            if (
+              currentTable.newClients.includes(currentTable.clients[j].name)
+            ) {
+              currentTable.clients[j].status = "new";
+              currentTable.clientSummary.new += 1;
+            } else {
+              if (i > 0) {
+                let objectsFromLastPeriod = tables[i - 1].clients;
+                for (let k = 0; k < objectsFromLastPeriod.length; k++) {
+                  if (
+                    objectsFromLastPeriod[k].total > 0 &&
+                    objectsFromLastPeriod[k].name ==
+                      currentTable.clients[j].name
+                  ) {
+                    currentTable.clients[j].status = "persistent";
+                    currentTable.clientSummary.persistent += 1;
+                  }
                 }
+              }
+              if (currentTable.clients[j].status == "") {
+                currentTable.clients[j].status = "old";
+                currentTable.clientSummary.old += 1;
               }
             }
           }
@@ -134,8 +171,8 @@ export default {
     ...mapState(["ref", "date", "period", "selected"]),
   },
   methods: {
-    format: function (objects) {
-      let items = objects.map((e) => {
+    format: function (clients) {
+      let items = clients.map((e) => {
         return {
           name: e.client,
           total: e.total,
@@ -152,16 +189,20 @@ export default {
         let dateClone = moment(date).format(); // clone is necessary label the tables correctly
         getByDateRange("orders", "date", date, this.form.period)
           .then((e) => {
-            let objects = this.format(JSON.parse(JSON.stringify(e)));
-            let table = {
-              date: dateClone,
-              objects: objects,
-              clientSummary: {
+            let clients = this.format(JSON.parse(JSON.stringify(e)));
+            let emptyClientSummary = Object.assign(
+              {},
+              {
                 absent: 0,
                 new: 0,
                 old: 0,
                 persistent: 0,
-              },
+              }
+            );
+            let table = {
+              date: dateClone,
+              clients: clients,
+              clientSummary: emptyClientSummary,
             };
             return table;
           })
@@ -182,6 +223,8 @@ export default {
       }
     },
     generate: function () {
+      this.tablesForRendering = [];
+      this.clients = [];
       this.getObjects();
     },
     labeledPeriod: function (date) {
@@ -204,7 +247,7 @@ export default {
 
 <style scoped>
 table {
-  min-width: 250px;
+  min-width: 280px;
 }
 
 td,
@@ -218,6 +261,24 @@ tr {
 
 li {
   list-style-type: none;
+}
+
+#controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: center;
+}
+
+#submit {
+  margin: 3px 20px 3px 20px;
+}
+
+.f-group {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
 }
 
 #table-container {
