@@ -144,6 +144,7 @@ export default {
         let currentTable = tables[i];
         console.log(currentTable.newClients.sort());
         for (let j = 0; j < currentTable.clients.length; j++) {
+          currentTable.clients[j].status = "";
           if (currentTable.clients[j].total == 0) {
             currentTable.clients[j].status = "darkened";
             currentTable.clientSummary.absent += 1;
