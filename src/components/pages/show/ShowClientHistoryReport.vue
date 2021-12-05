@@ -89,6 +89,15 @@ export default {
       for (let i = 0; i < tables.length; i++) {
         let withoutDuplicates = [];
         let currentTable = tables[i];
+        currentTable.clientSummary = Object.assign(
+          {},
+          {
+            absent: 0,
+            new: 0,
+            old: 0,
+            persistent: 0,
+          }
+        );
         for (let j = 0; j < currentTable.clients.length; j++) {
           let currentObject = currentTable.clients[j];
           let included = false;
