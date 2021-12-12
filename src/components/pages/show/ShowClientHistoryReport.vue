@@ -85,9 +85,8 @@ export default {
     formattedTables: function () {
       let tables = [...this.tablesForRendering];
       tables.reverse();
-      // remove duplicates in each list
+      // combine duplicates in each list
       for (let i = 0; i < tables.length; i++) {
-        let withoutDuplicates = [];
         let currentTable = tables[i];
         currentTable.clientSummary = Object.assign(
           {},
@@ -98,21 +97,22 @@ export default {
             persistent: 0,
           }
         );
+        let combinedClients = [];
         for (let j = 0; j < currentTable.clients.length; j++) {
           let currentObject = currentTable.clients[j];
           let included = false;
-          for (let k = 0; k < withoutDuplicates.length; k++) {
-            let includedObject = withoutDuplicates[k];
+          for (let k = 0; k < combinedClients.length; k++) {
+            let includedObject = combinedClients[k];
             if (currentObject.name === includedObject.name) {
               includedObject.total += currentObject.total;
               included = true;
             }
           }
           if (!included) {
-            withoutDuplicates.push(currentObject);
+            combinedClients.push(currentObject);
           }
         }
-        tables[i].clients = withoutDuplicates;
+        tables[i].clients = combinedClients;
       }
       //combine all lists so that they have the same number of clients
       let allNames = [];
@@ -139,6 +139,7 @@ export default {
           a.name.localeCompare(b.name)
         );
       }
+
       // add status to each of the clients of the lists
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
@@ -187,6 +188,7 @@ export default {
     ...mapState(["ref", "date", "period", "selected"]),
   },
   methods: {
+    sortTablesBy() {},
     format: function (clients) {
       let items = clients.map((e) => {
         return {
@@ -202,7 +204,7 @@ export default {
     getObjects: function () {
       let date = moment(this.date);
       for (let i = 0; i < this.form.range; i++) {
-        let dateClone = moment(date).format(); // clone is necessary label the tables correctly
+        let dateClone = moment(date).format(); // clone is necessary to label the tables correctly
         let emptyClientSummary = Object.assign(
           {},
           {
@@ -214,7 +216,7 @@ export default {
         );
         getByDateRange("orders", "date", date, this.form.period)
           .then((e) => {
-            let clients = this.format(JSON.parse(JSON.stringify(e)));
+            let clients = this.format(JSON.parse(JSON.stringify(e))); // format creates a map with only the info we need
 
             let table = {
               date: dateClone,
@@ -225,13 +227,12 @@ export default {
           })
           .then((table) => {
             let tdate = moment(table.date).format();
-            console.log(tdate);
             getByDateRange(`clients`, "since", tdate, this.form.period).then(
               (e) => {
                 table.newClients = JSON.parse(JSON.stringify(e)).map(
                   (e) => e.name
                 );
-                console.log(table.newClients);
+
                 this.tablesForRendering.push(table);
               }
             );
@@ -239,6 +240,7 @@ export default {
         date.subtract(1, this.form.period).format();
       }
     },
+
     generate: function () {
       this.tablesForRendering = [];
       this.clients = [];
