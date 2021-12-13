@@ -1,5 +1,6 @@
 <template>
   <div id="reports">
+    {{ this.clientTableItems }}
     <div id="controls">
       <InputSelect
         v-model="form.period"
@@ -86,10 +87,7 @@ export default {
   },
   computed: {
     newClientsNames: function () {
-      return this.newClients
-        .flat()
-        .map((e) => e.name)
-        .sort();
+      return this.newClients.flat().map((e) => e.name);
     },
     clientTableItems: function () {
       let orders = [...this.ordersFromDatabase];
@@ -112,7 +110,9 @@ export default {
       return tableItems;
     },
     formattedTables: function () {
-      let tables = [...this.allTables];
+      let tables = [...this.tablesForRendering];
+      tables.reverse();
+      // combine duplicates in each list
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
         currentTable.clientSummary = Object.assign(
@@ -124,7 +124,7 @@ export default {
             persistent: 0,
           }
         );
-        currentTable.clients = this.clientTableItems[i];
+        currentTable.clients;
       }
       //combine all lists so that they have the same number of clients
       let allNames = [];
@@ -155,14 +155,16 @@ export default {
       // add status to each of the clients of the lists
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
-        console.log(this.newClientsNames);
+        console.log(currentTable.newClients.sort());
         for (let j = 0; j < currentTable.clients.length; j++) {
           currentTable.clients[j].status = "";
           if (currentTable.clients[j].total == 0) {
             currentTable.clients[j].status = "darkened";
             currentTable.clientSummary.absent += 1;
           } else {
-            if (this.newClientsNames.includes(currentTable.clients[j].name)) {
+            if (
+              currentTable.newClients.includes(currentTable.clients[j].name)
+            ) {
               currentTable.clients[j].status = "new";
               currentTable.clientSummary.new += 1;
             } else {
@@ -232,10 +234,9 @@ export default {
     getObjects: function () {
       let date = moment(this.date);
       for (let i = 0; i < this.form.range; i++) {
-        let dateClone = moment(date).format(); // clone is necessary to label the tables correctly
         getByDateRange("orders", "date", date, this.form.period).then((e) => {
           this.ordersFromDatabase.unshift(JSON.parse(JSON.stringify(e)));
-          this.allTables.unshift({ date: dateClone });
+          this.allTables.unshift({ date: date });
         });
         getByDateRange(`clients`, "since", date, this.form.period).then((e) => {
           this.newClients.unshift(JSON.parse(JSON.stringify(e)));
