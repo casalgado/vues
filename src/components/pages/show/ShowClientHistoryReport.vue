@@ -1,5 +1,6 @@
 <template>
   <div id="reports">
+    {{ allClientsWithTotalsForRange }}
     <div id="controls">
       <InputSelect
         v-model="form.period"
@@ -111,6 +112,14 @@ export default {
       }
       return tableItems;
     },
+    allClientsWithTotalsForRange: function () {
+      let acwt = this.combineDuplicates(
+        [...this.ordersFromDatabase].flat().map((e) => {
+          return { name: e.client, total: e.total };
+        })
+      );
+      return acwt;
+    },
     formattedTables: function () {
       let tables = [...this.allTables];
       for (let i = 0; i < tables.length; i++) {
@@ -126,6 +135,7 @@ export default {
         );
         currentTable.clients = this.clientTableItems[i];
       }
+      /* voy por aqui, lo siguiente es pad las listas, despues agregar los status */
       //combine all lists so that they have the same number of clients
       let allNames = [];
       // first we get a list of all names
@@ -216,6 +226,18 @@ export default {
         }
       }
       return combined;
+    },
+    padList: function (arrayOfClientObjects, arrayOfAllNameStrings) {
+      let arrayOfClientNames = arrayOfClientObjects.map((e) => e.name);
+      for (let j = 0; j < arrayOfAllNameStrings.length; j++) {
+        if (!arrayOfClientNames.includes(arrayOfAllNameStrings[j])) {
+          arrayOfClientObjects.push({
+            name: arrayOfAllNameStrings[j],
+            total: 0,
+          });
+        }
+      }
+      return arrayOfClientObjects.sort((a, b) => a.name.localeCompare(b.name));
     },
     format: function (clients) {
       let items = clients.map((e) => {
