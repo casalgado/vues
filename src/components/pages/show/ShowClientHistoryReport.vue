@@ -1,6 +1,6 @@
 <template>
   <div id="reports">
-    {{ allClientsWithTotalsForRange }}
+    {{ activeSorting }}
     <div id="controls">
       <InputSelect
         v-model="form.period"
@@ -17,10 +17,16 @@
       <b-button @click="generate" type="submit" variant="primary" id="submit"
         >Generar</b-button
       >
+      <b-button @click="sortBy('name')" variant="info">Nombre</b-button>
+      <b-button @click="sortBy('value')" variant="info">Valor</b-button>
+      <b-button @click="sortBy('persistent')" variant="info"
+        >Persistente</b-button
+      >
+      <b-button @click="sortBy('new')" variant="info">Nuevo</b-button>
     </div>
 
     <div id="table-container">
-      <div v-for="(table, index) in formattedTables" v-bind:key="index">
+      <div v-for="(table, index) in tablesForRendering" v-bind:key="index">
         <table>
           <tr>
             <th>{{ labeledPeriod(table.date) }}</th>
@@ -63,26 +69,16 @@ export default {
           { value: "week", text: "semanas" },
           { value: "month", text: "meses" },
         ],
-        rangeOptions: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-        ],
+        rangeOptions: Array(12)
+          .fill()
+          .map((_, i) => `${i + 1}`),
       },
       tablesForRendering: [],
       clients: [],
       ordersFromDatabase: [],
       newClients: [],
       allTables: [],
+      activeSorting: [],
     };
   },
   computed: {
@@ -112,7 +108,7 @@ export default {
       }
       return tableItems;
     },
-    allClientsWithTotalsForRange: function () {
+    allClients: function () {
       let acwt = this.combineDuplicates(
         [...this.ordersFromDatabase].flat().map((e) => {
           return { name: e.client, total: e.total };
@@ -121,6 +117,7 @@ export default {
       return acwt;
     },
     formattedTables: function () {
+      console.log("method being called twice?");
       let tables = [...this.allTables];
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
@@ -133,39 +130,15 @@ export default {
             persistent: 0,
           }
         );
-        currentTable.clients = this.clientTableItems[i];
-      }
-      /* voy por aqui, lo siguiente es pad las listas, despues agregar los status */
-      //combine all lists so that they have the same number of clients
-      let allNames = [];
-      // first we get a list of all names
-      for (let i = 0; i < tables.length; i++) {
-        let currentTable = tables[i];
-        for (let j = 0; j < currentTable.clients.length; j++) {
-          allNames.push(currentTable.clients[j].name);
-        }
-      }
-      let uniqueNames = [...new Set(allNames)];
-
-      // then we pad each list with names that are not present
-      for (let i = 0; i < tables.length; i++) {
-        let currentTable = tables[i];
-        let currentTableNames = tables[i].clients.map((e) => e.name);
-
-        for (let j = 0; j < uniqueNames.length; j++) {
-          if (!currentTableNames.includes(uniqueNames[j])) {
-            currentTable.clients.push({ name: uniqueNames[j], total: 0 });
-          }
-        }
-        currentTable.clients = currentTable.clients.sort((a, b) =>
-          a.name.localeCompare(b.name)
+        currentTable.clients = this.padList(
+          this.clientTableItems[i],
+          this.allClients.map((e) => {
+            return e.name;
+          })
         );
-      }
 
-      // add status to each of the clients of the lists
-      for (let i = 0; i < tables.length; i++) {
-        let currentTable = tables[i];
-        console.log(this.newClientsNames);
+        /* method below adds status to the client objects in the table
+        there are four possible status objects can have */
         for (let j = 0; j < currentTable.clients.length; j++) {
           currentTable.clients[j].status = "";
           if (currentTable.clients[j].total == 0) {
@@ -205,10 +178,12 @@ export default {
 
       return tables;
     },
-
     ...mapState(["ref", "date", "period", "selected"]),
   },
   methods: {
+    sortBy: function (type) {
+      console.log(type);
+    },
     combineDuplicates: function (array) {
       let combined = [];
       for (let j = 0; j < array.length; j++) {
@@ -238,6 +213,39 @@ export default {
         }
       }
       return arrayOfClientObjects.sort((a, b) => a.name.localeCompare(b.name));
+    },
+    sortByValue: function (formattedTables, allClients) {
+      let sortingArr = [...allClients]
+        .sort((a, b) => b.total - a.total)
+        .map((e) => {
+          return e.name;
+        });
+      let sorted = formattedTables.sort(
+        (a, b) => sortingArr.indexOf(a.name) - sortingArr.indexOf(b.name)
+      );
+      return sorted;
+    },
+    sortByName: function (formattedTables) {
+      return formattedTables.sort((a, b) => a.name.localeCompare(b.name));
+    },
+    sortByPersistent: function (formattedTables) {
+      let counting = [];
+      for (let i = 0; i < formattedTables.length; i++) {
+        const table = formattedTables[i].clients;
+        for (let j = 0; j < table.length; j++) {
+          if (i == 0) {
+            counting.push({
+              name: table[j].name,
+              persisted: 0,
+            });
+          } else {
+            let int = table[j].status == "persistent" ? 1 : 0;
+            counting[j].persisted += int;
+          }
+        }
+      }
+      let sorted = counting.sort((a, b) => b.persisted - a.persisted);
+      return sorted;
     },
     format: function (clients) {
       let items = clients.map((e) => {
@@ -286,6 +294,21 @@ export default {
       }
     },
   },
+  watch: {
+    formattedTables() {
+      this.tablesForRendering = this.formattedTables;
+    },
+    sortBy() {
+      switch (this.activeSorting) {
+        case "name":
+          /* voy por aqui */
+          break;
+
+        default:
+          break;
+      }
+    },
+  },
 };
 </script>
 
@@ -305,7 +328,7 @@ li {
 
 #controls {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 20px;
   align-items: center;
 }
@@ -325,9 +348,7 @@ li {
   display: grid;
   grid-template-columns: repeat(12, fit-content(280px));
   grid-auto-flow: column;
-  overflow: auto;
-  height: 90vh;
-  width: 98%;
+  overflow-x: auto;
 }
 
 .name-cell {
