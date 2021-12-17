@@ -1,6 +1,5 @@
 <template>
   <div id="reports">
-    {{ activeSorting }}
     <div id="controls">
       <InputSelect
         v-model="form.period"
@@ -27,6 +26,13 @@
 
     <div id="table-container">
       <div v-for="(table, index) in tablesForRendering" v-bind:key="index">
+        <ul id="clientSummary">
+          <li>ausente: {{ table.clientSummary.absent }}</li>
+          <li>nuevo: {{ table.clientSummary.new }}</li>
+          <li>viejo: {{ table.clientSummary.old }}</li>
+          <li>persistente:{{ table.clientSummary.persistent }}</li>
+          <li>total:{{ table.clientSummary.total }}</li>
+        </ul>
         <table>
           <tr>
             <th>{{ labeledPeriod(table.date) }}</th>
@@ -40,13 +46,6 @@
             <td>{{ client.total }}</td>
           </tr>
         </table>
-        <ul id="clientSummary">
-          <li>ausente: {{ table.clientSummary.absent }}</li>
-          <li>nuevo: {{ table.clientSummary.new }}</li>
-          <li>viejo: {{ table.clientSummary.old }}</li>
-          <li>persistente:{{ table.clientSummary.persistent }}</li>
-          <li>total:{{ table.clientSummary.total }}</li>
-        </ul>
       </div>
     </div>
   </div>
@@ -139,15 +138,20 @@ export default {
 
         /* method below adds status to the client objects in the table
         there are four possible status objects can have */
+        let newClientsNamesClone = this.newClientsNames;
         for (let j = 0; j < currentTable.clients.length; j++) {
           currentTable.clients[j].status = "";
           if (currentTable.clients[j].total == 0) {
             currentTable.clients[j].status = "darkened";
             currentTable.clientSummary.absent += 1;
           } else {
-            if (this.newClientsNames.includes(currentTable.clients[j].name)) {
+            if (newClientsNamesClone.includes(currentTable.clients[j].name)) {
               currentTable.clients[j].status = "new";
               currentTable.clientSummary.new += 1;
+              newClientsNamesClone.splice(
+                newClientsNamesClone.indexOf(currentTable.clients[j].name),
+                1
+              );
             } else {
               if (i > 0) {
                 let objectsFromLastPeriod = tables[i - 1].clients;
@@ -182,7 +186,32 @@ export default {
   },
   methods: {
     sortBy: function (type) {
-      console.log(type);
+      switch (type) {
+        case "name":
+          this.activeSorting = this.sortByName();
+          break;
+        case "value":
+          this.activeSorting = this.sortByValue();
+          break;
+        case "persistent":
+          this.activeSorting = this.sortByPersistent();
+          break;
+        case "new":
+          this.activeSorting = this.sortByNew();
+          break;
+        default:
+          this.activeSorting = this.sortByName();
+          break;
+      }
+      let tables = this.tablesForRendering;
+      for (let i = 0; i < tables.length; i++) {
+        tables[i].clients = [...tables[i].clients].sort(
+          (a, b) =>
+            this.activeSorting.indexOf(a.name) -
+            this.activeSorting.indexOf(b.name)
+        );
+      }
+      this.$forceUpdate();
     },
     combineDuplicates: function (array) {
       let combined = [];
@@ -214,38 +243,52 @@ export default {
       }
       return arrayOfClientObjects.sort((a, b) => a.name.localeCompare(b.name));
     },
-    sortByValue: function (formattedTables, allClients) {
-      let sortingArr = [...allClients]
+    sortByName: function () {
+      return [...this.allClients]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((e) => e.name);
+    },
+    sortByValue: function () {
+      return [...this.allClients]
         .sort((a, b) => b.total - a.total)
-        .map((e) => {
-          return e.name;
-        });
-      let sorted = formattedTables.sort(
-        (a, b) => sortingArr.indexOf(a.name) - sortingArr.indexOf(b.name)
-      );
-      return sorted;
+        .map((e) => e.name);
     },
-    sortByName: function (formattedTables) {
-      return formattedTables.sort((a, b) => a.name.localeCompare(b.name));
-    },
-    sortByPersistent: function (formattedTables) {
+    sortByPersistent: function () {
       let counting = [];
-      for (let i = 0; i < formattedTables.length; i++) {
-        const table = formattedTables[i].clients;
+      let tables = this.tablesForRendering;
+      for (let i = 0; i < tables.length; i++) {
+        const table = tables[i].clients;
         for (let j = 0; j < table.length; j++) {
           if (i == 0) {
             counting.push({
               name: table[j].name,
-              persisted: 0,
+              persistent: 0,
             });
           } else {
-            let int = table[j].status == "persistent" ? 1 : 0;
-            counting[j].persisted += int;
+            counting[j].persistent += table[j].status == "persistent" ? 1 : 0;
           }
         }
       }
-      let sorted = counting.sort((a, b) => b.persisted - a.persisted);
-      return sorted;
+      return counting
+        .sort((a, b) => b.persistent - a.persistent)
+        .map((e) => e.name);
+    },
+    sortByNew: function () {
+      let counting = [];
+      let tables = this.tablesForRendering;
+      for (let i = 0; i < tables.length; i++) {
+        const table = tables[i].clients;
+        for (let j = 0; j < table.length; j++) {
+          if (i == 0) {
+            counting.push({
+              name: table[j].name,
+              new: 0,
+            });
+          }
+          counting[j].new += table[j].status == "new" ? 4 - i : 0;
+        }
+      }
+      return counting.sort((a, b) => b.new - a.new).map((e) => e.name);
     },
     format: function (clients) {
       let items = clients.map((e) => {
@@ -297,16 +340,6 @@ export default {
   watch: {
     formattedTables() {
       this.tablesForRendering = this.formattedTables;
-    },
-    sortBy() {
-      switch (this.activeSorting) {
-        case "name":
-          /* voy por aqui */
-          break;
-
-        default:
-          break;
-      }
     },
   },
 };
