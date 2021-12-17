@@ -285,7 +285,7 @@ export default {
               new: 0,
             });
           }
-          counting[j].new += table[j].status == "new" ? 4 - i : 0;
+          counting[j].new += table[j].status == "new" ? tables.length - i : 0;
         }
       }
       return counting.sort((a, b) => b.new - a.new).map((e) => e.name);
