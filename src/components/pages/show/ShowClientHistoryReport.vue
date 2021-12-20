@@ -35,7 +35,7 @@
         </ul>
         <table>
           <tr>
-            <th>{{ labeledPeriod(table.date) }}</th>
+            <th>{{ table.date }}</th>
           </tr>
           <tr
             v-for="(client, index) in table.clients"
@@ -72,11 +72,10 @@ export default {
           .fill()
           .map((_, i) => `${i + 1}`),
       },
-      tablesForRendering: [],
-      clients: [],
       ordersFromDatabase: [],
+      datesForPeriods: [],
       newClients: [],
-      allTables: [],
+      tablesForRendering: [],
       activeSorting: [],
     };
   },
@@ -87,26 +86,6 @@ export default {
         .map((e) => e.name)
         .sort();
     },
-    clientTableItems: function () {
-      let orders = [...this.ordersFromDatabase];
-      let tableItems = [];
-      for (let i = 0; i < orders.length; i++) {
-        tableItems.push(
-          this.combineDuplicates(
-            orders[i].map((e) => {
-              return {
-                name: e.client,
-                total: e.total,
-                type: e.type,
-                date: e.date,
-                status: "",
-              };
-            })
-          )
-        );
-      }
-      return tableItems;
-    },
     allClients: function () {
       return this.combineDuplicates(
         [...this.ordersFromDatabase].flat().map((e) => {
@@ -116,9 +95,13 @@ export default {
     },
     formattedTables: function () {
       console.log("method being called twice?");
-      let tables = [...this.allTables];
+      let tables = this.datesForPeriods.map((a) => {
+        return { ...a };
+      });
       for (let i = 0; i < tables.length; i++) {
         let currentTable = tables[i];
+
+        /* resets client summary object */
         currentTable.clientSummary = Object.assign(
           {},
           {
@@ -128,10 +111,17 @@ export default {
             persistent: 0,
           }
         );
-        currentTable.clients = this.padList(this.clientTableItems[i]);
+
+        currentTable.clients = this.padList(
+          this.allClients,
+          this.combineDuplicates(
+            this.clientTableItems(this.ordersFromDatabase[i])
+          )
+        );
 
         /* method below adds status to the client objects in the table
         there are four possible status objects can have */
+
         let newClientsNamesClone = this.newClientsNames;
         for (let j = 0; j < currentTable.clients.length; j++) {
           currentTable.clients[j].status = "";
@@ -253,6 +243,8 @@ export default {
       return counting.sort((a, b) => b.new - a.new).map((e) => e.name);
     },
     combineDuplicates: function (array) {
+      /* the array this method recieves must be an array of objects.
+      objects in the array must have the properties name: String, and total: Number */
       let combined = [];
       for (let j = 0; j < array.length; j++) {
         let currentObject = array[j];
@@ -270,9 +262,19 @@ export default {
       }
       return combined;
     },
-    padList: function (arrayOfClientObjects) {
+    clientTableItems: function (ordersFromDatabase) {
+      return ordersFromDatabase.map((e) => {
+        return {
+          name: e.client,
+          total: e.total,
+          date: e.date,
+          status: "",
+        };
+      });
+    },
+    padList: function (allClients, arrayOfClientObjects) {
       let arrayOfClientNames = arrayOfClientObjects.map((e) => e.name);
-      let arrayOfAllNameStrings = this.allClients.map((e) => {
+      let arrayOfAllNameStrings = allClients.map((e) => {
         return e.name;
       });
       for (let j = 0; j < arrayOfAllNameStrings.length; j++) {
@@ -285,25 +287,24 @@ export default {
       }
       return arrayOfClientObjects.sort((a, b) => a.name.localeCompare(b.name));
     },
-    getObjects: function () {
-      let date = moment(this.date);
-      for (let i = 0; i < this.form.range; i++) {
-        let dateClone = moment(date).format(); // clone is necessary to label the tables correctly
-        getByDateRange("orders", "date", date, this.form.period).then((e) => {
+    getObjects: function (date, period, range) {
+      let dateClone = moment(date);
+      for (let i = 0; i < range; i++) {
+        let dateString = this.labeledPeriod(moment(dateClone).format());
+        getByDateRange("orders", "date", dateClone, period).then((e) => {
           this.ordersFromDatabase.unshift(JSON.parse(JSON.stringify(e)));
-          this.allTables.unshift({ date: dateClone });
+          this.datesForPeriods.unshift({ date: dateString });
         });
-        getByDateRange(`clients`, "since", date, this.form.period).then((e) => {
+        getByDateRange(`clients`, "since", dateClone, period).then((e) => {
           this.newClients.unshift(JSON.parse(JSON.stringify(e)));
         });
 
-        date.subtract(1, this.form.period).format();
+        dateClone.subtract(1, period).format();
       }
     },
     generate: function () {
       this.tablesForRendering = [];
-      this.clients = [];
-      this.getObjects();
+      this.getObjects(this.date, this.form.period, this.form.range);
     },
     labeledPeriod: function (date) {
       let period = this.form.period;

@@ -2,6 +2,7 @@ const firebase = require("@firebase/testing");
 const admin = require("firebase-admin");
 const mockdata = require("./mockdata");
 import { renameProduct } from "../../src/firebaseMethods";
+jest.unmock("firebase");
 
 const projectId = "es-alimento";
 process.env.GCLOUD_PROJECT = projectId;

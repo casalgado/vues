@@ -14,6 +14,7 @@ import {
   getProvidersLastExpense,
 } from "../../src/firebaseMethods";
 import moment from "moment";
+jest.unmock("firebase");
 
 const projectId = "es-alimento";
 process.env.GCLOUD_PROJECT = projectId;
