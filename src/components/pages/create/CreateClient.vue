@@ -101,8 +101,8 @@ export default {
       evt.preventDefault();
       this.$v.$touch();
       let alertmsg = "¿continuar?";
-      if (this.oldname !== this.form.name) {
-        alertmsg = "¿continuar y renombrar cliente?";
+      if (this.oid !== "") {
+        alertmsg = "¿guardar cambios en cliente?";
       }
       if (this.$v.$invalid) {
         console.log("invalid");
@@ -129,11 +129,11 @@ export default {
                 update("optionsForMenus/clients", {
                   [id]: { name: this.form.name },
                 });
-                this.$router.push({ name: "ShowClients" });
+                this.reset();
               });
             } else {
               update(`${this.path}/${this.oid}`, this.form).then(() => {
-                this.$router.push({ name: "ShowClients" });
+                this.reset();
               });
               if (this.oldname !== this.form.name) {
                 renameClient(this.oldname, this.form.name, this);
@@ -150,13 +150,15 @@ export default {
       this.form.name = "";
       this.form.cc = "";
       this.form.email = "";
-      this.form.phone = 0;
+      this.form.phone = "";
       this.form.address = "";
       this.form.birthday = "";
       this.form.comment = "";
       this.form.category = "";
       this.show = false;
+
       this.$nextTick(() => {
+        this.$v.$reset();
         this.show = true;
       });
     },

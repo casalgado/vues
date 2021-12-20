@@ -144,7 +144,7 @@ export default {
     },
   },
   watch: {
-    client: function(val) {
+    client: function (val) {
       if (this.oid === "" && this.options.client.includes(this.form.client)) {
         this.form.products = [];
         getClientsLastOrder(val).then((e) => {
@@ -163,7 +163,7 @@ export default {
         });
       }
     },
-    date: function(val) {
+    date: function (val) {
       this.form.deliver = moment(val).format("YYYY-MM-DD");
     },
   },
@@ -202,12 +202,8 @@ export default {
           }
         });
       } else {
-        this.form.date = moment()
-          .add(1, "day")
-          .format("YYYY-MM-DD");
-        this.form.deliver = moment()
-          .add(2, "day")
-          .format("YYYY-MM-DD");
+        this.form.date = moment().add(1, "day").format("YYYY-MM-DD");
+        this.form.deliver = moment().add(2, "day").format("YYYY-MM-DD");
       }
     });
   },
@@ -218,12 +214,8 @@ export default {
       }
       this.form = {
         client: "",
-        date: moment()
-          .add(1, "day")
-          .format("YYYY-MM-DD"),
-        deliver: moment()
-          .add(2, "day")
-          .format("YYYY-MM-DD"),
+        date: moment().add(1, "day").format("YYYY-MM-DD"),
+        deliver: moment().add(2, "day").format("YYYY-MM-DD"),
         paid: "",
         products: [
           {
@@ -239,6 +231,7 @@ export default {
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {
+        this.$v.$reset();
         this.show = true;
       });
     },

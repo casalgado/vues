@@ -96,8 +96,8 @@ export default {
     submit(evt) {
       evt.preventDefault();
       let alertmsg = "¿continuar?";
-      if (this.oldname !== this.form.name) {
-        alertmsg = "¿continuar y renombrar producto?";
+      if (this.oid !== "") {
+        alertmsg = "¿guardar cambios en producto?";
       }
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -114,11 +114,11 @@ export default {
             this.form.name = this.form.name.toLowerCase().trim();
             if (this.oid === "") {
               save(this.path, this.form, this).then(() => {
-                this.$router.push({ name: "ShowProducts" });
+                this.reset();
               });
             } else {
               update(`${this.path}/${this.oid}`, this.form).then(() => {
-                this.$router.push({ name: "ShowProducts" });
+                this.reset();
                 if (this.oldname !== this.form.name) {
                   renameProduct(this.oldname, this.form.name, this);
                 }
@@ -138,6 +138,7 @@ export default {
       this.category = "";
       this.show = false;
       this.$nextTick(() => {
+        this.$v.$reset();
         this.show = true;
       });
     },
