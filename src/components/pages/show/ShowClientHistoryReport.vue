@@ -108,12 +108,11 @@ export default {
       return tableItems;
     },
     allClients: function () {
-      let acwt = this.combineDuplicates(
+      return this.combineDuplicates(
         [...this.ordersFromDatabase].flat().map((e) => {
           return { name: e.client, total: e.total };
         })
       );
-      return acwt;
     },
     formattedTables: function () {
       console.log("method being called twice?");
@@ -129,12 +128,7 @@ export default {
             persistent: 0,
           }
         );
-        currentTable.clients = this.padList(
-          this.clientTableItems[i],
-          this.allClients.map((e) => {
-            return e.name;
-          })
-        );
+        currentTable.clients = this.padList(this.clientTableItems[i]);
 
         /* method below adds status to the client objects in the table
         there are four possible status objects can have */
@@ -186,6 +180,7 @@ export default {
   },
   methods: {
     sortBy: function (type) {
+      let tables = this.tablesForRendering;
       switch (type) {
         case "name":
           this.activeSorting = this.sortByName();
@@ -194,16 +189,15 @@ export default {
           this.activeSorting = this.sortByValue();
           break;
         case "persistent":
-          this.activeSorting = this.sortByPersistent();
+          this.activeSorting = this.sortByPersistent(tables);
           break;
         case "new":
-          this.activeSorting = this.sortByNew();
+          this.activeSorting = this.sortByNew(tables);
           break;
         default:
-          this.activeSorting = this.sortByName();
+          this.activeSorting = this.sortByName(tables);
           break;
       }
-      let tables = this.tablesForRendering;
       for (let i = 0; i < tables.length; i++) {
         tables[i].clients = [...tables[i].clients].sort(
           (a, b) =>
@@ -212,6 +206,51 @@ export default {
         );
       }
       this.$forceUpdate();
+    },
+    sortByName: function () {
+      return [...this.allClients]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((e) => e.name);
+    },
+    sortByValue: function () {
+      return [...this.allClients]
+        .sort((a, b) => b.total - a.total)
+        .map((e) => e.name);
+    },
+    sortByPersistent: function (tables) {
+      let counting = [];
+      for (let i = 0; i < tables.length; i++) {
+        const table = tables[i].clients;
+        for (let j = 0; j < table.length; j++) {
+          if (i == 0) {
+            counting.push({
+              name: table[j].name,
+              persistent: 0,
+            });
+          } else {
+            counting[j].persistent += table[j].status == "persistent" ? 1 : 0;
+          }
+        }
+      }
+      return counting
+        .sort((a, b) => b.persistent - a.persistent)
+        .map((e) => e.name);
+    },
+    sortByNew: function (tables) {
+      let counting = [];
+      for (let i = 0; i < tables.length; i++) {
+        const table = tables[i].clients;
+        for (let j = 0; j < table.length; j++) {
+          if (i == 0) {
+            counting.push({
+              name: table[j].name,
+              new: 0,
+            });
+          }
+          counting[j].new += table[j].status == "new" ? tables.length - i : 0;
+        }
+      }
+      return counting.sort((a, b) => b.new - a.new).map((e) => e.name);
     },
     combineDuplicates: function (array) {
       let combined = [];
@@ -231,8 +270,11 @@ export default {
       }
       return combined;
     },
-    padList: function (arrayOfClientObjects, arrayOfAllNameStrings) {
+    padList: function (arrayOfClientObjects) {
       let arrayOfClientNames = arrayOfClientObjects.map((e) => e.name);
+      let arrayOfAllNameStrings = this.allClients.map((e) => {
+        return e.name;
+      });
       for (let j = 0; j < arrayOfAllNameStrings.length; j++) {
         if (!arrayOfClientNames.includes(arrayOfAllNameStrings[j])) {
           arrayOfClientObjects.push({
@@ -242,65 +284,6 @@ export default {
         }
       }
       return arrayOfClientObjects.sort((a, b) => a.name.localeCompare(b.name));
-    },
-    sortByName: function () {
-      return [...this.allClients]
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((e) => e.name);
-    },
-    sortByValue: function () {
-      return [...this.allClients]
-        .sort((a, b) => b.total - a.total)
-        .map((e) => e.name);
-    },
-    sortByPersistent: function () {
-      let counting = [];
-      let tables = this.tablesForRendering;
-      for (let i = 0; i < tables.length; i++) {
-        const table = tables[i].clients;
-        for (let j = 0; j < table.length; j++) {
-          if (i == 0) {
-            counting.push({
-              name: table[j].name,
-              persistent: 0,
-            });
-          } else {
-            counting[j].persistent += table[j].status == "persistent" ? 1 : 0;
-          }
-        }
-      }
-      return counting
-        .sort((a, b) => b.persistent - a.persistent)
-        .map((e) => e.name);
-    },
-    sortByNew: function () {
-      let counting = [];
-      let tables = this.tablesForRendering;
-      for (let i = 0; i < tables.length; i++) {
-        const table = tables[i].clients;
-        for (let j = 0; j < table.length; j++) {
-          if (i == 0) {
-            counting.push({
-              name: table[j].name,
-              new: 0,
-            });
-          }
-          counting[j].new += table[j].status == "new" ? tables.length - i : 0;
-        }
-      }
-      return counting.sort((a, b) => b.new - a.new).map((e) => e.name);
-    },
-    format: function (clients) {
-      let items = clients.map((e) => {
-        return {
-          name: e.client,
-          total: e.total,
-          type: e.type,
-          date: e.date,
-          status: "",
-        };
-      });
-      return items;
     },
     getObjects: function () {
       let date = moment(this.date);
