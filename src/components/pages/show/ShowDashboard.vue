@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container fluid>
+    <b-container fluid id="screen-view">
       <b-row>
         <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
           <h6 id="title">{{ tableProduce.title }}</h6>
@@ -13,6 +13,10 @@
           >
             por producto
           </b-button>
+          <b-button variant="dark" class="post-table-button" @click="print">
+            imprimir
+          </b-button>
+
           <OrdersSummary
             v-if="showSummaryProduce"
             :objects="tableProduce.objects"
@@ -36,6 +40,7 @@
         <ClientSnippet :key="this.oids[0] + 'i'" :oid="this.oids[0]" />
       </b-card>
     </b-container>
+    <PrintDelivery :orders="this.forPrint" />
     <Landing v-if="!this.user" />
   </div>
 </template>
@@ -48,7 +53,9 @@ import ButtonPaid from "../../tools/ButtonPaid";
 import ClientSnippet from "../../tools/ClientSnippet";
 import OrdersSummary from "../../tools/OrdersSummary";
 import Pagination from "../../table/Pagination";
-import { getByDateRange } from "@/firebase";
+import PrintDelivery from "../../print/PrintDelivery";
+import { ref } from "@/firebaseInit";
+import { getByDateRange, getOneWhere } from "@/firebaseMethods";
 import { mapState } from "vuex";
 
 export default {
@@ -61,6 +68,7 @@ export default {
     Landing,
     ButtonPaid,
     OrdersSummary,
+    PrintDelivery,
   },
   mixins: [ordersMixin],
   data() {
@@ -105,8 +113,8 @@ export default {
             thClass: "slim",
           },
           {
-            key: "products",
-            label: "Productos",
+            key: "address",
+            label: "Direccion",
             sortable: true,
             tdClass: "justifyLeft slim orderProduct",
             thClass: "slim",
@@ -127,10 +135,11 @@ export default {
       path: "orders",
       showSummaryProduce: false,
       showSummaryDeliver: false,
+      forPrint: [],
     };
   },
   computed: {
-    user: function() {
+    user: function () {
       return true;
     },
     ...mapState(["uid", "date", "period", "selected"]),
@@ -154,29 +163,40 @@ export default {
     this.getObjects();
   },
   methods: {
-    getObjects: function() {
-      getByDateRange(`orders`, "date", this.date, this.period).then((e) => {
-        for (let i = 0; i < e.length; i++) {
-          if (e[i].comment && e[i].comment != "") {
-            e[i].comment = "O";
+    getObjects: function () {
+      console.log(ref);
+      getByDateRange(ref, `orders`, "date", this.date, this.period).then(
+        (e) => {
+          this.tableDeliver.objects = [];
+          this.tableDeliver.formattedObjects = [];
+          for (let i = 0; i < e.length; i++) {
+            if (e[i].comment && e[i].comment != "") {
+              e[i].commentClone = e[i].comment;
+              e[i].comment = "O";
+            }
+            getOneWhere(ref, "clients", "name", e[i].client).then((c) => {
+              let forPrint = {
+                client: c.name,
+                address: c.address,
+                method: e[i].paymentMethod,
+                comment: e[i].commentClone,
+                id: e[i].id,
+              };
+              this.tableDeliver.objects.push(forPrint);
+              this.tableDeliver.formattedObjects.push(forPrint);
+              this.forPrint.push(forPrint);
+            });
           }
+          this.tableProduce.objects = JSON.parse(JSON.stringify(e));
+          this.tableProduce.formattedObjects = this.format(
+            JSON.parse(JSON.stringify(e))
+          );
+          console.log(this.forPrint);
         }
-        this.tableProduce.objects = JSON.parse(JSON.stringify(e));
-        this.tableProduce.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e))
-        );
-      });
-      getByDateRange(`orders`, "deliver", this.date, this.period).then((e) => {
-        for (let i = 0; i < e.length; i++) {
-          if (e[i].comment && e[i].comment != "") {
-            e[i].comment = "O";
-          }
-        }
-        this.tableDeliver.objects = JSON.parse(JSON.stringify(e));
-        this.tableDeliver.formattedObjects = this.format(
-          JSON.parse(JSON.stringify(e))
-        );
-      });
+      );
+    },
+    print: function () {
+      window.print();
     },
   },
   beforeRouteUpdate() {
@@ -199,7 +219,7 @@ export default {
 }
 @media screen {
   #page {
-    display: grid;
+    display: none;
   }
 
   #title {
@@ -208,9 +228,7 @@ export default {
 }
 
 @media print {
-  #container,
-  #title,
-  #sidebar-content {
+  #screen-view {
     display: none;
   }
 
