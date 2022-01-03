@@ -13,9 +13,6 @@
           >
             por producto
           </b-button>
-          <b-button variant="dark" class="post-table-button" @click="print">
-            imprimir
-          </b-button>
 
           <OrdersSummary
             v-if="showSummaryProduce"
@@ -27,6 +24,9 @@
           <h6 id="title">{{ tableDeliver.title }}</h6>
           <Pagination period="day" />
           <Table :table="tableDeliver" :sidebar="false" />
+          <b-button variant="dark" class="post-table-button" @click="print">
+            imprimir
+          </b-button>
         </b-col>
       </b-row>
       <b-card v-if="selected.length > 0" id="toolbox">
@@ -40,6 +40,7 @@
         <ClientSnippet :key="this.oids[0] + 'i'" :oid="this.oids[0]" />
       </b-card>
     </b-container>
+
     <PrintDelivery :orders="this.forPrint" />
     <Landing v-if="!this.user" />
   </div>
@@ -169,6 +170,7 @@ export default {
         (e) => {
           this.tableDeliver.objects = [];
           this.tableDeliver.formattedObjects = [];
+          this.forPrint = [];
           for (let i = 0; i < e.length; i++) {
             if (e[i].comment && e[i].comment != "") {
               e[i].commentClone = e[i].comment;

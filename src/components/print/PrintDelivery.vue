@@ -29,8 +29,8 @@ export default {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   border-top: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
   padding: 0.2cm;
 }
 
@@ -45,7 +45,8 @@ export default {
 .box {
   height: 2cm;
   width: 3cm;
-  border: 1px solid black;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
   justify-self: center;
   display: table-cell;
   vertical-align: bottom;
