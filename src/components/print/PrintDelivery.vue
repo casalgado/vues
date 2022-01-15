@@ -5,8 +5,10 @@
       <p class="name">{{ order.client }}</p>
       <p class="address">{{ order.address }}</p>
       <p>{{ order.method }}</p>
+
       <p class="box bolsas"># bolsas</p>
       <p class="comment">{{ order.comment }}</p>
+      <p>{{ formatString(order.total) }}</p>
     </div>
   </div>
 </template>
@@ -17,13 +19,19 @@ export default {
   props: {
     orders: Array,
   },
+  methods: {
+    formatString: function (string) {
+      return parseInt(string).toLocaleString();
+    },
+  },
 };
 </script>
 
 <style scoped>
 #page {
   margin: 2cm 1cm 2cm 1cm;
-  padding-bottom: 1cm;
+  padding-bottom: 2cm;
+  font-size: 1.2em;
 }
 .row {
   display: grid;
@@ -31,7 +39,6 @@ export default {
   border-top: 1px solid black;
   border-left: 1px solid white;
   border-right: 1px solid white;
-  padding: 0.2cm;
 }
 
 .row:last-child {
@@ -43,7 +50,7 @@ export default {
 }
 
 .box {
-  height: 2cm;
+  height: 1.5cm;
   width: 3cm;
   border-right: 1px solid black;
   border-left: 1px solid black;

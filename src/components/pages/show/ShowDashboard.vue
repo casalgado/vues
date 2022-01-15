@@ -27,6 +27,10 @@
           <b-button variant="dark" class="post-table-button" @click="print">
             imprimir
           </b-button>
+          <div v-if="missingClients.length >= 1">
+            <p>clientes no creados</p>
+            {{ missingClients }}
+          </div>
         </b-col>
       </b-row>
       <b-card v-if="selected.length > 0" id="toolbox">
@@ -137,6 +141,7 @@ export default {
       showSummaryProduce: false,
       showSummaryDeliver: false,
       forPrint: [],
+      missingClients: [],
     };
   },
   computed: {
@@ -171,22 +176,30 @@ export default {
           this.tableDeliver.objects = [];
           this.tableDeliver.formattedObjects = [];
           this.forPrint = [];
+          this.missingClients = [];
           for (let i = 0; i < e.length; i++) {
             if (e[i].comment && e[i].comment != "") {
               e[i].commentClone = e[i].comment;
               e[i].comment = "O";
             }
             getOneWhere(ref, "clients", "name", e[i].client).then((c) => {
-              let forPrint = {
-                client: c.name,
-                address: c.address,
-                method: e[i].paymentMethod,
-                comment: e[i].commentClone,
-                id: e[i].id,
-              };
-              this.tableDeliver.objects.push(forPrint);
-              this.tableDeliver.formattedObjects.push(forPrint);
-              this.forPrint.push(forPrint);
+              if (c) {
+                let forPrint = {
+                  client: c.name,
+                  address: c.address,
+                  method: e[i].paymentMethod,
+                  comment: e[i].commentClone,
+                  total: e[i].total,
+                  id: e[i].id,
+                };
+                this.tableDeliver.objects.push(forPrint);
+                this.tableDeliver.formattedObjects.push(forPrint);
+                this.forPrint.push(forPrint);
+              } else {
+                console.log("not found");
+                console.log(e[i].client);
+                this.missingClients.push(e[i].client);
+              }
             });
           }
           this.tableProduce.objects = JSON.parse(JSON.stringify(e));
