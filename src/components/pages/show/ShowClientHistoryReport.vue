@@ -48,17 +48,22 @@
         </table>
       </div>
     </div>
+    <ButtonExportReportByPersistent
+      :orderedClients="sortByPersistent(tablesForRendering)"
+      :tables="tablesForRendering"
+    />
   </div>
 </template>
 
 <script>
 import InputSelect from "../../inputs/InputSelect";
+import ButtonExportReportByPersistent from "../../tools/ButtonExportReportByPersistent.vue";
 import { getByDateRange } from "@/firebase";
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
   name: "ShowClientHistoryReport",
-  components: { InputSelect },
+  components: { InputSelect, ButtonExportReportByPersistent },
   data() {
     return {
       form: {
