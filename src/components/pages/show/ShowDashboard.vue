@@ -13,6 +13,13 @@
           >
             por producto
           </b-button>
+          <b-button
+            variant="dark"
+            class="post-table-button"
+            @click="print('production')"
+          >
+            imprimir
+          </b-button>
 
           <OrdersSummary
             v-if="showSummaryProduce"
@@ -24,7 +31,11 @@
           <h6 id="title">{{ tableDeliver.title }}</h6>
           <Pagination period="day" />
           <Table :table="tableDeliver" :sidebar="false" />
-          <b-button variant="dark" class="post-table-button" @click="print">
+          <b-button
+            variant="dark"
+            class="post-table-button"
+            @click="print('delivery')"
+          >
             imprimir
           </b-button>
           <div v-if="missingClients.length >= 1">
@@ -45,7 +56,16 @@
       </b-card>
     </b-container>
 
-    <PrintDelivery :orders="this.forPrint" />
+    <PrintDelivery
+      :class="showDelivery ? 'print-me' : ''"
+      class="hide-me"
+      :orders="this.printDelivery"
+    />
+    <PrintProduction
+      :class="showProduction ? 'print-me' : ''"
+      class="hide-me"
+      :orders="tableProduce.objects"
+    />
     <Landing v-if="!this.user" />
   </div>
 </template>
@@ -59,6 +79,7 @@ import ClientSnippet from "../../tools/ClientSnippet";
 import OrdersSummary from "../../tools/OrdersSummary";
 import Pagination from "../../table/Pagination";
 import PrintDelivery from "../../print/PrintDelivery";
+import PrintProduction from "../../print/PrintProduction";
 import { ref } from "@/firebaseInit";
 import { getByDateRange, getOneWhere } from "@/firebaseMethods";
 import { mapState } from "vuex";
@@ -74,6 +95,7 @@ export default {
     ButtonPaid,
     OrdersSummary,
     PrintDelivery,
+    PrintProduction,
   },
   mixins: [ordersMixin],
   data() {
@@ -140,8 +162,10 @@ export default {
       path: "orders",
       showSummaryProduce: false,
       showSummaryDeliver: false,
-      forPrint: [],
+      printDelivery: [],
       missingClients: [],
+      showDelivery: false,
+      showProduction: false,
     };
   },
   computed: {
@@ -175,7 +199,7 @@ export default {
         (e) => {
           this.tableDeliver.objects = [];
           this.tableDeliver.formattedObjects = [];
-          this.forPrint = [];
+          this.printDelivery = [];
           this.missingClients = [];
           for (let i = 0; i < e.length; i++) {
             if (e[i].comment && e[i].comment != "") {
@@ -184,7 +208,7 @@ export default {
             }
             getOneWhere(ref, "clients", "name", e[i].client).then((c) => {
               if (c) {
-                let forPrint = {
+                let printDelivery = {
                   client: c.name,
                   address: c.address,
                   method: e[i].paymentMethod,
@@ -192,9 +216,9 @@ export default {
                   total: e[i].total,
                   id: e[i].id,
                 };
-                this.tableDeliver.objects.push(forPrint);
-                this.tableDeliver.formattedObjects.push(forPrint);
-                this.forPrint.push(forPrint);
+                this.tableDeliver.objects.push(printDelivery);
+                this.tableDeliver.formattedObjects.push(printDelivery);
+                this.printDelivery.push(printDelivery);
               } else {
                 console.log("not found");
                 console.log(e[i].client);
@@ -206,12 +230,21 @@ export default {
           this.tableProduce.formattedObjects = this.format(
             JSON.parse(JSON.stringify(e))
           );
-          console.log(this.forPrint);
+          console.log(this.printDelivery);
         }
       );
     },
-    print: function () {
-      window.print();
+    print: function (table) {
+      if (table == "production") {
+        this.showProduction = true;
+        this.showDelivery = false;
+      } else if (table == "delivery") {
+        this.showProduction = false;
+        this.showDelivery = true;
+      }
+      setTimeout(function () {
+        window.print();
+      }, 1);
     },
   },
   beforeRouteUpdate() {
@@ -233,9 +266,12 @@ export default {
   }
 }
 @media screen {
-  #page {
+  /* 
+  .print-me,
+  .hide-me {
     display: none;
-  }
+  } 
+  */
 
   #title {
     width: 100%;
@@ -247,7 +283,11 @@ export default {
     display: none;
   }
 
-  #page {
+  .hide-me {
+    display: none;
+  }
+
+  .print-me {
     color: black;
     display: grid;
   }

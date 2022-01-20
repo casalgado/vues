@@ -1,5 +1,5 @@
 <template>
-  <div id="page">
+  <div>
     <div v-for="order in orders" :key="order.index" class="row">
       <p class="box orden">orden</p>
       <p class="name">{{ order.client }}</p>
