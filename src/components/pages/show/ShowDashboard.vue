@@ -18,7 +18,7 @@
             class="post-table-button"
             @click="print('production')"
           >
-            imprimir
+            imprimir produccion
           </b-button>
 
           <OrdersSummary
@@ -36,7 +36,7 @@
             class="post-table-button"
             @click="print('delivery')"
           >
-            imprimir
+            imprimir ruta
           </b-button>
           <div v-if="missingClients.length >= 1">
             <p>clientes no creados</p>
@@ -266,12 +266,14 @@ export default {
   }
 }
 @media screen {
-  /* 
   .print-me,
   .hide-me {
     display: none;
-  } 
-  */
+  }
+
+  .show {
+    display: block;
+  }
 
   #title {
     width: 100%;
