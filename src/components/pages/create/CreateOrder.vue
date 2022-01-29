@@ -158,6 +158,7 @@ export default {
               unitPrice: products[i].unitPrice,
               quantity: products[i].quantity,
               total: products[i].total,
+              code: products[i].code,
             });
           }
         });
@@ -198,6 +199,7 @@ export default {
               unitPrice: products[i].unitPrice,
               quantity: products[i].quantity,
               total: products[i].total,
+              code: products[i].code,
             });
           }
         });

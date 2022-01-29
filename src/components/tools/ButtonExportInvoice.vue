@@ -34,7 +34,6 @@ export default {
       let objs = _.orderBy(this.objects, "date");
       let counter = 0;
       objs.forEach((e) => {
-        console.log(e);
         counter++;
         fmo.push({
           o: counter,

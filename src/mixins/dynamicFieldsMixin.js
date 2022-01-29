@@ -13,6 +13,7 @@ export const dynamicFieldsMixin = {
         unitPrice: 1,
         quantity: 1,
         total: 1,
+        code: "",
       });
       setTimeout(
         function() {
@@ -27,6 +28,7 @@ export const dynamicFieldsMixin = {
           e.unitPrice = payload.unitPrice;
           e.quantity = payload.quantity;
           e.total = payload.total;
+          e.code = payload.code;
         }
       });
     },
@@ -48,6 +50,7 @@ export const dynamicFieldsMixin = {
       } else {
         let form = Object.assign({}, this.form);
         let products = this.form.products.filter((e) => e.active == true);
+        console.log(products);
         let productsClone = [...products];
         if (productsClone.length == 0) {
           console.log("invalid (no products)");
@@ -85,8 +88,8 @@ export const dynamicFieldsMixin = {
               if (form.provider) {
                 form.provider = form.provider.toLowerCase();
               }
+              console.log(form);
               if (this.oid === "") {
-                console.log(form);
                 save(`${this.path}`, form, this).then((id) => {
                   if (this.path == "orders") {
                     // save new client

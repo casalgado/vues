@@ -93,6 +93,7 @@ export default {
         unitPrice: 1,
         quantity: 1,
         total: 1,
+        code: "",
       },
       payload: {},
     };
@@ -110,6 +111,7 @@ export default {
     this.input.unitPrice = this.populate.unitPrice;
     this.input.quantity = this.populate.quantity;
     this.input.total = this.populate.total;
+    this.input.code = this.populate.code;
   },
   methods: {
     hideIfSlim() {
@@ -142,6 +144,7 @@ export default {
           if (obj) {
             this.input.unitPrice = obj.price;
             this.input.total = Math.floor(obj.price * quantity);
+            this.input.code = obj.code;
             this.$emit("update-field", this.input);
           }
         });
