@@ -13,7 +13,7 @@ export const dynamicFieldsMixin = {
         unitPrice: 1,
         quantity: 1,
         total: 1,
-        code: "",
+        code: "00",
       });
       setTimeout(
         function() {

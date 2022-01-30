@@ -144,7 +144,7 @@ export default {
           if (obj) {
             this.input.unitPrice = obj.price;
             this.input.total = Math.floor(obj.price * quantity);
-            this.input.code = obj.code;
+            this.input.code = obj.code ? obj.code : "00";
             this.$emit("update-field", this.input);
           }
         });

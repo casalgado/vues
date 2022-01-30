@@ -108,7 +108,7 @@ export default {
             name: "domicilio",
             unitPrice: 5000,
             quantity: 1,
-            code: "",
+            code: "00",
             total: 5000,
           },
         ],
@@ -171,7 +171,7 @@ export default {
               unitPrice: 5000,
               quantity: 1,
               total: 5000,
-              code: "",
+              code: "000001",
             });
           }
         });
