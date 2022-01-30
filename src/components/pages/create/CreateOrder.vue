@@ -108,6 +108,7 @@ export default {
             name: "domicilio",
             unitPrice: 5000,
             quantity: 1,
+            code: "",
             total: 5000,
           },
         ],
@@ -148,17 +149,29 @@ export default {
       if (this.oid === "" && this.options.client.includes(this.form.client)) {
         this.form.products = [];
         getClientsLastOrder(val).then((e) => {
-          let products = e.products;
-          this.form.paymentMethod = e.paymentMethod;
-          for (let i = 0; i < products.length; i++) {
+          if (e) {
+            let products = e.products;
+            this.form.paymentMethod = e.paymentMethod;
+            for (let i = 0; i < products.length; i++) {
+              this.form.products.push({
+                id: i,
+                active: true,
+                name: products[i].name,
+                unitPrice: products[i].unitPrice,
+                quantity: products[i].quantity,
+                total: products[i].total,
+                code: products[i].code,
+              });
+            }
+          } else {
             this.form.products.push({
-              id: i,
+              id: 0,
               active: true,
-              name: products[i].name,
-              unitPrice: products[i].unitPrice,
-              quantity: products[i].quantity,
-              total: products[i].total,
-              code: products[i].code,
+              name: "domicilio",
+              unitPrice: 5000,
+              quantity: 1,
+              total: 5000,
+              code: "",
             });
           }
         });

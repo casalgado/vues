@@ -280,7 +280,11 @@ export function getClientsLastOrder(client) {
       .limitToLast(1)
       .once("value", function(snapshot) {
         console.timeEnd("getClientsLastOrder");
-        resolve(Object.values(snapshot.val())[0]);
+        if (snapshot.val()) {
+          resolve(Object.values(snapshot.val())[0]);
+        } else {
+          resolve(null);
+        }
       });
   });
 }
