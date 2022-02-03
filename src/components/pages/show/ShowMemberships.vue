@@ -230,13 +230,10 @@ export default {
       it returns a string of the type w1, w2, w3. This corresponds to the 
       'relative' week we are in, in terms of the clients membership */
       const membership = this.getMembershipById(id);
+      console.log(Object.keys(membership.weekdaySelection));
       const range = Object.keys(membership.weekdaySelection).length;
       return `w${
-        ((this.weeksSinceAbsoluteStartDate() -
-          this.weeksSinceAbsoluteStartDate(membership.startDate) +
-          weeksFromToday) %
-          range) +
-        1
+        ((this.weeksSinceAbsoluteStartDate() + weeksFromToday) % range) + 1
       }`;
     },
     productsForTheWeekForClient(weeksFromToday, id) {

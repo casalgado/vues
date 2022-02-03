@@ -82,7 +82,6 @@ export default {
     getWeight: function (code_string) {
       let unitWeight;
       if (this.getCategory(code_string) == "01") {
-        console.log(this.getSize(code_string));
         switch (this.getSize(code_string)) {
           case "3":
             unitWeight = 1000;
@@ -97,7 +96,6 @@ export default {
           default:
             break;
         }
-        console.log(unitWeight);
         console.log(this.go(code_string).quantity);
         return `${unitWeight * this.go(code_string).quantity}g`;
       } else {

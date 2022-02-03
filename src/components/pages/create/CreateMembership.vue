@@ -161,6 +161,7 @@ export default {
         unitPrice: 1,
         quantity: 1,
         total: 1,
+        code: "",
       });
       setTimeout(
         function () {
@@ -177,6 +178,7 @@ export default {
           e.unitPrice = payload.unitPrice;
           e.quantity = payload.quantity;
           e.total = payload.total;
+          e.code = payload.code;
         }
       });
     },

@@ -170,6 +170,7 @@ export const dynamicFieldsMixin = {
                   // this.$router.push({ path: "/" });
                 });
               } else {
+                console.log(this.oid);
                 update(`${this.path}/${this.oid}`, form, this.oid).then(
                   (id) => {
                     if (this.path == "orders") {
