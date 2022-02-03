@@ -59,12 +59,12 @@
     <PrintDelivery
       :class="showDelivery ? 'print-me' : ''"
       class="hide-me"
-      :orders="this.printDelivery"
+      :orders="forPrintDelivery"
     />
     <PrintProduction
       :class="showProduction ? 'print-me' : ''"
       class="hide-me"
-      :orders="tableProduce.objects"
+      :orders="forPrintProduction"
     />
     <Landing v-if="!this.user" />
   </div>
@@ -162,10 +162,11 @@ export default {
       path: "orders",
       showSummaryProduce: false,
       showSummaryDeliver: false,
-      printDelivery: [],
       missingClients: [],
       showDelivery: false,
       showProduction: false,
+      forPrintProduction: [],
+      forPrintDelivery: [],
     };
   },
   computed: {
@@ -199,7 +200,6 @@ export default {
         (e) => {
           this.tableDeliver.objects = [];
           this.tableDeliver.formattedObjects = [];
-          this.printDelivery = [];
           this.missingClients = [];
           for (let i = 0; i < e.length; i++) {
             if (e[i].comment && e[i].comment != "") {
@@ -218,7 +218,6 @@ export default {
                 };
                 this.tableDeliver.objects.push(printDelivery);
                 this.tableDeliver.formattedObjects.push(printDelivery);
-                this.printDelivery.push(printDelivery);
               } else {
                 console.log("not found");
                 console.log(e[i].client);
@@ -230,7 +229,6 @@ export default {
           this.tableProduce.formattedObjects = this.format(
             JSON.parse(JSON.stringify(e))
           );
-          console.log(this.printDelivery);
         }
       );
     },
@@ -238,9 +236,11 @@ export default {
       if (table == "production") {
         this.showProduction = true;
         this.showDelivery = false;
+        this.forPrintProduction = this.tableProduce.objects;
       } else if (table == "delivery") {
         this.showProduction = false;
         this.showDelivery = true;
+        this.forPrintDelivery = this.tableDeliver.objects;
       }
       setTimeout(function () {
         window.print();

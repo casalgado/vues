@@ -78,7 +78,7 @@ export default {
     selected() {
       return this.$store.state.selected;
     },
-    rows: function() {
+    rows: function () {
       if (this.objects.length > 0) {
         let rows = [];
         if (this.sameClient(this.selected)) {
@@ -86,7 +86,7 @@ export default {
           let selected = this.selected.map((e) => e.id);
           for (let i = 0; i < selected.length; i++) {
             let object = this.objects.find((e) => e.id == selected[i]);
-            console.log(object);
+
             let products = object.products;
             for (let j = 0; j < products.length; j++) {
               let index = rows.length;
@@ -94,13 +94,14 @@ export default {
                 index: index,
                 date: moment(object.deliver).format("DD/MM/YYYY"),
                 product: products[j].name,
-                quantity: products[j].quantity,
+                quantity: parseInt(products[j].quantity),
                 unitPrice: numeral(products[j].unitPrice).format("0,0"),
                 total: numeral(products[j].total).format("0,0"),
               });
             }
           }
-          return rows;
+          console.log(rows);
+          return this.groupByProduct(rows);
         } else {
           return [{ name: "must be same client" }];
         }
@@ -108,9 +109,8 @@ export default {
         return [];
       }
     },
-    total: function() {
+    total: function () {
       if (this.selected.length > 0) {
-        console.log(numeral(this.selected[0].total).value());
         return numeral(
           this.selected.reduce((a, b) => ({
             total: numeral(a.total).value() + numeral(b.total).value(),
@@ -122,7 +122,7 @@ export default {
     },
   },
   methods: {
-    sameClient: function(objects) {
+    sameClient: function (objects) {
       if (objects.length > 0) {
         let client = objects[0].client;
         return (
@@ -133,8 +133,50 @@ export default {
         return false;
       }
     },
-    saveInput: function() {
+    saveInput: function () {
       save("invoices", this.invoice, this);
+    },
+    groupByProduct: function (rows) {
+      let allProducts = [...new Set(rows.map((e) => e.product))];
+      let grouped = {};
+      console.log(allProducts);
+      console.log(rows);
+      for (let i = 0; i < allProducts.length; i++) {
+        grouped[allProducts[i]] = { unitPrice: 0, total: 0, quantity: 0 };
+        for (let k = 0; k < rows.length; k++) {
+          if (rows[k].product == allProducts[i]) {
+            grouped[rows[k].product].total += numeral(rows[k].total).value();
+            grouped[rows[k].product].quantity += numeral(
+              rows[k].quantity
+            ).value();
+          }
+        }
+      }
+      console.log(grouped);
+      let g = Object.keys(grouped).map((e, i) => {
+        return {
+          index: i,
+          date: moment().format("DD/MM/YYYY"),
+          product: e,
+          total: grouped[e].total,
+          quantity: grouped[e].quantity,
+          unitPrice: grouped[e].total / grouped[e].quantity,
+        };
+      });
+      return g;
+    },
+    sameProduct: function (obj1, obj2) {
+      console.log([obj1, obj2]);
+      if (obj1) {
+        return obj1.product == obj2.product;
+      }
+      return false;
+    },
+    sameUnitPrice: function (obj1, obj2) {
+      if (obj1) {
+        return obj1.unitPrice == obj2.unitPrice;
+      }
+      return false;
     },
   },
   watch: {
