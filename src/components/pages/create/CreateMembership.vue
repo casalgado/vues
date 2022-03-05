@@ -53,7 +53,7 @@
               :priority="'unitPrice'"
               :populate="field"
               :activeWeek="name"
-              :slim="true"
+              :slim="false"
               @remove-field="removeField"
               @update-field="updateField"
             />

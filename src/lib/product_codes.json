@@ -4317,5 +4317,77 @@
     "lastModified": "",
     "dateCreated": "2021-02-05T15:14:55-05:00",
     "id": "-MSnpJjEE2JFmRUon6B_"
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040111",
+    "name": "cafe pan cuadrado",
+    "price": 1500
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040121",
+    "name": "cafe pan flautas",
+    "price": 2000
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040211",
+    "name": "cafe mini torta de zanahoria",
+    "price": 2000
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040221",
+    "name": "cafe mini torta de naranja",
+    "price": 2000
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040231",
+    "name": "cafe mini torta de banano",
+    "price": 2000
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040311",
+    "name": "cafe dedito holaya",
+    "price": 1500
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040321",
+    "name": "cafe dedito integral",
+    "price": 1500
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040411",
+    "name": "cafe pandebono",
+    "price": 1300
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040511",
+    "name": "cafe brownie normal",
+    "price": 1900
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040521",
+    "name": "cafe brownie vegano",
+    "price": 2000
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040611",
+    "name": "cafe galleta de chocolate",
+    "price": 3500
+  },
+  {
+    "category": "eldiario",
+    "codigo": "040711",
+    "name": "cafe rollo de canela",
+    "price": 960
   }
 ]

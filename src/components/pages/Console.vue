@@ -1,16 +1,17 @@
 <template>
   <div>
-    <button
-      class="btn btn-info"
-      @click="addProductCodesToProductsinMemberships()"
-    >
-      addProductCodesToProductsinMemberships
+    <button class="btn btn-info" @click="addProductCodesToProductsinElDiario()">
+      addProductCodesToProductsinElDiario
     </button>
+    <button class="btn btn-info" @click="addProductCodesToProducts()">
+      addProductCodesToProducts
+    </button>
+    {{ products }}
   </div>
 </template>
 <script>
 import { ref } from "@/firebaseInit";
-import { getAll, update } from "@/firebaseMethods";
+import { getAll, update, getAllWhere } from "@/firebaseMethods";
 import product_codes from "../../lib/product_codes";
 export default {
   name: "Console",
@@ -97,6 +98,28 @@ export default {
             }
             products[k].code = code;
           }
+          update(ref, `orders/${e[i].id}`, { products: products });
+        }
+      });
+    },
+    addProductCodesToProductsinElDiario: function () {
+      getAllWhere(ref, "orders", "client", "el diario cafe").then((e) => {
+        for (let i = 0; i < e.length; i++) {
+          let products = e[i].products;
+          for (let k = 0; k < products.length; k++) {
+            let code;
+            let product_object = product_codes.filter(
+              (element) => element.name == products[k].name
+            )[0];
+            if (product_object) {
+              code = product_object.codigo;
+            } else {
+              this.products.push(products[k].name);
+              code = "";
+            }
+            products[k].code = code;
+          }
+          console.log(products);
           update(ref, `orders/${e[i].id}`, { products: products });
         }
       });
