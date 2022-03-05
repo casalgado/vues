@@ -7,7 +7,7 @@
       <ul>
         <li>ES ALIMENTO SAS</li>
         <li>RUT: 1045676132</li>
-        <li>cra 52 # 79 - 249</li>
+        <li>car 73 # 86 - 43</li>
         <li>322 374 4173</li>
       </ul>
     </div>
@@ -32,14 +32,14 @@
     <div id="objects">
       <table>
         <tr>
-          <th class="text-left">Entregado</th>
+          <!-- <th class="text-left">Entregado</th> -->
           <th class="text-left">Descripcion</th>
           <th class="text-right">Cantidad</th>
           <th class="text-right">Vr Unitario</th>
           <th class="text-right">Vr Total</th>
         </tr>
         <tr v-for="row in invoice.rows" :key="row.index">
-          <td class="text-left">{{ row.date }}</td>
+          <!-- <td class="text-left">{{ row.date }}</td> -->
           <td class="text-left">{{ row.product }}</td>
           <td class="text-right">{{ row.quantity }}</td>
           <td class="text-right">{{ row.unitPrice }}</td>

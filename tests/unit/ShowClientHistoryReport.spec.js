@@ -8,6 +8,7 @@ import {
   newClients,
 } from "./showClientHistoryReportMockData";
 jest.mock("@/firebase");
+jest.mock("@/firebaseInit");
 
 const localVue = createLocalVue();
 localVue.use(BootstrapVue);
