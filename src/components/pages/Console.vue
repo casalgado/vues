@@ -1,11 +1,8 @@
 <template>
   <div>
-    <button class="btn btn-info" @click="addProductCodesToProductsinElDiario()">
+    <!-- <button class="btn btn-info" @click="addProductCodesToProductsinElDiario">
       addProductCodesToProductsinElDiario
-    </button>
-    <button class="btn btn-info" @click="addProductCodesToProducts()">
-      addProductCodesToProducts
-    </button>
+    </button> -->
     {{ products }}
   </div>
 </template>

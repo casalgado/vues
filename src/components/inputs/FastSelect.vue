@@ -1,7 +1,15 @@
 <template>
   <div id="selection-cont">
-    <b-button id="fast-select" variant="info" @click="toggleShow">+</b-button>
-    <div id="selection" v-if="show">
+    <div class="button-cont">
+      <b-button class="fast-select" variant="info" @click="toggleBtoC"
+        >+</b-button
+      >
+      <b-button class="fast-select" variant="warning" @click="toggleElDiario"
+        >+</b-button
+      >
+    </div>
+
+    <div class="selection" v-if="showBtoC">
       <div class="text sp6">masa madre</div>
       <div @click="setCode('xx0x')" id="hb" class="button btn sp3 mb">
         blanca
@@ -29,6 +37,13 @@
       <div @click="setCode('09xx')" id="ch" class="button btn sp2">
         chocolate
       </div>
+      <div @click="setCode('10xx')" id="pim" class="button btn sp2">
+        pimienta
+      </div>
+      <div @click="setCode('11xx')" id="og" class="button btn sp2">
+        zanahoria
+      </div>
+      <div @click="setCode('31x1')" id="pim" class="button btn sp2">molde</div>
 
       <div @click="setCode('xxx3')" id="peq" class="button btn sp2 mt mb">
         P
@@ -47,6 +62,65 @@
       <div @click="setCode('970x')" id="qs" class="button btn sp2">
         zanahoria
       </div>
+      <div class="text sp6">pan de bonos</div>
+      <div @click="setCode('2110')" id="" class="button btn sp2">x 1</div>
+      <div @click="setCode('2111')" id="" class="button btn sp2">x 6</div>
+      <div @click="setCode('2112')" id="" class="button btn sp2">x 12</div>
+      <div class="text sp6">otros</div>
+      <div @click="setCode('3113')" id="" class="button btn sp3">
+        sin gluten
+      </div>
+      <div @click="setCode('3114')" id="" class="button btn sp3">
+        panes surtidos
+      </div>
+    </div>
+    <div class="selection" v-if="showElDiario">
+      <div class="text sp6">deditos</div>
+      <div @click="setCode('4311')" id="og" class="button btn sp3">
+        dedito holaya
+      </div>
+      <div @click="setCode('4321')" id="sm" class="button btn sp3">
+        dedito integral
+      </div>
+      <div class="text sp6">mini tortas</div>
+      <div @click="setCode('4231')" id="zt" class="button btn sp3">banano</div>
+      <div @click="setCode('4221')" id="zt" class="button btn sp3">naranja</div>
+
+      <div class="text sp6">masa madre</div>
+      <div @click="setCode('5101')" id="og" class="button btn sp2">
+        original
+      </div>
+      <div @click="setCode('5102')" id="it" class="button btn sp2">
+        integral
+      </div>
+      <div @click="setCode('5103')" id="qs" class="button btn sp2">queso</div>
+      <div @click="setCode('5104')" id="sm" class="button btn sp2">
+        semillas
+      </div>
+      <div @click="setCode('5105')" id="ch" class="button btn sp2">
+        chocolate
+      </div>
+
+      <div class="text sp6">otros</div>
+      <div @click="setCode('4411')" id="qs" class="button btn sp2">
+        pan de bono
+      </div>
+      <div @click="setCode('4111')" id="qs" class="button btn sp2">
+        pan cuadrado
+      </div>
+      <div @click="setCode('4121')" id="qs" class="button btn sp2">
+        pan flautas
+      </div>
+      <div class="text sp6">dulce</div>
+      <div @click="setCode('4511')" id="pim" class="button btn sp2">
+        brownie normal
+      </div>
+      <div @click="setCode('4611')" id="pim" class="button btn sp2">
+        galleta chocolate
+      </div>
+      <div @click="setCode('4711')" id="pim" class="button btn sp2">
+        rollo canela
+      </div>
     </div>
   </div>
 </template>
@@ -56,7 +130,8 @@ export default {
   name: "FastSelect.vue",
   data() {
     return {
-      show: false,
+      showBtoC: false,
+      showElDiario: false,
       code: "xxxx",
     };
   },
@@ -64,8 +139,17 @@ export default {
     makeSelection: function (code) {
       this.$emit("fast-select", this.chooseProduct(code));
     },
-    toggleShow: function () {
-      this.show = !this.show;
+    hideAll() {
+      this.showElDiario = false;
+      this.showBtoC = false;
+    },
+    toggleBtoC: function () {
+      this.showBtoC = !this.showBtoC;
+      this.showElDiario = false;
+    },
+    toggleElDiario: function () {
+      this.showElDiario = !this.showElDiario;
+      this.showBtoC = false;
     },
     setCode(input) {
       let newCode = [];
@@ -84,12 +168,13 @@ export default {
       console.log(ready);
       if (ready == 4) {
         this.makeSelection(this.code);
-        this.toggleShow();
+        this.hideAll();
         this.code = "xxxx";
       }
       console.log(this.code);
     },
     chooseProduct(code) {
+      console.log(code);
       const productList = {
         "0101": "original grande",
         "0102": "pan de masa madre mediano",
@@ -145,12 +230,54 @@ export default {
         "0911": "pan integral de chocolate grande",
         "0912": "pan integral de chocolate mediano",
         "0913": "pan integral de chocolate pequeño",
+        1003: "pimienta pequeño",
+        1002: "pimienta mediano",
+        1001: "pimienta grande",
+        1013: "pan pimienta integral peq",
+        1012: "pimienta mediano integral",
+        1011: "pan de pimienta integral grande",
+        1103: "pan zanahoria peq",
+        1102: "pan zanahoria mediano",
+        1101: "pan de zanahoria blanco grande",
+        1113: "pan de zanahoria integral pequeño",
+        1112: "pan de zanahoria integral mediano",
+        1111: "pan de zanahoria integral grande",
+
+        3101: "pan de molde",
+        3111: "pan de molde integral",
+
         9902: "mini torta de banano",
         9802: "mini torta de naranja",
         9702: "mini torta de zanahoria",
         9901: "torta de pan con banano",
         9801: "torta de naranja",
         9701: "torta de zanahoria",
+
+        2110: "pan de bono",
+        2111: "pan de bono x 6",
+        2112: "pan de bono paquete",
+
+        3113: "pan sin gluten x 6",
+        3114: "panes surtidos",
+
+        4111: "cafe pan cuadrado",
+        4121: "cafe pan flautas",
+        4211: "mini torta de zanahoria",
+        4221: "cafe mini torta de naranja",
+        4231: "cafe mini torta de banano",
+        4311: "cafe dedito holaya",
+        4321: "cafe dedito integral",
+        4411: "cafe pandebono",
+        4511: "cafe brownie normal",
+        4521: "cafe brownie vegano",
+        4611: "cafe galleta de chocolate",
+        4711: "cafe rollo de canela",
+
+        5101: "original 25% dcto",
+        5102: "integral original mediano 25% dcto",
+        5103: "queso mediano 25% dcto",
+        5104: "5 semillas mediano 25% dcto",
+        5105: "chocolate mediano 25% dcto",
       };
       return productList[code];
     },
@@ -159,7 +286,14 @@ export default {
 </script>
 
 <style scoped>
-#fast-select {
+.button-cont {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.fast-select {
   height: 30px;
   width: 30px;
   padding: 0px;
@@ -169,7 +303,7 @@ export default {
   position: relative;
 }
 
-#selection {
+.selection {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   width: 300px;
@@ -254,6 +388,10 @@ export default {
 #ch {
   color: #e6e6e6;
   background-color: #270028;
+}
+#pim {
+  color: #e6e6e6;
+  background-color: #575757;
 }
 
 #peq {
