@@ -273,8 +273,8 @@ export default {
         4611: "cafe galleta de chocolate",
         4711: "cafe rollo de canela",
 
-        5101: "original 25% dcto",
-        5102: "integral original mediano 25% dcto",
+        5101: "original mediano 25% dcto",
+        5102: "integral y avena mediano 25% dcto",
         5103: "queso mediano 25% dcto",
         5104: "5 semillas mediano 25% dcto",
         5105: "chocolate mediano 25% dcto",
