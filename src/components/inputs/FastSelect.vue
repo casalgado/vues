@@ -100,6 +100,7 @@
       <div @click="setCode('5105')" id="ch" class="button btn sp2">
         chocolate
       </div>
+      <div @click="setCode('5106')" id="zt" class="button btn sp2">zaatar</div>
 
       <div class="text sp6">otros</div>
       <div @click="setCode('4411')" id="qs" class="button btn sp2">
@@ -278,6 +279,7 @@ export default {
         5103: "queso mediano 25% dcto",
         5104: "5 semillas mediano 25% dcto",
         5105: "chocolate mediano 25% dcto",
+        5106: "zaatar mediano 25% dcto",
       };
       return productList[code];
     },
