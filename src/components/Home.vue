@@ -28,6 +28,11 @@ export default {
       console.log("r");
     },
   },
+  mounted() {
+    if (!this.$store.state.uid) {
+      this.$router.push({ path: "/landing" });
+    }
+  },
 };
 </script>
 <style scoped>
