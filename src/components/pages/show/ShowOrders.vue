@@ -30,9 +30,17 @@
           v-if="sameClient"
           variant="info"
           class="toolbox-button"
-          @click="print"
+          @click="print()"
         >
           factura
+        </b-button>
+        <b-button
+          v-if="sameClient"
+          variant="info"
+          class="toolbox-button"
+          @click="print('remision')"
+        >
+          remision
         </b-button>
       </b-card>
       <b-button variant="dark" class="post-table-button" @click="toggleSummary">
@@ -54,7 +62,7 @@
       </div>
     </div>
     <!-- change printorders to 'invoice' -->
-    <PrintOrders :objects="table.objects" />
+    <PrintOrders :objects="table.objects" :remision="remision" />
   </div>
 </template>
 <script>
@@ -144,6 +152,8 @@ export default {
       path: "orders",
       showSummary: false,
       showByDay: false,
+      typeOfInvoice: "",
+      remision: false,
     };
   },
   computed: {
@@ -223,8 +233,20 @@ export default {
     toggleByDay: function () {
       this.showByDay = !this.showByDay;
     },
-    print: function () {
-      window.print();
+    print: function (type) {
+      this.remision = false;
+      if (type == "remision") {
+        console.log(type);
+        this.remision = true;
+      }
+      setTimeout(
+        function () {
+          window.print();
+        }.bind(this)
+      );
+    },
+    setInvoiceType: function (type) {
+      this.typeOfInvoice = type;
     },
     showYear: function () {
       this.$store.commit("setPeriod", { period: "year" });

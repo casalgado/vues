@@ -1,4 +1,4 @@
-vue<template>
+<template>
   <div>
     <!-- <p @click="download">test</p> -->
     <download-csv
@@ -40,6 +40,7 @@ export default {
         fmo.push({
           fecha: date,
           producto: p,
+          codigo: this.summary[p].code,
           cantidad: q,
           total: t,
           promedio: avg,
@@ -79,7 +80,11 @@ export default {
           report[p.name].total =
             parseInt(report[p.name].total) + parseInt(p.total);
         } else {
-          report[p.name] = { quantity: p.quantity, total: p.total };
+          report[p.name] = {
+            quantity: p.quantity,
+            total: p.total,
+            code: p.code,
+          };
         }
       });
       let keys = Object.keys(report);

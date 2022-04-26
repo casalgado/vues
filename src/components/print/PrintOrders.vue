@@ -23,32 +23,30 @@
     </div>
     <div id="invoice_info">
       <ul>
-        <li>Factura de Venta</li>
-        <li>{{ " " }}</li>
-        <li>Fecha de Facturacion:</li>
+        <li>Fecha de Emision:</li>
         <li>{{ date }}</li>
       </ul>
     </div>
     <div id="objects">
-      <table>
+      <table :class="remision ? 'remision' : ''">
         <tr>
           <!-- <th class="text-left">Entregado</th> -->
           <th class="text-left">Descripcion</th>
           <th class="text-right">Cantidad</th>
-          <th class="text-right">Vr Unitario</th>
-          <th class="text-right">Vr Total</th>
+          <th class="text-right" v-if="!remision">Vr Unitario</th>
+          <th class="text-right" v-if="!remision">Vr Total</th>
         </tr>
         <tr v-for="row in invoice.rows" :key="row.index">
           <!-- <td class="text-left">{{ row.date }}</td> -->
           <td class="text-left">{{ row.product }}</td>
-          <td class="text-right">{{ row.quantity }}</td>
-          <td class="text-right">{{ row.unitPrice }}</td>
-          <td class="text-right">{{ row.total }}</td>
+          <td class="text-right">{{ row.quantity }} un</td>
+          <td class="text-right" v-if="!remision">{{ row.unitPrice }}</td>
+          <td class="text-right" v-if="!remision">{{ row.total }}</td>
         </tr>
       </table>
     </div>
     <div id="footer">Recibe ___________________________</div>
-    <div id="totals">
+    <div id="totals" v-if="!remision">
       Total:
       <span>{{ invoice.total }}</span>
     </div>
@@ -63,6 +61,10 @@ export default {
   name: "PrintOrders",
   props: {
     objects: Array,
+    remision: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -197,10 +199,6 @@ export default {
   text-align: start;
 }
 
-.text-right {
-  text-align: right;
-}
-
 #page {
   font-family: "Courier New", Courier, monospace;
   display: grid;
@@ -270,5 +268,10 @@ ul {
 
 #totals span {
   margin-left: 6px;
+}
+
+.remision {
+  width: 50% !important;
+  margin: 0 auto;
 }
 </style>
