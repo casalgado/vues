@@ -1,7 +1,9 @@
 <template>
   <div>
-    <p @click="getProducts">.{{ list }}</p>
-    <table>
+    <b-button variant="dark" class="toolbox-button" @click="getProducts"
+      >consumo</b-button
+    >
+    <table v-if="list.length > 0">
       <tr>
         <th>ingrediente</th>
         <th>total</th>

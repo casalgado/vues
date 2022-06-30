@@ -310,7 +310,8 @@ export default {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   width: 300px;
   position: absolute;
-  right: 10px;
+  top: -150px;
+  right: 80px;
   background-color: var(--color-primary);
   gap: 4px;
   border-radius: 5px;

@@ -2,7 +2,7 @@
   <div>
     <b-container fluid id="screen-view">
       <b-row>
-        <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
+        <b-col xs="12" md="12" class="dashcol pr-0 pl-0">
           <h6 id="title">{{ tableProduce.title }}</h6>
           <Pagination period="day" />
           <Table :table="tableProduce" :sidebar="false" />
@@ -21,16 +21,6 @@
             imprimir produccion
           </b-button>
 
-          <OrdersSummary
-            v-if="showSummaryProduce"
-            :objects="tableProduce.objects"
-            :onlyQuantities="true"
-          />
-        </b-col>
-        <b-col xs="12" md="6" class="dashcol pr-0 pl-0">
-          <h6 id="title">{{ tableDeliver.title }}</h6>
-          <Pagination period="day" />
-          <Table :table="tableDeliver" :sidebar="false" />
           <b-button
             variant="dark"
             class="post-table-button"
@@ -38,6 +28,18 @@
           >
             imprimir ruta
           </b-button>
+
+          <OrdersSummary
+            v-if="showSummaryProduce"
+            :objects="tableProduce.objects"
+            :onlyQuantities="true"
+          />
+        </b-col>
+        <b-col xs="12" md="12" class="dashcol pr-0 pl-0 hide-me">
+          <h6 id="title">{{ tableDeliver.title }}</h6>
+          <Pagination period="day" />
+          <Table :table="tableDeliver" :sidebar="false" />
+
           <div v-if="missingClients.length >= 1">
             <p>clientes no creados</p>
             {{ missingClients }}
