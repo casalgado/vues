@@ -1,8 +1,6 @@
 <template>
   <div>
-    <!-- <button class="btn btn-info" @click="addProductCodesToProductsinElDiario">
-      addProductCodesToProductsinElDiario
-    </button> -->
+    <button class="btn btn-info" @click="encryptClientNames">encrypt</button>
     {{ products }}
   </div>
 </template>
@@ -120,6 +118,88 @@ export default {
           update(ref, `orders/${e[i].id}`, { products: products });
         }
       });
+    },
+    encryptClientNames: function () {
+      // getAll(ref, "clients").then((e) => {
+      //   for (let i = 0; i < e.length; i++) {
+      //     update(ref, `clients/${e[i].id}`, { name: this.encrypt(e[i].name) });
+      //   }
+      // });
+      // let clients_each_name;
+      // getAll(ref, "memberships").then((e) => {
+      //   for (let i = 0; i < e.length; i++) {
+      //     update(ref, `memberships/${e[i].id}`, {
+      //       clientName: this.encrypt(e[i].clientName),
+      //     });
+      //   }
+      // });
+
+      // getAll(ref, "orders").then((e) => {
+      //   for (let i = 0; i < e.length; i++) {
+      //     update(ref, `orders/${e[i].id}`, {
+      //       client: this.encrypt(e[i].client),
+      //     });
+      //   }
+      // });
+
+      getAll(ref, "optionsForMenus/clients").then((e) => {
+        for (let i = 0; i < e.length; i++) {
+          console.log(`optionsForMenus/clients/${e[i].name}`);
+          update(ref, `optionsForMenus/clients/${e[i].id}`, {
+            name: this.encrypt(e[i].name),
+          });
+        }
+      });
+
+      // let memberships_each_clientName;
+      // let optionsForMenus_clients_each_name;
+      // let orders_each_client;
+    },
+    encrypt: function (str) {
+      var alphabet = [
+        "k",
+        "n",
+        "y",
+        "e",
+        "i",
+        "z",
+        "a",
+        "p",
+        "g",
+        "ú",
+        "v",
+        "j",
+        "h",
+        "á",
+        "l",
+        "s",
+        "u",
+        "ñ",
+        "é",
+        "t",
+        "f",
+        "r",
+        "q",
+        "w",
+        "c",
+        "d",
+        "m",
+        "o",
+        "b",
+        "í",
+        "x",
+        "ó",
+      ];
+      let result = [];
+      for (let i = 0; i < str.length; i++) {
+        for (let j = 0; j < alphabet.length; j++) {
+          if (str[i] === alphabet[j]) {
+            result.push(alphabet[(j + 9) % alphabet.length]);
+          }
+        }
+      }
+
+      return result.join("");
     },
   },
   mounted() {},
