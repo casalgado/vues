@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="btn btn-info" @click="encryptClientNames">encrypt</button>
+    <button class="btn btn-info" @click="e">encrypt</button>
     {{ products }}
   </div>
 </template>
@@ -133,7 +133,6 @@ export default {
       //     });
       //   }
       // });
-
       // getAll(ref, "orders").then((e) => {
       //   for (let i = 0; i < e.length; i++) {
       //     update(ref, `orders/${e[i].id}`, {
@@ -141,16 +140,14 @@ export default {
       //     });
       //   }
       // });
-
-      getAll(ref, "optionsForMenus/clients").then((e) => {
-        for (let i = 0; i < e.length; i++) {
-          console.log(`optionsForMenus/clients/${e[i].name}`);
-          update(ref, `optionsForMenus/clients/${e[i].id}`, {
-            name: this.encrypt(e[i].name),
-          });
-        }
-      });
-
+      // getAll(ref, "optionsForMenus/clients").then((e) => {
+      //   for (let i = 0; i < e.length; i++) {
+      //     console.log(`optionsForMenus/clients/${e[i].name}`);
+      //     update(ref, `optionsForMenus/clients/${e[i].id}`, {
+      //       name: this.encrypt(e[i].name),
+      //     });
+      //   }
+      // });
       // let memberships_each_clientName;
       // let optionsForMenus_clients_each_name;
       // let orders_each_client;
