@@ -19,7 +19,7 @@
     "firebase": "^7.24.0",
     "jest-serializer-vue": "^2.0.2",
     "jquery": "^3.6.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "numeral": "^2.0.6",
     "popper.js": "^1.16.0",
     "sinon": "^9.2.4",
