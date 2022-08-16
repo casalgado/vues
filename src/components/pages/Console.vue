@@ -1,7 +1,9 @@
 <template>
   <div>
-    <button class="btn btn-info" @click="e">encrypt</button>
-    {{ products }}
+    <button class="btn btn-info" @click="generateAverageOrderSizeReport">
+      Download Avg Ticket Report
+    </button>
+    {{ b2bclients }}
   </div>
 </template>
 <script>
@@ -14,6 +16,24 @@ export default {
     return {
       products: [],
       orders: [],
+      b2bclients: [
+        "el diario cafe",
+        "fithub 51",
+        "fithub 98",
+        "humo",
+        "hyh cocina",
+        "oveja negra",
+        "tres fuegos",
+        "foodology",
+        "viral brands sas",
+        "cafe y tapas",
+        "cocina de inmigrantes",
+        "la scarpetta",
+        "rita bendek",
+        "lau pasteleria",
+        "manufacturas bee sas",
+        "orlando malkun",
+      ],
     };
   },
   methods: {
@@ -197,6 +217,14 @@ export default {
       }
 
       return result.join("");
+    },
+    generateAverageOrderSizeReport: function () {
+      getAll(ref, "orders")
+        .orderByChild("date")
+        .startAt("2022-08-15")
+        .then((e) => {
+          console.log(e);
+        });
     },
   },
   mounted() {},
