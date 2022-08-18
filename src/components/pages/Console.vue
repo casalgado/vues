@@ -1,8 +1,6 @@
 <template>
   <div>
-    <button class="btn btn-info" @click="generateAverageOrderSizeReport">
-      Download Avg Ticket Report
-    </button>
+    <button class="btn btn-info" @click="getTotalSalesByMonth">Venta</button>
     {{ b2bclients }}
   </div>
 </template>
@@ -17,6 +15,7 @@ export default {
       products: [],
       orders: [],
       b2bclients: [
+        "el caminante",
         "el diario cafe",
         "fithub 51",
         "fithub 98",
@@ -33,6 +32,7 @@ export default {
         "lau pasteleria",
         "manufacturas bee sas",
         "orlando malkun",
+        "diego bustos",
       ],
     };
   },
@@ -218,13 +218,56 @@ export default {
 
       return result.join("");
     },
-    generateAverageOrderSizeReport: function () {
-      getAll(ref, "orders")
-        .orderByChild("date")
-        .startAt("2022-08-15")
-        .then((e) => {
-          console.log(e);
+    getTotalSalesByMonth: function () {
+      console.log("called");
+      let report = {};
+      return new Promise((resolve) => {
+        // console.log(ref.toString());
+        ref
+          .child("orders")
+          .orderByChild("date")
+          .startAt("2016")
+          .on("value", (snap) => {
+            let objects = [];
+            snap.forEach((csnap) => {
+              let key = csnap.key;
+              let data = csnap.val();
+              data.id = key;
+              objects.push(data);
+            });
+            resolve(objects);
+          });
+      }).then((e) => {
+        e.forEach((order) => {
+          console.log(order);
+          if (order.total > 0) {
+            let yearstring = order.date.split("T")[0].split("-")[0];
+            let monthstring = order.date.split("T")[0].split("-")[1];
+            let clientType = this.b2bclients.includes(order.client)
+              ? "b2b"
+              : "b2c";
+
+            //console.log([yearstring, monthstring, order.total, clientType]);
+
+            if (report[yearstring] == undefined) {
+              console.log("e");
+              report[yearstring] = {};
+            }
+            if (report[yearstring][monthstring] == undefined) {
+              console.log("e");
+              report[yearstring][monthstring] = { b2c: 0, b2b: 0, all: 0 };
+            }
+
+            if (clientType == "b2b") {
+              report[yearstring][monthstring].b2b += order.total;
+            } else {
+              report[yearstring][monthstring].b2c += order.total;
+            }
+            report[yearstring][monthstring].all += order.total;
+          }
         });
+        console.log(report);
+      });
     },
   },
   mounted() {},
