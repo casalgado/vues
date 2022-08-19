@@ -1,6 +1,12 @@
 <template>
   <div>
-    <button class="btn btn-info" @click="getTotalSalesByMonth">Venta</button>
+    <button class="btn btn-info" @click="getTotalSalesByMonth">
+      Venta por b2b/b2c
+    </button>
+    <button class="btn btn-info" @click="getNewClientsByMonth">
+      Clientes nuevos por mes
+    </button>
+
     {{ b2bclients }}
   </div>
 </template>
@@ -37,7 +43,7 @@ export default {
     };
   },
   methods: {
-    addProductCodesToProducts: function () {
+    addProductCodesToProducts: function() {
       getAll(ref, "products").then((e) => {
         this.products = e;
         for (let i = 0; i < e.length; i++) {
@@ -53,7 +59,7 @@ export default {
         }
       });
     },
-    addProductCodesToProductsinMemberships: function () {
+    addProductCodesToProductsinMemberships: function() {
       getAll(ref, "memberships").then((e) => {
         for (let i = 0; i < e.length; i++) {
           const m = e[i];
@@ -93,7 +99,7 @@ export default {
         // }
       });
     },
-    addProductCodesToOrders: function () {
+    addProductCodesToOrders: function() {
       getAll(ref, "orders").then((e) => {
         this.orders = e;
         for (let i = 0; i < e.length; i++) {
@@ -117,7 +123,7 @@ export default {
         }
       });
     },
-    addProductCodesToProductsinElDiario: function () {
+    addProductCodesToProductsinElDiario: function() {
       getAllWhere(ref, "orders", "client", "el diario cafe").then((e) => {
         for (let i = 0; i < e.length; i++) {
           let products = e[i].products;
@@ -139,7 +145,7 @@ export default {
         }
       });
     },
-    encryptClientNames: function () {
+    encryptClientNames: function() {
       // getAll(ref, "clients").then((e) => {
       //   for (let i = 0; i < e.length; i++) {
       //     update(ref, `clients/${e[i].id}`, { name: this.encrypt(e[i].name) });
@@ -172,7 +178,7 @@ export default {
       // let optionsForMenus_clients_each_name;
       // let orders_each_client;
     },
-    encrypt: function (str) {
+    encrypt: function(str) {
       var alphabet = [
         "k",
         "n",
@@ -218,28 +224,11 @@ export default {
 
       return result.join("");
     },
-    getTotalSalesByMonth: function () {
+    getTotalSalesByMonth: function() {
       console.log("called");
       let report = {};
-      return new Promise((resolve) => {
-        // console.log(ref.toString());
-        ref
-          .child("orders")
-          .orderByChild("date")
-          .startAt("2016")
-          .on("value", (snap) => {
-            let objects = [];
-            snap.forEach((csnap) => {
-              let key = csnap.key;
-              let data = csnap.val();
-              data.id = key;
-              objects.push(data);
-            });
-            resolve(objects);
-          });
-      }).then((e) => {
+      getAll(ref, "orders").then((e) => {
         e.forEach((order) => {
-          console.log(order);
           if (order.total > 0) {
             let yearstring = order.date.split("T")[0].split("-")[0];
             let monthstring = order.date.split("T")[0].split("-")[1];
@@ -247,14 +236,13 @@ export default {
               ? "b2b"
               : "b2c";
 
-            //console.log([yearstring, monthstring, order.total, clientType]);
-
             if (report[yearstring] == undefined) {
-              console.log("e");
+              console.log("year");
               report[yearstring] = {};
             }
+
             if (report[yearstring][monthstring] == undefined) {
-              console.log("e");
+              console.log("month");
               report[yearstring][monthstring] = { b2c: 0, b2b: 0, all: 0 };
             }
 
@@ -266,8 +254,60 @@ export default {
             report[yearstring][monthstring].all += order.total;
           }
         });
+        let rows = [["mes", "b2c", "b2c%", "b2b", "b2b%", "total"]];
+        Object.keys(report).forEach((year) => {
+          Object.keys(report[year]).forEach((month) => {
+            rows.push([
+              `${year}-${month}`,
+              report[year][month]["b2c"],
+              report[year][month]["b2c"] / report[year][month]["all"],
+              report[year][month]["b2b"],
+              report[year][month]["b2b"] / report[year][month]["all"],
+              report[year][month]["all"],
+            ]);
+          });
+        });
         console.log(report);
+
+        this.downloadCSV(rows, "venta");
       });
+    },
+    getNewClientsByMonth: function() {
+      let report = {};
+      let accumulated = 0;
+      getAll(ref, "clients").then((e) => {
+        e.forEach((client) => {
+          let year = client.since.split("T")[0].split("-")[0];
+          let month = client.since.split("T")[0].split("-")[1];
+          let since = `${year}-${month}`;
+          console.log(since);
+          if (report[since] == undefined) {
+            report[since] = { current: 0 };
+          }
+          report[since].current += 1;
+          accumulated += 1;
+          report[since].accumulated = accumulated;
+        });
+        console.log(report);
+        let rows = [["mes", "nuevos clientes", "acumulado"]];
+        Object.keys(report).forEach((date) => {
+          rows.push([date, report[date].current, report[date].accumulated]);
+        });
+
+        this.downloadCSV(rows, "clientes");
+      });
+    },
+    downloadCSV: function(arrayOfArrays, name) {
+      var csv = "";
+      arrayOfArrays.forEach(function(row) {
+        csv += row.join(",");
+        csv += "\n";
+      });
+      var hiddenElement = document.createElement("a");
+      hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
+      hiddenElement.target = "_blank";
+      hiddenElement.download = `${name}.csv`;
+      hiddenElement.click();
     },
   },
   mounted() {},
