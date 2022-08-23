@@ -7,6 +7,10 @@
       Clientes nuevos por mes
     </button>
 
+    <button class="btn btn-info" @click="getSalesByProduct">
+      b2c por producto
+    </button>
+
     {{ b2bclients }}
   </div>
 </template>
@@ -40,10 +44,23 @@ export default {
         "orlando malkun",
         "diego bustos",
       ],
+      flavorCodes: {
+        "0101": "original",
+        "0102": "integral",
+        "0103": "queso",
+        "0104": "zaatar",
+        "0105": "uva",
+        "0106": "banano",
+        "0107": "semillas",
+        "0108": "ajonjoli",
+        "0109": "chocolate",
+        "0110": "pimienta",
+        "0111": "zanahoria",
+      },
     };
   },
   methods: {
-    addProductCodesToProducts: function() {
+    addProductCodesToProducts: function () {
       getAll(ref, "products").then((e) => {
         this.products = e;
         for (let i = 0; i < e.length; i++) {
@@ -59,7 +76,7 @@ export default {
         }
       });
     },
-    addProductCodesToProductsinMemberships: function() {
+    addProductCodesToProductsinMemberships: function () {
       getAll(ref, "memberships").then((e) => {
         for (let i = 0; i < e.length; i++) {
           const m = e[i];
@@ -99,7 +116,7 @@ export default {
         // }
       });
     },
-    addProductCodesToOrders: function() {
+    addProductCodesToOrders: function () {
       getAll(ref, "orders").then((e) => {
         this.orders = e;
         for (let i = 0; i < e.length; i++) {
@@ -123,7 +140,7 @@ export default {
         }
       });
     },
-    addProductCodesToProductsinElDiario: function() {
+    addProductCodesToProductsinElDiario: function () {
       getAllWhere(ref, "orders", "client", "el diario cafe").then((e) => {
         for (let i = 0; i < e.length; i++) {
           let products = e[i].products;
@@ -145,7 +162,7 @@ export default {
         }
       });
     },
-    encryptClientNames: function() {
+    encryptClientNames: function () {
       // getAll(ref, "clients").then((e) => {
       //   for (let i = 0; i < e.length; i++) {
       //     update(ref, `clients/${e[i].id}`, { name: this.encrypt(e[i].name) });
@@ -178,7 +195,7 @@ export default {
       // let optionsForMenus_clients_each_name;
       // let orders_each_client;
     },
-    encrypt: function(str) {
+    encrypt: function (str) {
       var alphabet = [
         "k",
         "n",
@@ -224,7 +241,7 @@ export default {
 
       return result.join("");
     },
-    getTotalSalesByMonth: function() {
+    getTotalSalesByMonth: function () {
       console.log("called");
       let report = {};
       getAll(ref, "orders").then((e) => {
@@ -272,7 +289,7 @@ export default {
         this.downloadCSV(rows, "venta");
       });
     },
-    getNewClientsByMonth: function() {
+    getNewClientsByMonth: function () {
       let report = {};
       let accumulated = 0;
       getAll(ref, "clients").then((e) => {
@@ -297,9 +314,144 @@ export default {
         this.downloadCSV(rows, "clientes");
       });
     },
-    downloadCSV: function(arrayOfArrays, name) {
+    getSalesByProduct: function () {
+      return new Promise((resolve) => {
+        ref
+          .child("orders")
+          .orderByChild("date")
+          .on("value", (snap) => {
+            let objects = [];
+            snap.forEach((csnap) => {
+              let key = csnap.key;
+              let data = csnap.val();
+              data.id = key;
+              objects.push(data);
+            });
+            resolve(objects);
+          });
+      }).then((e) => {
+        let report = {};
+        e.forEach((order) => {
+          if (order.total > 0 && !this.b2bclients.includes(order.client)) {
+            let year = order.date.split("T")[0].split("-")[0];
+            let month = order.date.split("T")[0].split("-")[1];
+            let date = `${year}-${month}`;
+            if (report[date] == undefined) {
+              report[date] = {};
+            }
+            order.products.forEach((p) => {
+              if (p.code) {
+                let productType = p.code.substring(0, 2);
+                if (productType == "01") {
+                  let flavorCode = p.code.substring(0, 4);
+                  let flourCode = p.code.substring(4, 5);
+                  let sizeCode = p.code.substring(5, 6);
+                  if (report[date][flavorCode] == undefined) {
+                    report[date][flavorCode] = {
+                      name: p.name,
+                      flour: {
+                        1: 0,
+                        2: 0,
+                      },
+                      size: {
+                        0: 0,
+                        1: 0,
+                        2: 0,
+                        3: 0,
+                      },
+                    };
+                  }
+                  report[date][flavorCode]["size"][sizeCode] += parseInt(
+                    p.total
+                  );
+                  report[date][flavorCode]["flour"][flourCode] += parseInt(
+                    p.quantity
+                  );
+                }
+              }
+            });
+          }
+        });
+        console.log(report);
+        // at this point, report has been created with all pertinent data.
+        // what follows is the organization of that data in two reports, a detailed one and a summarized one
+        // first step is to create the first row of each of the reports
+        let detailed = ["mes"];
+        let summarized = ["mes"];
+        Object.keys(this.flavorCodes).forEach((code) => {
+          let name = this.flavorCodes[code];
+          detailed.push([
+            `${name}-tot`,
+            `${name}-min`,
+            `${name}-peq`,
+            `${name}-med`,
+            `${name}-gra`,
+            `${name}-bla`,
+            `${name}-int`,
+          ]);
+          summarized.push(name);
+        });
+
+        let detailedReport = [];
+        let summarizedReport = [];
+        detailedReport.push(detailed.flat());
+        summarizedReport.push(summarized.flat());
+
+        // now we have to populate array with the data for each month
+        Object.keys(report).forEach((month) => {
+          let detailedRow = [month];
+          let summarizedRow = [month];
+          let monthValues = report[month];
+
+          // add zeroes for empty products in month
+          Object.keys(this.flavorCodes)
+            .sort()
+            .forEach((code) => {
+              if (monthValues[code] == undefined) {
+                monthValues[code] = {
+                  flour: {
+                    1: 0,
+                    2: 0,
+                  },
+                  size: {
+                    0: 0,
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                  },
+                };
+              }
+            });
+
+          // add data to row for each product
+          Object.keys(this.flavorCodes)
+            .sort()
+            .forEach((code) => {
+              let sizes = monthValues[code]["size"];
+              let total = sizes[0] + sizes[1] + sizes[2] + sizes[3];
+              detailedRow.push([
+                total,
+                sizes[0],
+                sizes[1],
+                sizes[2],
+                sizes[3],
+                monthValues[code]["flour"][1],
+                monthValues[code]["flour"][2],
+              ]);
+              summarizedRow.push(total);
+            });
+          console.log(".");
+          detailedReport.push(detailedRow.flat());
+          summarizedReport.push(summarizedRow.flat());
+        });
+
+        this.downloadCSV(detailedReport, "productos-detalle");
+        this.downloadCSV(summarizedReport, "productos-resumen");
+      });
+    },
+    downloadCSV: function (arrayOfArrays, name) {
       var csv = "";
-      arrayOfArrays.forEach(function(row) {
+      arrayOfArrays.forEach(function (row) {
         csv += row.join(",");
         csv += "\n";
       });
