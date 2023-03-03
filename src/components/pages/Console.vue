@@ -11,6 +11,10 @@
       b2c por producto
     </button>
 
+    <button class="btn btn-info" @click="activeClients">
+      clientes activos
+    </button>
+
     {{ b2bclients }}
   </div>
 </template>
@@ -18,6 +22,7 @@
 import { ref } from "@/firebaseInit";
 import { getAll, update, getAllWhere } from "@/firebaseMethods";
 import product_codes from "../../lib/product_codes";
+import moment from "moment";
 export default {
   name: "Console",
   data() {
@@ -31,6 +36,9 @@ export default {
         "fithub 98",
         "humo",
         "hyh cocina",
+        "hyh",
+        "h&h",
+        "mi madre sanducheria",
         "oveja negra",
         "tres fuegos",
         "foodology",
@@ -43,6 +51,8 @@ export default {
         "manufacturas bee sas",
         "orlando malkun",
         "diego bustos",
+        "café epoca",
+        "sites groups sas.",
       ],
       flavorCodes: {
         "0101": "original",
@@ -260,51 +270,160 @@ export default {
 
             if (report[yearstring][monthstring] == undefined) {
               console.log("month");
-              report[yearstring][monthstring] = { b2c: 0, b2b: 0, all: 0 };
+              report[yearstring][monthstring] = {
+                b2c: 0,
+                b2b: 0,
+                all: 0,
+                b2cQty: 0,
+                b2bQty: 0,
+              };
             }
 
             if (clientType == "b2b") {
               report[yearstring][monthstring].b2b += order.total;
+              report[yearstring][monthstring].b2bQty++;
             } else {
               report[yearstring][monthstring].b2c += order.total;
+              report[yearstring][monthstring].b2cQty++;
             }
             report[yearstring][monthstring].all += order.total;
           }
         });
-        let rows = [["mes", "b2c", "b2c%", "b2b", "b2b%", "total"]];
+        let rows = [
+          [
+            "mes",
+            "b2c",
+            "cantitad b2c",
+            "ticket b2c",
+            "b2b",
+            "cantidad b2b",
+            "ticket b2b",
+            "b2c%",
+            "b2b%",
+            "total",
+          ],
+        ];
         Object.keys(report).forEach((year) => {
           Object.keys(report[year]).forEach((month) => {
+            console.log(`${year}-${month}`);
             rows.push([
               `${year}-${month}`,
               report[year][month]["b2c"],
-              report[year][month]["b2c"] / report[year][month]["all"],
+              report[year][month]["b2cQty"],
+              parseInt(report[year][month]["b2c"]) /
+                parseInt(report[year][month]["b2cQty"]),
               report[year][month]["b2b"],
+              report[year][month]["b2bQty"],
+              parseInt(report[year][month]["b2b"]) /
+                parseInt(report[year][month]["b2bQty"]),
+              report[year][month]["b2c"] / report[year][month]["all"],
               report[year][month]["b2b"] / report[year][month]["all"],
               report[year][month]["all"],
             ]);
           });
         });
-        console.log(report);
 
-        this.downloadCSV(rows, "venta");
+        console.log(rows);
+        this.downloadCSV(rows, "venta total");
+      });
+    },
+    activeClients: function () {
+      let years = ["2019", "2020", "2021", "2022"];
+      const theshold = 3;
+
+      return new Promise((resolve) => {
+        ref
+          .child("clients")
+          .orderByChild("since")
+          .on("value", (snap) => {
+            let objects = [];
+            snap.forEach((csnap) => {
+              let key = csnap.key;
+              let data = csnap.val();
+              data.id = key;
+              objects.push(data);
+            });
+            resolve(objects);
+          });
+      }).then((c) => {
+        let clients = c.filter((e) => !this.b2bclients.includes(e.name));
+        console.log(clients);
+        let currentMonth = "";
+        let months = [];
+
+        // get months
+        years.forEach((year) => {
+          for (let i = 1; i < 13; i++) {
+            currentMonth = `${year}-${i}`;
+            months.push(moment(currentMonth).format());
+          }
+        });
+        // get total and active clients per month
+        const report = {};
+        months.forEach((month) => {
+          console.log("-----------");
+          console.log(month);
+          report[month] = { active: 0, total: 0 };
+          clients.forEach((client) => {
+            if (client.since < month) {
+              if (client.history) {
+                // relative value based on current month
+                const lastOrderDate = Object.values(client.history)
+                  .map((e) => e.date)
+                  .filter((e) => e <= month)
+                  .sort()
+                  .reverse()[0];
+                const cutoff = moment(month)
+                  .subtract(theshold, "months")
+                  .format();
+                const isActive = lastOrderDate > cutoff;
+                if (isActive) {
+                  report[month].active++;
+                }
+                report[month].total++;
+              }
+            }
+          });
+        });
+        console.log(report);
+        let rows = [["mes", "activos", "total", "%"]];
+        Object.keys(report).forEach((date) => {
+          let dateString = moment(date)
+            .subtract(1, "month")
+            .format()
+            .substring(0, 7);
+          rows.push([
+            dateString,
+            report[date].active,
+            report[date].total,
+            report[date].active / report[date].total,
+          ]);
+        });
+        this.downloadCSV(rows, "activos");
       });
     },
     getNewClientsByMonth: function () {
+      console.log("called");
       let report = {};
       let accumulated = 0;
-      getAll(ref, "clients").then((e) => {
-        e.forEach((client) => {
-          let year = client.since.split("T")[0].split("-")[0];
-          let month = client.since.split("T")[0].split("-")[1];
-          let since = `${year}-${month}`;
-          console.log(since);
-          if (report[since] == undefined) {
-            report[since] = { current: 0 };
+      getAll(ref, "clients").then((c) => {
+        let clients = c.filter((e) => !this.b2bclients.includes(e.name));
+        clients.forEach((client) => {
+          if (client.history) {
+            let year = client.since.split("T")[0].split("-")[0];
+            let month = client.since.split("T")[0].split("-")[1];
+            let since = `${year}-${month}`;
+            if (report[since] == undefined) {
+              report[since] = { current: 0 };
+            }
+            report[since].current += 1;
+            accumulated += 1;
+            report[since].accumulated = accumulated;
           }
-          report[since].current += 1;
-          accumulated += 1;
-          report[since].accumulated = accumulated;
         });
+        // below is to determine how many active clients per month
+        // active clients means they ordered at least once in the past 3 months
+
         console.log(report);
         let rows = [["mes", "nuevos clientes", "acumulado"]];
         Object.keys(report).forEach((date) => {
@@ -313,6 +432,7 @@ export default {
 
         this.downloadCSV(rows, "clientes");
       });
+      console.log("end");
     },
     getSalesByProduct: function () {
       return new Promise((resolve) => {
@@ -450,6 +570,7 @@ export default {
       });
     },
     downloadCSV: function (arrayOfArrays, name) {
+      console.log(arrayOfArrays);
       var csv = "";
       arrayOfArrays.forEach(function (row) {
         csv += row.join(",");

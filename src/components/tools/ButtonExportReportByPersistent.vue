@@ -84,9 +84,11 @@ export default {
       });
     },
     populateClientList: function () {
-      for (let i = 0; i < this.orderedClients.length; i++) {
-        this.getClientInfo(this.orderedClients[i]);
-      }
+      // for (let i = 0; i < this.orderedClients.length; i++) {
+      //   this.getClientInfo(this.orderedClients[i]);
+      // }
+      console.log(this.orderedClients);
+      console.log(this.tables);
     },
   },
 };
