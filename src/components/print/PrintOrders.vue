@@ -84,7 +84,6 @@ export default {
       if (this.objects.length > 0) {
         let rows = [];
         if (this.sameClient(this.selected)) {
-          console.log(this.selected);
           let selected = this.selected.map((e) => e.id);
           for (let i = 0; i < selected.length; i++) {
             let object = this.objects.find((e) => e.id == selected[i]);
@@ -102,7 +101,7 @@ export default {
               });
             }
           }
-          console.log(rows);
+
           return this.groupByProduct(rows);
         } else {
           return [{ name: "must be same client" }];
@@ -141,8 +140,6 @@ export default {
     groupByProduct: function (rows) {
       let allProducts = [...new Set(rows.map((e) => e.product))];
       let grouped = {};
-      console.log(allProducts);
-      console.log(rows);
       for (let i = 0; i < allProducts.length; i++) {
         grouped[allProducts[i]] = { unitPrice: 0, total: 0, quantity: 0 };
         for (let k = 0; k < rows.length; k++) {
@@ -154,7 +151,7 @@ export default {
           }
         }
       }
-      console.log(grouped);
+
       let g = Object.keys(grouped).map((e, i) => {
         return {
           index: i,
@@ -168,7 +165,6 @@ export default {
       return g;
     },
     sameProduct: function (obj1, obj2) {
-      console.log([obj1, obj2]);
       if (obj1) {
         return obj1.product == obj2.product;
       }
