@@ -1,4 +1,5 @@
-vue<template>
+vue
+<template>
   <div>
     <!-- <p @click="download">test</p> -->
     <download-csv
@@ -13,6 +14,7 @@ vue<template>
 <script>
 import moment from "moment";
 import { getOneWhere } from "@/firebase";
+import { b2bClients } from "../../lib/b2bclients";
 import _ from "lodash";
 export default {
   name: "ButtonExportOrdersByClient",
@@ -32,11 +34,14 @@ export default {
     formatObjects() {
       let fmo = [];
       let objs = _.orderBy(this.objects, "client");
+
       objs.forEach((e) => {
+        let clientType = b2bClients.includes(e.client) ? "b2b" : "b2c";
         fmo.push({
           cliente: e.client,
           fecha: e.date.split("T")[0],
           metodo: e.paymentMethod,
+          tipo: clientType,
           productos: e.products.filter((j) => {
             return j.name !== "domicilio";
           }).length,
@@ -92,7 +97,7 @@ export default {
     },
   },
   methods: {
-    download: function() {
+    download: function () {
       console.log(this.emails);
       console.log(this.formattedObjects);
     },
@@ -101,7 +106,7 @@ export default {
     formatObjects() {
       this.formattedObjects = this.formatObjects;
       this.formattedObjects.forEach(
-        function(e) {
+        function (e) {
           if (e.cliente !== "") {
             getOneWhere("clients", "name", e.cliente).then((client) => {
               if (client) {

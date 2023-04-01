@@ -4389,5 +4389,69 @@
     "codigo": "040711",
     "name": "cafe rollo de canela",
     "price": 960
+  },
+
+  {
+    "category": "panes",
+    "codigo": "011311",
+    "dateCreated": "2023-03-06T12:21:24-05:00",
+    "name": "pan pequeño aceituna",
+    "price": "14000",
+    "recipe": ""
+  },
+  {
+    "category": "panes",
+    "codigo": "011312",
+    "dateCreated": "2023-03-06T12:21:46-05:00",
+    "name": "pan mediano aceituna",
+    "price": "26000",
+    "recipe": ""
+  },
+  {
+    "category": "panes",
+    "codigo": "011313",
+    "dateCreated": "2023-03-06T12:21:57-05:00",
+    "name": "pan grande aceituna",
+    "price": "50000",
+    "recipe": ""
+  },
+  {
+    "category": "panes",
+    "codigo": "011323",
+    "dateCreated": "2023-03-15T14:21:18-05:00",
+    "name": "integral pan de aceituna grande",
+    "price": "50000",
+    "recipe": ""
+  },
+  {
+    "category": "panes",
+    "codigo": "011322",
+    "dateCreated": "2023-03-15T16:17:16-05:00",
+    "name": "integral pan de aceituna mediano",
+    "price": "26000",
+    "recipe": ""
+  },
+  {
+    "category": "panes",
+    "codigo": "011321",
+    "dateCreated": "2023-03-15T16:17:33-05:00",
+    "name": "integral pan de aceituna pequeño",
+    "price": "14000",
+    "recipe": ""
+  },
+  {
+    "category": "panes",
+    "codigo": "010114",
+    "dateCreated": "2022-05-03T16:13:06-05:00",
+    "name": "pan original 1200g",
+    "price": "15000",
+    "recipe": "00"
+  },
+  {
+    "category": "otros",
+    "dateCreated": "2022-01-31T11:30:20-05:00",
+    "name": "base de pizza",
+    "price": "5000",
+    "recipe": ""
   }
 ]

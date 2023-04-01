@@ -8,7 +8,8 @@
     </button>
 
     <button class="btn btn-info" @click="getSalesByProduct">
-      b2c por producto
+      B2C por producto
+      <!-- grandes tamaños combinan original e integral -->
     </button>
 
     <button class="btn btn-info" @click="activeClients">
@@ -22,6 +23,7 @@
 import { ref } from "@/firebaseInit";
 import { getAll, update, getAllWhere } from "@/firebaseMethods";
 import product_codes from "../../lib/product_codes";
+import { b2bClients } from "../../lib/b2bclients";
 import moment from "moment";
 export default {
   name: "Console",
@@ -29,31 +31,7 @@ export default {
     return {
       products: [],
       orders: [],
-      b2bclients: [
-        "el caminante",
-        "el diario cafe",
-        "fithub 51",
-        "fithub 98",
-        "humo",
-        "hyh cocina",
-        "hyh",
-        "h&h",
-        "mi madre sanducheria",
-        "oveja negra",
-        "tres fuegos",
-        "foodology",
-        "viral brands sas",
-        "cafe y tapas",
-        "cocina de inmigrantes",
-        "la scarpetta",
-        "rita bendek",
-        "lau pasteleria",
-        "manufacturas bee sas",
-        "orlando malkun",
-        "diego bustos",
-        "café epoca",
-        "sites groups sas.",
-      ],
+      b2bclients: b2bClients,
       flavorCodes: {
         "0101": "original",
         "0102": "integral",
@@ -66,6 +44,7 @@ export default {
         "0109": "chocolate",
         "0110": "pimienta",
         "0111": "zanahoria",
+        "0113": "aceituna",
       },
     };
   },
@@ -127,17 +106,32 @@ export default {
       });
     },
     addProductCodesToOrders: function () {
+      let oliveBreads = [
+        "integral pan de aceituna pequeño",
+        "integral pan de aceituna mediano",
+        "integral pan de aceituna grande",
+        "pan grande aceituna",
+        "pan mediano aceituna",
+        "pan pequeño aceituna",
+      ];
+      let count = 0;
+      console.log(oliveBreads);
       getAll(ref, "orders").then((e) => {
         this.orders = e;
         for (let i = 0; i < e.length; i++) {
+          let containsOliveBread = false;
           let products = e[i].products;
-          console.log(e[i]);
+          //console.log(e[i]);
           for (let k = 0; k < products.length; k++) {
+            if (oliveBreads.includes(products[k].name)) {
+              containsOliveBread = true;
+            }
             let code;
             let product_object = product_codes.filter(
               (element) => element.name == products[k].name
             )[0];
-            console.log(product_object);
+            //if (containsOliveBread) console.log("***", product_object);
+            //console.log(product_object);
             if (product_object) {
               code = product_object.codigo;
             } else {
@@ -146,8 +140,17 @@ export default {
             }
             products[k].code = code;
           }
-          update(ref, `orders/${e[i].id}`, { products: products });
+          if (containsOliveBread) {
+            count++;
+            console.log(e[i].id);
+            // console.log({
+            //   products: products,
+            // });
+
+            update(ref, `orders/${e[i].id}`, { products: products });
+          }
         }
+        console.log(count, "orders modified");
       });
     },
     addProductCodesToProductsinElDiario: function () {

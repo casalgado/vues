@@ -13,6 +13,7 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import { b2bClients } from "../../lib/b2bclients";
 import { getAll } from "@/firebase";
 export default {
   name: "ButtonExportOrdersByProduct",
@@ -42,6 +43,8 @@ export default {
           producto: p,
           codigo: this.summary[p].code,
           cantidad: q,
+          b2b: this.summary[p].b2b,
+          b2c: this.summary[p].b2c,
           total: t,
           promedio: avg,
         });
@@ -55,6 +58,7 @@ export default {
     },
     summary: function () {
       let products = [];
+      console.log(b2bClients);
 
       if (this.expanded) {
         products = this.products.map((e) => {
@@ -63,7 +67,12 @@ export default {
       }
 
       this.objects.forEach((e) => {
+        console.log("*****");
+        console.log(e);
         e.products.forEach((p) => {
+          let b2b = b2bClients.includes(e.client) ? true : false;
+          p.b2b = b2b;
+          console.log(p);
           products.push(p);
         });
       });
@@ -79,14 +88,24 @@ export default {
             parseInt(report[p.name].quantity) + parseInt(p.quantity);
           report[p.name].total =
             parseInt(report[p.name].total) + parseInt(p.total);
+          if (p.b2b) {
+            report[p.name].b2b =
+              parseInt(report[p.name].b2b) + parseInt(p.total);
+          } else {
+            report[p.name].b2c =
+              parseInt(report[p.name].b2c) + parseInt(p.total);
+          }
         } else {
           report[p.name] = {
             quantity: p.quantity,
             total: p.total,
             code: p.code,
+            b2b: p.b2b ? p.total : 0,
+            b2c: p.b2b ? 0 : p.total,
           };
         }
       });
+      console.log(report);
       let keys = Object.keys(report);
       keys.forEach((e) => {
         report[e].total = parseInt(numeral(report[e].total).format("00"));
