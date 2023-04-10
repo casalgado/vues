@@ -1,12 +1,14 @@
 <template>
   <p v-if="this.selected.length == 0" id="tableTotals">
     Venta: {{ total[1] }} <br />Domicilio: {{ total[2] }} <br />
-    Total: {{ total[0] }}
+    Total: {{ total[0] }} <br />
+    B2B: {{ total[3] }}
   </p>
   <p v-else id="tableTotals">Venta: {{ total[0] }}</p>
 </template>
 <script>
 import numeral from "numeral";
+import { b2bClients } from "../../lib/b2bclients";
 export default {
   name: "TableTotals",
   props: {
@@ -22,7 +24,7 @@ export default {
           let total = this.objects.reduce((a, b) => ({
             total: parseInt(a.total) + parseInt(b.total),
           })).total;
-
+          let totalb2b = 0;
           let productSales = 0;
           let deliveryIncome = 0;
           for (let i = 0; i < this.objects.length; i++) {
@@ -34,6 +36,9 @@ export default {
                 deliveryIncome += parseInt(product.total);
               } else {
                 productSales += parseInt(product.total);
+                if (b2bClients.includes(element.client)) {
+                  totalb2b += parseInt(product.total);
+                }
               }
             }
           }
@@ -42,6 +47,7 @@ export default {
             numeral(total).format("0,0"),
             numeral(productSales).format("0,0"),
             numeral(deliveryIncome).format("0,0"),
+            `${Math.floor((totalb2b / total) * 1000) / 10}%`,
           ];
         } else {
           let total = 0;

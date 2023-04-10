@@ -58,7 +58,7 @@ export default {
     },
     summary: function () {
       let products = [];
-      console.log(b2bClients);
+      // console.log(b2bClients);
 
       if (this.expanded) {
         products = this.products.map((e) => {
@@ -67,12 +67,12 @@ export default {
       }
 
       this.objects.forEach((e) => {
-        console.log("*****");
-        console.log(e);
+        // console.log("*****");
+        // console.log(e);
         e.products.forEach((p) => {
           let b2b = b2bClients.includes(e.client) ? true : false;
           p.b2b = b2b;
-          console.log(p);
+          // console.log(p);
           products.push(p);
         });
       });
@@ -105,7 +105,7 @@ export default {
           };
         }
       });
-      console.log(report);
+      // console.log(report);
       let keys = Object.keys(report);
       keys.forEach((e) => {
         report[e].total = parseInt(numeral(report[e].total).format("00"));
