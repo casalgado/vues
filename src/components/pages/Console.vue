@@ -283,13 +283,16 @@ export default {
             }
 
             if (clientType == "b2b") {
-              report[yearstring][monthstring].b2b += order.total;
+              report[yearstring][monthstring].b2b +=
+                this.totalWithoutDelivery(order);
               report[yearstring][monthstring].b2bQty++;
             } else {
-              report[yearstring][monthstring].b2c += order.total;
+              report[yearstring][monthstring].b2c +=
+                this.totalWithoutDelivery(order);
               report[yearstring][monthstring].b2cQty++;
             }
-            report[yearstring][monthstring].all += order.total;
+            report[yearstring][monthstring].all +=
+              this.totalWithoutDelivery(order);
           }
         });
         let rows = [
@@ -584,6 +587,21 @@ export default {
       hiddenElement.target = "_blank";
       hiddenElement.download = `${name}.csv`;
       hiddenElement.click();
+    },
+    totalWithoutDelivery: function (order) {
+      let products = order.products;
+      let deliveryIncome = 0;
+      for (let j = 0; j < products.length; j++) {
+        let product = products[j];
+        if (product.code == "000001") {
+          deliveryIncome += parseInt(product.total);
+        }
+      }
+      console.log(deliveryIncome);
+      console.log(order.total);
+      console.log(order.total - deliveryIncome);
+      console.log("----------------");
+      return order.total - deliveryIncome;
     },
   },
   mounted() {},
