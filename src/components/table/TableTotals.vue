@@ -2,7 +2,8 @@
   <p v-if="this.selected.length == 0" id="tableTotals">
     Venta: {{ total[1] }} <br />Domicilio: {{ total[2] }} <br />
     Total: {{ total[0] }} <br />
-    B2B: {{ total[3] }}
+    B2C: {{ total[3] }} <br />
+    B2B: {{ total[4] }}
   </p>
   <p v-else id="tableTotals">Venta: {{ total[0] }}</p>
 </template>
@@ -47,7 +48,12 @@ export default {
             numeral(total).format("0,0"),
             numeral(productSales).format("0,0"),
             numeral(deliveryIncome).format("0,0"),
-            `${Math.floor((totalb2b / total) * 1000) / 10}%`,
+            `${numeral(productSales - totalb2b).format("0,0")} - ${
+              Math.floor(((productSales - totalb2b) / productSales) * 1000) / 10
+            }%`,
+            `${numeral(totalb2b).format("0,0")} - ${
+              Math.floor((totalb2b / productSales) * 1000) / 10
+            }%`,
           ];
         } else {
           let total = 0;
