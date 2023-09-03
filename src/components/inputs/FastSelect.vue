@@ -26,7 +26,9 @@
       </div>
       <div @click="setCode('03xx')" id="qs" class="button btn sp2">queso</div>
       <div @click="setCode('04xx')" id="zt" class="button btn sp2">zaatar</div>
-      <div @click="setCode('05xx')" id="uv" class="button btn sp2">uva</div>
+      <div @click="setCode('13xx')" id="uv" class="button btn sp2">
+        aceituna
+      </div>
       <div @click="setCode('06xx')" id="gs" class="button btn sp2">girasol</div>
       <div @click="setCode('07xx')" id="sm" class="button btn sp2">
         semillas
@@ -243,6 +245,14 @@ export default {
         1113: "pan de zanahoria integral pequeño",
         1112: "pan de zanahoria integral mediano",
         1111: "pan de zanahoria integral grande",
+
+        1303: "pan pequeño aceituna",
+        1302: "pan mediano aceituna",
+        1301: "pan grande aceituna",
+
+        1313: "integral pan de aceituna pequeño",
+        1312: "integral pan de aceituna mediano",
+        1311: "integral pan de aceituna grande",
 
         3101: "pan de molde",
         3111: "pan de molde integral",
