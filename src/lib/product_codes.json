@@ -4453,5 +4453,78 @@
     "name": "base de pizza",
     "price": "5000",
     "recipe": ""
+  },
+
+  {
+    "category": "panes",
+    "codigo": "010414",
+    "dateCreated": "2023-09-27T11:53:47-05:00",
+    "name": "pan de zaatar largo",
+    "price": "2500",
+    "recipe": "00"
+  },
+  {
+    "category": "panes",
+    "codigo": "010314",
+    "dateCreated": "2023-09-27T11:53:59-05:00",
+    "name": "pan de queso largo",
+    "price": "2500",
+    "recipe": "00"
+  },
+  {
+    "category": "panes",
+    "codigo": "010224",
+    "dateCreated": "2023-09-27T11:54:11-05:00",
+    "name": "pan integral largo",
+    "price": "1500",
+    "recipe": "00"
+  },
+  {
+    "category": "panes",
+    "codigo": "010115",
+    "dateCreated": "2023-09-27T11:54:24-05:00",
+    "name": "pan original largo",
+    "price": "1500",
+    "recipe": "00"
+  },
+  {
+    "category": "panes",
+    "codigo": "011314",
+    "dateCreated": "2023-09-27T11:54:50-05:00",
+    "name": "pan aceituna largo",
+    "price": "2500",
+    "recipe": "00"
+  },
+  {
+    "category": "panes",
+    "codigo": "010714",
+    "dateCreated": "2023-09-27T11:55:04-05:00",
+    "name": "pan de semillas largo",
+    "price": "2500",
+    "recipe": "00"
+  },
+  {
+    "category": "panes",
+    "codigo": "010914",
+    "dateCreated": "2023-09-27T11:55:14-05:00",
+    "name": "pan de chocolate largo",
+    "price": "2500",
+    "recipe": "00"
+  },
+  {
+    "category": "panes",
+    "codigo": "011014",
+    "dateCreated": "2023-09-27T11:55:25-05:00",
+    "name": "pan de pimienta largo",
+    "price": "2500",
+    "recipe": "00"
+  },
+  {
+    "category": "panes",
+    "codigo": "011114",
+    "dateCreated": "2023-09-27T11:55:33-05:00",
+    "name": "pan de zanahoria largo",
+    "price": "2500",
+    "recipe": "00"
   }
 ]

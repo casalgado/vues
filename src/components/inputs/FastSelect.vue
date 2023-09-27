@@ -56,6 +56,9 @@
       <div @click="setCode('xxx1')" id="gra" class="button btn sp2 mt mb">
         G
       </div>
+      <div @click="setCode('xxx4')" id="gra" class="button btn sp2 mt mb">
+        L
+      </div>
       <div class="text sp6">tortas</div>
       <div @click="setCode('xxx2')" id="" class="button btn sp3">mini</div>
       <div @click="setCode('xxx1')" id="" class="button btn sp3">norm</div>
@@ -253,6 +256,16 @@ export default {
         1313: "integral pan de aceituna pequeño",
         1312: "integral pan de aceituna mediano",
         1311: "integral pan de aceituna grande",
+
+        "0104": "pan original largo",
+        "0214": "pan integral largo",
+        "0304": "pan de queso largo",
+        "0404": "pan de zaatar largo",
+        "0704": "pan de semillas largo",
+        "0904": "pan de chocolate largo",
+        1004: "pan de pimienta largo",
+        1104: "pan de zanahoria largo",
+        1304: "pan aceituna largo",
 
         3101: "pan de molde",
         3111: "pan de molde integral",
