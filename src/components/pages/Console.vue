@@ -16,6 +16,8 @@
       clientes activos
     </button>
 
+    <button class="btn btn-info" @click="allClients">clientes totales</button>
+
     {{ b2bclients }}
   </div>
 </template>
@@ -408,6 +410,149 @@ export default {
         this.downloadCSV(rows, "activos");
       });
     },
+    allClients: function () {
+      return new Promise((resolve) => {
+        ref
+          .child("clients")
+          .orderByChild("since")
+          .on("value", (snap) => {
+            let objects = [];
+            snap.forEach((csnap) => {
+              let key = csnap.key;
+              let data = csnap.val();
+              data.id = key;
+              objects.push(data);
+            });
+            resolve(objects);
+          });
+      }).then((c) => {
+        let clients = c;
+        console.log(clients);
+
+        clients = clients.filter((e) => e.id != "-MFvsMEn0mZnDnx8wxt1");
+        let headerRow = [];
+        let rows = [];
+        let i = 0;
+
+        clients.forEach((client) => {
+          // Log the current client object
+          console.log("START");
+          console.log("client", client);
+
+          // Check if the client is a B2B client
+          let b2b = this.b2bclients.includes(client.name);
+          client.b2b = b2b;
+          // console.log(b2b);
+
+          client.cedula = client.cc ? client.cc : "-";
+
+          if (client.address) {
+            client.address = client.address
+              .replaceAll("#", "No")
+              .replaceAll(",", "");
+          } else {
+            client.address = "-";
+          }
+
+          if (client.comment) {
+            client.comment = client.comment
+              .replaceAll("#", "No")
+              .replaceAll(",", "");
+          } else {
+            client.comment = "-";
+          }
+
+          // Process client history if available
+          if (client.history) {
+            // Extract array of orders from client history
+            const arrayOfOrders = Object.values(client.history);
+            //console.log(client.history);
+            //console.log("history", arrayOfOrders);
+
+            // Determine first and last order dates
+            let firstOrderDate = arrayOfOrders
+              .map((e) => e.date)
+              .sort()[0]
+              .split("T")[0];
+            let lastOrderDate = arrayOfOrders.map((e) => e.date).sort();
+            lastOrderDate =
+              lastOrderDate[arrayOfOrders.length - 1].split("T")[0];
+
+            client.primera_orden = firstOrderDate;
+            client.ultima_orden = lastOrderDate;
+
+            // Count total number of orders
+            let numberOfOrders = arrayOfOrders.length;
+            //console.log("dates", firstOrderDate, lastOrderDate);
+            //console.log("orders", numberOfOrders);
+
+            client.numero_de_ordenes = numberOfOrders;
+
+            // Calculate total amount spent by the client
+            let totalSpent = arrayOfOrders
+              .map((e) => e.products)
+              .flat()
+              .map((e) => parseInt(e.total))
+              .reduce((a, b) => a + b, 0);
+
+            client.total_compras = totalSpent;
+
+            // Calculate average order value
+            let averageOrder = Math.floor(totalSpent / numberOfOrders);
+            //console.log("total", totalSpent);
+            //console.log("avg", averageOrder);
+
+            client.ticket_promedio = averageOrder;
+
+            // Determine client's favorite product
+            let favoriteProduct = arrayOfOrders
+              .map((e) => e.products)
+              .flat()
+              .map((e) => e.name)
+              .filter((e) => e != "domicilio")
+              .sort((a, b) =>
+                arrayOfOrders
+                  .map((e) => e.products)
+                  .flat()
+                  .map((e) => e.name)
+                  .filter((e) => e == a).length >
+                arrayOfOrders
+                  .map((e) => e.products)
+                  .flat()
+                  .map((e) => e.name)
+                  .filter((e) => e == b).length
+                  ? -1
+                  : 1
+              )[0];
+            //console.log("fav", favoriteProduct);
+
+            client.producto_favorito = favoriteProduct;
+
+            const { history, id, since, cc, ...filteredClient } = client;
+            console.log("IGNORE", history, id, since, cc);
+            filteredClient;
+            if (headerRow.length == 0) {
+              headerRow = Object.keys(filteredClient);
+
+              console.log("HEADER ROW", headerRow, i);
+              rows.push(headerRow);
+            }
+            // console.log(headerRow);
+            // console.log("Filtered", i, filteredClient);
+            rows.push(headerRow.map((e) => filteredClient[e]));
+          } else {
+            // console.log("no history");
+            // client.producto_favorito = 0;
+            // rows.push(headerRow.map((e) => client[e]));
+          }
+          i++;
+        });
+
+        console.log(rows);
+
+        this.downloadCSV(rows, "clientes");
+      });
+    },
     getNewClientsByMonth: function () {
       console.log("called");
       let report = {};
@@ -578,10 +723,13 @@ export default {
     downloadCSV: function (arrayOfArrays, name) {
       console.log(arrayOfArrays);
       var csv = "";
-      arrayOfArrays.forEach(function (row) {
-        csv += row.join(",");
+      for (var i = 0; i < arrayOfArrays.length; i++) {
+        console.log("ROW", i, arrayOfArrays[i]);
+        csv += arrayOfArrays[i].join(",");
         csv += "\n";
-      });
+      }
+
+      console.log(csv);
       var hiddenElement = document.createElement("a");
       hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
       hiddenElement.target = "_blank";
